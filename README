@@ -1,0 +1,18 @@
+logle is a tool for summarizing activity in Plaso logs. For example, it will
+take a log file and conclude that an FTP session was used to download a Windows
+executable, and this executable was run on a text file downloaded using FireFox.
+
+Status: early stage of development.
+
+About the name:
+logle is a portmanteau of log and ogle.  The intended pronunciation is as a
+rhyme of 'ogle'. Eg: "let's logle long logs."
+
+
+TODO(vijaydsilva) :  complete this sequence once the build is ported.
+
+To install run the following commands:
+
+  mkdir build
+  cd build
+  cmake ..

@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+option cc_api_version = 2;
+
+package third_party_logle;
+
+// The fields in the RendererConfig proto control how a graph represented in
+// the Graphviz dot format is rendered by the Graphviz server.
+//   - layout_engine : must specify one of the following layout algorithms.
+//     * circo : for directed graphs. Nodes are placed in a circle.
+//     * dot : for directed graphs. Works well for acyclic graphs.
+//     * fdp, neato, sfdp : for undirected graphs.
+//     * twopi : for directed graphs. Nodes are placed in concentric circles.
+//   - output_format : must be one of png, ps or svg.
+//   - min_timeout_seconds : the timeout for the server's first rendering
+//     attempt.
+//   - num_tries : number of times to try rendering. The timeout is doubled
+//     for each attempt, starting with min_timeout_seconds.
+message RendererConfig {
+  optional string layout_engine = 1 [default = "dot"];
+  optional string output_format = 2 [default = "svg"];
+  optional int32 min_timeout_seconds = 3 [default = 30];
+  optional int32 num_tries = 4 [default = 5];
+}
