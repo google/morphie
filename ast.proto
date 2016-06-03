@@ -1,0 +1,111 @@
+// Copyright 2015 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+syntax = "proto2";
+
+package logle;
+
+// Unstructured data from logs is typically processed and represented in a
+// structured way to enable analysis. The protos in this file implement an
+// abstract syntax tree (AST) that can represent types and values of those
+// types. The types that will be used are below.
+//   ptype := BOOL | INT | STRING | TIMESTAMP
+//    type := null | INTERVAL(ptype) | LIST(type) | TUPLE(type,...,type) |
+//            SET(type) | type?
+// A type is either null, a primitive type, an interval over a primitive type,
+// or a composite type. A primitive type is a bool, int, string, or a timestamp
+// indicating the number of microseconds since the start of the Unix Epoch.  A
+// composite type is obtained by applying a type constructor to a type. The
+// composite types are intervals over primitive types, or lists of some type,
+// sets of some type, or a tuple of types. Lists, sets and tuples are
+// collectively referred to as containers. A null type is neither a primitive
+// nor a composite type. A null type has no value. A type T is nullable, written
+// T?, if it can have no value. Nullable types are useful for situations where
+// data is missing.
+//
+//   Example: A log containing timestamped, file system events can be processed
+//   to obtain two kinds of structures.
+//   Event: tuple(timestamp?, string?, string?, string?))
+//   File: list(string)
+//   Event data is structured as a tuple of a timestamp and three strings. The
+//   four fields are nullable because data might be missing. A file is
+//   represented by a list of strings. Each element of the list represents one
+//   subdirectory on the file path and the entire list represents the filename.
+//
+// The AST proto represents an Abstract Syntax Tree (AST) for types and values
+// of types. The standard approach to structuring data would be to use a proto
+// with specific fields. In the example above, event data can be represented by
+// a proto with an int field for a timestamp and three string fields. Such a
+// proto can only be used by systems that produce or consume data with this
+// specific structure. The alternative used here is to represent types and
+// values by ASTs. The AST proto is a universal data structure in the sense that
+// it can represent all types defined by the grammar above and also represent
+// values of those types.
+//
+// The trade-off is that we cannot rely on the protobuf compiler for type
+// checking. Instead, type checking is done at runtime. This trade-off is
+// feasible in this case because the grammar above, and consequently the type
+// checker implementation code, is simple.
+//
+// The representation of types by ASTs is documented in the file type_checker.h
+// and the representation of values by ASTs is documented in value_checker.h.
+
+enum PrimitiveType {
+  BOOL = 0;
+  INT = 1;
+  STRING = 2;
+  TIMESTAMP = 3;
+}
+
+enum Operator {
+  INTERVAL = 0;
+  LIST = 1;
+  TUPLE = 2;
+  SET = 3;
+}
+
+message PrimitiveValue {
+  oneof val {
+    bool bool_val = 1;
+    int64  int_val = 2;
+    string string_val= 3;
+    int64 time_val = 4;
+  }
+}
+
+message PrimitiveAST {
+  required PrimitiveType type = 1;
+  optional PrimitiveValue val = 2;
+}
+
+message CompositeAST {
+  required Operator op = 1;
+  repeated AST arg = 2;
+}
+
+message AST {
+  optional bool is_nullable = 1;
+  optional string name = 2;
+  oneof node {
+    PrimitiveAST p_ast = 3;
+    CompositeAST c_ast = 4;
+  }
+}
+
+// A tagged AST adds a tag to an AST. This allows labelling an AST by the kind
+// of data it represents. Example tags are "Event" or "File".
+message TaggedAST {
+    required string tag = 1;
+    optional AST ast = 2;
+};
