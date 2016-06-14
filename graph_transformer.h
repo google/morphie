@@ -37,6 +37,27 @@ namespace graph {
 std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
                                           const set<NodeId>& nodes);
 
+// The Quotient graph Q of a graph G is a graph whose vertices are blocks of a
+// partition of the vertices of G and where block B is adjacent to block C if
+// some vertex in B is adjacent to some vertex in C with respect to the edge
+// set of G. In other words, if G has edge set E and vertex set V and R is
+// the equivalence relation induced by the partition, then the quotient graph
+// has vertex set V/R and edge set {([u]R, [v]R) | (u, v) ∈ E(G)}. For example,
+// the condensation of a strongly connected graph is the quotient graph where
+// the strongly connected components form the blocks of the partition.
+//
+// Source: https://en.wikipedia.org/wiki/Quotient_graph
+//
+// The 'partition' maps each node in the graph onto some block of the partition,
+// which we represent by an integer label.
+//
+// Returns the labeled graph that results from the quotient operation on the
+// input graph with respect to the input partition.
+// - Requires that 'partition' has every node in 'graph' as a key.
+std::unique_ptr<LabeledGraph> QuotientGraph(
+                              const LabeledGraph& graph,
+                              const std::map<NodeId, int>& partition);
+
 }  // namespace graph
 
 }  // namespace third_party_logle

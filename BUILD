@@ -185,7 +185,11 @@ cc_library(
     hdrs = ["graph_transformer.h"],
     deps = [
         ":labeled_graph",
+        ":type",
+        ":value",
+        "//third_party/logle/util:logging",
         "//third_party/logle/util:status",
+        "//third_party/logle/util:string_utils",
     ],
 )
 

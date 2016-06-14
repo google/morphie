@@ -13,11 +13,23 @@
 // the License.
 
 #include "third_party/logle/graph_transformer.h"
-
+#include "third_party/logle/type.h"
+#include "third_party/logle/util/logging.h"
 #include "third_party/logle/util/status.h"
+#include "third_party/logle/util/string_utils.h"
+#include "third_party/logle/value.h"
 
 namespace third_party_logle {
+
+using ast::type::Types;
+namespace type = ast::type;
+
 namespace {
+
+const char* const kBlockTag = "Block";
+const char* const kEdgeTag = "Edge";
+const char* const kQuotientGraphTag = "Quotient-Graph";
+const char* const kSubNode = "Sub-Node";
 
 // A Transformation consists of a reference to an input graph, an output graph
 // and a map between the nodes of the input and the output graph. A
@@ -77,6 +89,57 @@ NodeId FindOrRelabelNode(NodeId node_id, TaggedAST new_label,
   return new_node;
 }
 
+// Takes an integer and returns a block label with that integer as the AST
+// payload and the tag.
+TaggedAST MakeBlockLabel(int label) {
+  TaggedAST tast;
+  *tast.mutable_ast() = ast::value::MakeInt(label);
+  tast.set_tag(kBlockTag);
+  return tast;
+}
+
+// Takes an id and adds the corresponding block to transform->output as dictated
+// by 'partition'. 'blocks' is used to keep track of duplicate blocks, as at the
+// moment FindOrAddNode does not check for duplicates as needed here. b/29351440
+//
+// Returns the id of the corresponding block node in the output graph.
+NodeId FindOrAddBlock(NodeId node_id, const std::map<NodeId, int>& partition,
+               std::map<int, NodeId>* blocks,
+               Transformation* transform) {
+    const auto node_it = partition.find(node_id);
+    CHECK(node_it != partition.end(),
+          util::StrCat("The following node is missing from the partition: ",
+                       std::to_string(node_id)));
+
+    int block_num = node_it->second;
+    // If the corresponding block is not in the graph, add it.
+    auto block_it = blocks->find(block_num);
+    NodeId block_id;
+    if (block_it == blocks->end()) {
+      TaggedAST block_label = MakeBlockLabel(block_num);
+      block_id = transform->output->FindOrAddNode(block_label);
+      (*blocks)[block_num] = block_id;
+    } else {
+      block_id = block_it->second;
+    }
+    return block_id;
+}
+
+std::unique_ptr<LabeledGraph> MakeBlockGraph() {
+  std::unique_ptr<LabeledGraph> new_graph(new LabeledGraph());
+
+  type::Types node_types;
+  node_types.emplace(kBlockTag,
+                     type::MakeInt(kBlockTag, /*Must not be null*/ false));
+  type::Types edge_types;
+  edge_types.emplace(kEdgeTag,
+                     type::MakeInt(kEdgeTag, /*Must not be null*/ false));
+  AST graph_type = type::MakeNull(kQuotientGraphTag);
+  new_graph->Initialize(node_types, {}, edge_types, {}, graph_type);
+
+  return new_graph;
+}
+
 }  // namespace
 
 namespace graph {
@@ -117,6 +180,34 @@ std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
           FindOrRelabelNode(tgt, graph.GetNodeLabel(tgt), &transform);
       transform.output->FindOrAddEdge(new_src, new_tgt,
                                       graph.GetEdgeLabel(*edge_it));
+    }
+  }
+  return std::move(transform.output);
+}
+
+
+std::unique_ptr<LabeledGraph> QuotientGraph(
+                              const LabeledGraph& graph,
+                              const std::map<NodeId, int>& partition) {
+  Transformation transform(graph);
+  transform.output = MakeBlockGraph();
+  if (transform.output == nullptr) {
+    return std::move(transform.output);
+  }
+  std::map<int, NodeId> blocks;
+  NodeIterator node_end_it = graph.NodeSetEnd();
+  for (NodeIterator node_it = graph.NodeSetBegin(); node_it != node_end_it;
+       ++node_it) {
+    NodeId src = *node_it;
+    NodeId src_block = FindOrAddBlock(src, partition, &blocks, &transform);
+    OutEdgeIterator edge_end_it = graph.OutEdgeEnd(src);
+    for (OutEdgeIterator edge_it = graph.OutEdgeBegin(src);
+         edge_it != edge_end_it; ++edge_it) {
+      NodeId tgt = graph.Target(*edge_it);
+      NodeId tgt_block = FindOrAddBlock(tgt, partition, &blocks, &transform);
+      TaggedAST new_edge_label(graph.GetEdgeLabel(*edge_it));
+      new_edge_label.set_tag(kEdgeTag);
+      transform.output->FindOrAddEdge(src_block, tgt_block, new_edge_label);
     }
   }
   return std::move(transform.output);

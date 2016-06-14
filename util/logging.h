@@ -1,6 +1,5 @@
-// This file defines a function for checking assertions and printing an error
-// if
-// the assertion fails.
+// This file defines a function for checking assertions and printing an error
+// if the assertion fails.
 #ifndef THIRD_PARTY_LOGLE_UTIL_LOGGING_H_
 #define THIRD_PARTY_LOGLE_UTIL_LOGGING_H_
 

@@ -103,5 +103,168 @@ TEST(GraphTransformerTest, DeleteNodeFromCycle) {
   EXPECT_TRUE(ast::value::Isomorphic(zero_label.ast(), src_label.ast()));
 }
 
+// The quotient of a graph with respect to the identity equivalence relation
+// should be the same graph.
+TEST(GraphTransformerTest, IdentityPathQuotient) {
+  // Create the graph { 0 -> 1 } and obtain the identifiers for the two nodes in
+  // the graph.
+  test::WeightedGraph path1;
+  test::GetPathGraph(2, &path1);
+  ASSERT_EQ(2, path1.NumNodes());
+  ASSERT_EQ(1, path1.NumEdges());
+  const LabeledGraph& input_graph1 = *path1.GetGraph();
+  NodeIterator node_it = input_graph1.NodeSetBegin();
+  NodeId first_node = *node_it;
+  ++node_it;
+  NodeId second_node = *node_it;
+
+  // Define the identity partition on two nodes.
+  std::map<NodeId, int> partition1 {
+    {first_node, 1},
+    {second_node, 2},
+  };
+
+  // Check that the quotient of the graph {0 -> 1} is the same graph.
+  std::unique_ptr<LabeledGraph> graph1 =
+      graph::QuotientGraph(input_graph1, partition1);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(2, graph1->NumNodes());
+  EXPECT_EQ(1, graph1->NumEdges());
+
+  // Check the same for a path graph with 6 nodes and 5 edges.
+  test::WeightedGraph path2;
+  test::GetPathGraph(6, &path2);
+  ASSERT_EQ(6, path2.NumNodes());
+  ASSERT_EQ(5, path2.NumEdges());
+  const LabeledGraph& input_graph2 = *path2.GetGraph();
+
+  std::map<NodeId, int> partition2;
+  NodeIterator end_it = input_graph2.NodeSetEnd();
+
+  // Define the identity partition on six nodes.
+  int i = 1;
+  for (node_it = input_graph2.NodeSetBegin(); node_it != end_it; ++node_it) {
+    partition2[*node_it] = i;
+    ++i;
+  }
+
+  // Check the quotient of this longer path is the same graph.
+  std::unique_ptr<LabeledGraph> graph2 =
+      graph::QuotientGraph(input_graph2, partition2);
+
+  EXPECT_TRUE(graph2 != nullptr);
+  EXPECT_EQ(6, graph2->NumNodes());
+  EXPECT_EQ(5, graph2->NumEdges());
+}
+
+TEST(GraphTransformerTest, IdentityCycleQuotient) {
+  // Create the graph { 0 <-> 1 } and obtain the identifiers for the two nodes
+  // in the graph.
+  test::WeightedGraph cycle1;
+  test::GetCycleGraph(2, &cycle1);
+  ASSERT_EQ(2, cycle1.NumNodes());
+  ASSERT_EQ(2, cycle1.NumEdges());
+  const LabeledGraph& input_graph1 = *cycle1.GetGraph();
+  NodeIterator node_it = input_graph1.NodeSetBegin();
+  NodeId first_node = *node_it;
+  ++node_it;
+  NodeId second_node = *node_it;
+
+  // Make partition splitting graph into two parts
+  std::map<NodeId, int> partition1 {
+    {first_node, 1},
+    {second_node, 2},
+  };
+
+  // Check that the quotient of the graph {0 <-> 1} is the same graph.
+  std::unique_ptr<LabeledGraph> graph1 =
+      graph::QuotientGraph(input_graph1, partition1);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(2, graph1->NumNodes());
+  EXPECT_EQ(2, graph1->NumEdges());
+
+  // Check the same on a larger cycle.
+  test::WeightedGraph cycle2;
+  test::GetCycleGraph(6, &cycle2);
+  ASSERT_EQ(6, cycle2.NumNodes());
+  ASSERT_EQ(6, cycle2.NumEdges());
+  const LabeledGraph& input_graph2 = *cycle2.GetGraph();
+
+  std::map<NodeId, int> partition2;
+  NodeIterator end_it = input_graph2.NodeSetEnd();
+
+  // Make finest partiton on this larger cycle.
+  int i = 1;
+  for (node_it = input_graph2.NodeSetBegin(); node_it != end_it; ++node_it) {
+    partition2[*node_it] = i++;
+  }
+
+  // Check the quotient of this larger cycle is the same graph.
+  std::unique_ptr<LabeledGraph> graph2 =
+      graph::QuotientGraph(input_graph2, partition2);
+
+  EXPECT_TRUE(graph2 != nullptr);
+  EXPECT_EQ(6, graph2->NumNodes());
+  EXPECT_EQ(6, graph2->NumEdges());
+}
+
+TEST(GraphTransformerTest, SimplePathQuotient) {
+  // Create the graph { 0 -> 1 } and obtain the identifiers for the two nodes
+  // in the graph.
+  test::WeightedGraph path1;
+  test::GetPathGraph(2, &path1);
+  ASSERT_EQ(2, path1.NumNodes());
+  ASSERT_EQ(1, path1.NumEdges());
+  const LabeledGraph& input_graph = *path1.GetGraph();
+  NodeIterator node_it = input_graph.NodeSetBegin();
+  NodeId first_node = *node_it;
+  ++node_it;
+  NodeId second_node = *node_it;
+
+  // Make partition splitting graph into two parts
+  std::map<NodeId, int> partition1 {
+    {first_node, 1},
+    {second_node, 1},
+  };
+
+  // Check that the quotient of the graph {0 -> 1} is the same graph.
+  std::unique_ptr<LabeledGraph> graph1 =
+      graph::QuotientGraph(input_graph, partition1);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(1, graph1->NumEdges());
+}
+
+TEST(GraphTransformerTest, SimpleCycleQuotient) {
+  // Create the graph { 0 <-> 1 } and obtain the identifiers for the two nodes
+  // in the graph.
+  test::WeightedGraph cycle1;
+  test::GetCycleGraph(2, &cycle1);
+  ASSERT_EQ(2, cycle1.NumNodes());
+  ASSERT_EQ(2, cycle1.NumEdges());
+  const LabeledGraph& input_graph = *cycle1.GetGraph();
+  NodeIterator node_it = input_graph.NodeSetBegin();
+  NodeId first_node = *node_it;
+  ++node_it;
+  NodeId second_node = *node_it;
+
+  // Make partition splitting graph into two parts
+  std::map<NodeId, int> partition1 {
+    {first_node, 1},
+    {second_node, 1},
+  };
+
+  // Check that the quotient of the graph {0 -> 1} is the same graph.
+  std::unique_ptr<LabeledGraph> graph1 =
+      graph::QuotientGraph(input_graph, partition1);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(2, graph1->NumEdges());
+}
+
 }  // namespace
 }  // namespace third_party_logle
