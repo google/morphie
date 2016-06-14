@@ -220,6 +220,18 @@ class LabeledGraph {
   // number of graph nodes and h is the complexity of serializing and hashing
   // 'label' to generate an index key.
   NodeId FindOrAddNode(const TaggedAST& label);
+  // Changes the label of 'node_id' to 'label'. Returns
+  // - Code::INVALID_ARGUMENT if
+  //   - 'node_id' does not exist, or
+  //   - 'label' is not of a valid label type, or
+  //   - 'label' is an existing, unique label in the graph.
+  //
+  // Adding a pre-exisitng unique label returns an error because otherwise, the
+  // the structure of the graph would have to change: two nodes would have to be
+  // merged to preserve the uniqueness constraint, which in turn would require
+  // updates the the set of nodes and edges in the graph.
+  util::Status UpdateNodeLabel(NodeId node_id, const TaggedAST& label);
+
   // Retrieve the id of an edge with the given label between the source and
   // target nodes. Behaves like FindOrAddNode for edge creation.
   // - Crashes if 'label' is not of a declared edge type.

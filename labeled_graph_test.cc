@@ -771,5 +771,51 @@ TEST_F(LabeledGraphTest, GetNeighbors) {
   EXPECT_EQ(graph_.GetLabelSuccessors(label[0]), node_set);
 }
 
+TEST_F(LabeledGraphTest, UpdateNodeLabels) {
+  ASSERT_TRUE(Initialize(&graph_).ok());
+  TaggedAST event1_label = GetIntLabel("Event", 5);
+  TaggedAST event2_label = GetIntLabel("Event", 12);
+  NodeId event1_id = graph_.FindOrAddNode(event1_label);
+  NodeId event2_id = graph_.FindOrAddNode(event2_label);
+  TaggedAST foo_label = GetStringLabel("File", "foo.txt");
+  graph_.FindOrAddNode(foo_label);
+  // The graph should have two nodes and no edges.
+  ASSERT_EQ(3, graph_.NumNodes());
+  ASSERT_EQ(0, graph_.NumEdges());
+  ASSERT_EQ(1, graph_.GetNodes(event1_label).size());
+  ASSERT_EQ(1, graph_.GetNodes(event2_label).size());
+  // After updating the label of event1 to be event2, there will be two event
+  // nodes with the same label.
+  graph_.UpdateNodeLabel(event1_id, event2_label);
+  EXPECT_EQ(3, graph_.NumNodes());
+  EXPECT_EQ(0, graph_.NumEdges());
+  EXPECT_EQ(0, graph_.GetNodes(event1_label).size());
+  EXPECT_EQ(2, graph_.GetNodes(event2_label).size());
+  std::set<NodeId> event_nodes = graph_.GetNodes(event2_label);
+  EXPECT_TRUE(event_nodes.find(event1_id) != event_nodes.end());
+  EXPECT_TRUE(event_nodes.find(event2_id) != event_nodes.end());
+  // Change the label of event1 to be a file different from foo.
+  TaggedAST bar_label = GetStringLabel("File", "bar.txt");
+  graph_.UpdateNodeLabel(event1_id, bar_label);
+  EXPECT_EQ(3, graph_.NumNodes());
+  EXPECT_EQ(0, graph_.GetNodes(event1_label).size());
+  EXPECT_EQ(1, graph_.GetNodes(event2_label).size());
+  EXPECT_EQ(1, graph_.GetNodes(foo_label).size());
+  std::set<NodeId> bar_nodes = graph_.GetNodes(bar_label);
+  EXPECT_EQ(1, bar_nodes.size());
+  EXPECT_EQ(event1_id, *bar_nodes.begin());
+}
+
+// The label of a node cannot be changed to a unique label that already exists
+// in the graph.
+TEST_F(LabeledGraphTest, UniqueNodeUpdateClash) {
+  ASSERT_TRUE(Initialize(&graph_).ok());
+  TaggedAST foo_label = GetStringLabel("File", "foo.txt");
+  TaggedAST bar_label = GetStringLabel("File", "bar.txt");
+  graph_.FindOrAddNode(foo_label);
+  NodeId bar_id = graph_.FindOrAddNode(bar_label);
+  EXPECT_FALSE(graph_.UpdateNodeLabel(bar_id, foo_label).ok());
+}
+
 }  // namespace
 }  // namespace third_party_logle

@@ -24,6 +24,7 @@
 
 #include <utility>
 
+#include "third_party/logle/ast.h"
 #include "third_party/logle/util/logging.h"
 #include "third_party/logle/util/string_utils.h"
 
@@ -37,6 +38,7 @@ const char* const kNullStr = "null";
 const char* const kInitializationErr = "The graph is not initialized.";
 const char* const kInvalidNodeErr = "Invalid node id.";
 const char* const kInvalidEdgeErr = "Invalid edge id.";
+const char* const kInvalidIndexTagErr = "There is no index for labels tagged ";
 
 // If a tagged AST has an AST field, return the serialization of the field.
 // Otherwise, return the string "null". TaggedAST objects with different tags
@@ -66,13 +68,57 @@ std::pair<bool, AST> GetTaggedType(const string& tag, const Types& types) {
 // Add a label and identifier to an index. The identifier may be either a node
 // or an edge id and the index must have the corresponding type.
 template <typename ObjectId>
-void IndexObject(const TaggedAST& label, ObjectId id,
-                 Indexes<set<ObjectId>>* indexes) {
+util::Status IndexObject(const TaggedAST& label, ObjectId id,
+                         Indexes<set<ObjectId>>* indexes) {
   auto index_it = indexes->find(label.tag());
-  CHECK(index_it != indexes->end(),
-        util::StrCat("There is no index for labels tagged ", label.tag(), "."));
+  if (index_it == indexes->end()) {
+    return util::Status(Code::INVALID_ARGUMENT,
+                        util::StrCat(kInvalidIndexTagErr, label.tag(), "."));
+  }
   Index<set<ObjectId>>& index = index_it->second;
   index[GetSerializationOrNull(label)].insert(id);
+  return util::Status::OK;
+}
+
+// Remove the object 'id' from the index of 'label'. The object may be a node or
+// an edge and 'label' must be of non-unique type.
+template <typename ObjectId>
+void DeIndexObject(const TaggedAST& label, ObjectId id,
+                   Indexes<set<ObjectId>>* indexes) {
+  auto index_it = indexes->find(label.tag());
+  Index<set<ObjectId>>& index = index_it->second;
+  index[GetSerializationOrNull(label)].erase(id);
+}
+
+// Extend the index of unique nodes with a map from 'label' to 'node_id'.
+// - Crashes if 'label' is already in the map.
+util::Status IndexUniqueNode(const TaggedAST& label, NodeId node_id,
+                             Indexes<NodeId>* named_nodes) {
+  auto index_it = named_nodes->find(label.tag());
+  Index<NodeId>& named_node = index_it->second;
+  string name = GetSerializationOrNull(label);
+  auto name_it = named_node.find(name);
+  if (name_it != named_node.end()) {
+    return util::Status(
+        Code::INVALID_ARGUMENT,
+        util::StrCat("A node with label ",
+                     ast::ToString(label, ast::PrintOption::kValue),
+                     " already exists."));
+  }
+  named_node.insert({name, node_id});
+  return util::Status::OK;
+}
+
+void DeIndexUniqueNode(const TaggedAST& label, NodeId node_id,
+                       Indexes<NodeId>* named_nodes) {
+  auto index_it = named_nodes->find(label.tag());
+  Index<NodeId>& named_node = index_it->second;
+  string name = GetSerializationOrNull(label);
+  auto name_it = named_node.find(name);
+  if (name_it == named_node.end()) {
+    return;
+  }
+  named_node.erase(name_it);
 }
 
 // Retrieve a set of identifiers from an index given a label. Returns the empty
@@ -208,6 +254,31 @@ NodeId LabeledGraph::FindOrAddNode(const TaggedAST& label) {
     name_it = named_node.insert({name, node_id}).first;
   }
   return name_it->second;
+}
+
+util::Status LabeledGraph::UpdateNodeLabel(NodeId node_id,
+                                           const TaggedAST& label) {
+  CHECK(is_initialized_, kInitializationErr);
+  string tmp_err;
+  if (!type::IsTyped(node_types_, label, &tmp_err)) {
+    return util::Status(Code::INVALID_ARGUMENT, tmp_err);
+  }
+  if (!HasNode(node_id)) {
+    return util::Status(Code::INVALID_ARGUMENT, kInvalidNodeErr);
+  }
+  TaggedAST old_label = GetNodeLabel(node_id);
+  // Update the label of the node and the relevant indexes.
+  graph_[node_id] = label;
+  if (IsUniqueNodeType(old_label)) {
+    DeIndexUniqueNode(old_label, node_id, &named_nodes_);
+  } else {
+    DeIndexObject(old_label, node_id, &node_indexes_);
+  }
+  if (IsUniqueNodeType(label)) {
+    return IndexUniqueNode(label, node_id, &named_nodes_);
+  } else {
+    return IndexObject(label, node_id, &node_indexes_);
+  }
 }
 
 EdgeId LabeledGraph::FindOrAddEdge(NodeId source, NodeId target,
