@@ -226,17 +226,24 @@ class LabeledGraph {
   //   - 'label' is not of a valid label type, or
   //   - 'label' is an existing, unique label in the graph.
   //
-  // Adding a pre-exisitng unique label returns an error because otherwise, the
+  // Adding a pre-exisiting unique label returns an error because otherwise, the
   // the structure of the graph would have to change: two nodes would have to be
   // merged to preserve the uniqueness constraint, which in turn would require
   // updates the the set of nodes and edges in the graph.
   util::Status UpdateNodeLabel(NodeId node_id, const TaggedAST& label);
-
   // Retrieve the id of an edge with the given label between the source and
   // target nodes. Behaves like FindOrAddNode for edge creation.
   // - Crashes if 'label' is not of a declared edge type.
   // The note about worst case complexity of FindOrAddNode applies here.
   EdgeId FindOrAddEdge(NodeId source, NodeId target, const TaggedAST& label);
+  // Changes the label of 'edge_id' to 'label'. Returns
+  // - Code::INVALID_ARGUMENT if
+  //   - 'edge_id' does not exist, or
+  //   - 'label' is not of a valid label type, or
+  //   - 'label' is an existing, unique label in the graph.
+  // See the comments for UpdateNodeLabel for a justification of these
+  // restrictions.
+  util::Status UpdateEdgeLabel(EdgeId edge_id, const TaggedAST& label);
   // Returns true if there is a node with the given identifier in the graph.
   bool HasNode(NodeId node_id) const;
   // Returns true if there is an edge corresponding to a given identifier.  An

@@ -90,8 +90,12 @@ void DeIndexObject(const TaggedAST& label, ObjectId id,
   index[GetSerializationOrNull(label)].erase(id);
 }
 
-// Extend the index of unique nodes with a map from 'label' to 'node_id'.
-// - Crashes if 'label' is already in the map.
+// The functions below extend the index of unique nodes or edges with a new
+// label, or remove a specific node or edge from a unique index. Unlike the
+// situation for non-unique indexes, separate functions are used for
+// manipulating unique node and edge indexes. This is because a unique node
+// index uses a serialized label as a key while a unique edge index uses a
+// triple of a source and target node and a serialized edge label as a key.
 util::Status IndexUniqueNode(const TaggedAST& label, NodeId node_id,
                              Indexes<NodeId>* named_nodes) {
   auto index_it = named_nodes->find(label.tag());
@@ -119,6 +123,30 @@ void DeIndexUniqueNode(const TaggedAST& label, NodeId node_id,
     return;
   }
   named_node.erase(name_it);
+}
+
+util::Status IndexUniqueEdge(const string& tag, const Edge& edge,
+                             EdgeId edge_id, UniqueEdges* indexes) {
+  auto index_it = indexes->find(tag);
+  EdgeIndex& index = index_it->second;
+  auto name_it = index.find(edge);
+  if (name_it != index.end()) {
+    return util::Status(Code::INVALID_ARGUMENT, "Unique edge label exists.");
+  }
+  Edge key(edge.source, edge.target, edge.label);
+  index.insert({key, edge_id});
+  return util::Status::OK;
+}
+
+void DeIndexUniqueEdge(const string& tag, const Edge& edge,
+                       UniqueEdges* indexes) {
+  auto index_it = indexes->find(tag);
+  EdgeIndex& index = index_it->second;
+  auto name_it = index.find(edge);
+  if (name_it == index.end()) {
+    return;
+  }
+  index.erase(name_it);
 }
 
 // Retrieve a set of identifiers from an index given a label. Returns the empty
@@ -304,6 +332,34 @@ EdgeId LabeledGraph::FindOrAddEdge(NodeId source, NodeId target,
   return name_it->second;
 }
 
+util::Status LabeledGraph::UpdateEdgeLabel(EdgeId edge_id,
+                                           const TaggedAST& label) {
+  CHECK(is_initialized_, kInitializationErr);
+  string tmp_err;
+  if (!type::IsTyped(edge_types_, label, &tmp_err)) {
+    return util::Status(Code::INVALID_ARGUMENT, tmp_err);
+  }
+  if (!HasEdge(edge_id)) {
+    return util::Status(Code::INVALID_ARGUMENT, kInvalidEdgeErr);
+  }
+  TaggedAST old_label = GetEdgeLabel(edge_id);
+  // Update the label of the edge and the relevant indexes.
+  graph_[edge_id] = label;
+  if (IsUniqueEdgeType(old_label)) {
+    string name = GetSerializationOrNull(old_label);
+    Edge edge(Source(edge_id), Target(edge_id), name);
+    DeIndexUniqueEdge(old_label.tag(), edge, &named_edges_);
+  } else {
+    DeIndexObject(old_label, edge_id, &edge_indexes_);
+  }
+  if (IsUniqueEdgeType(label)) {
+    string name = GetSerializationOrNull(label);
+    Edge edge(Source(edge_id), Target(edge_id), name);
+    return IndexUniqueEdge(label.tag(), edge, edge_id, &named_edges_);
+  } else {
+    return IndexObject(label, edge_id, &edge_indexes_);
+  }
+}
 // In a Boost adjacency list graph that uses vectors internally (like the
 // LabeledGraph), node ids are unsigned values in the range [0, NumNodes() - 1],
 // where NumNodes() is the number of nodes in the graph.

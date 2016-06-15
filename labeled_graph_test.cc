@@ -779,7 +779,7 @@ TEST_F(LabeledGraphTest, UpdateNodeLabels) {
   NodeId event2_id = graph_.FindOrAddNode(event2_label);
   TaggedAST foo_label = GetStringLabel("File", "foo.txt");
   graph_.FindOrAddNode(foo_label);
-  // The graph should have two nodes and no edges.
+  // The graph should have three nodes and no edges.
   ASSERT_EQ(3, graph_.NumNodes());
   ASSERT_EQ(0, graph_.NumEdges());
   ASSERT_EQ(1, graph_.GetNodes(event1_label).size());
@@ -815,6 +815,58 @@ TEST_F(LabeledGraphTest, UniqueNodeUpdateClash) {
   graph_.FindOrAddNode(foo_label);
   NodeId bar_id = graph_.FindOrAddNode(bar_label);
   EXPECT_FALSE(graph_.UpdateNodeLabel(bar_id, foo_label).ok());
+}
+
+TEST_F(LabeledGraphTest, UpdateEdgeLabels) {
+  ASSERT_TRUE(Initialize(&graph_).ok());
+  // Construct the graph:
+  //  [foo.txt]<--3--[Event:5]--[forks]-->[Event:12]
+  TaggedAST event1_label = GetIntLabel("Event", 5);
+  TaggedAST event2_label = GetIntLabel("Event", 12);
+  NodeId event1_id = graph_.FindOrAddNode(event1_label);
+  NodeId event2_id = graph_.FindOrAddNode(event2_label);
+  TaggedAST fork_label = GetStringLabel("Relation", "forks");
+  TaggedAST freq_five = GetIntLabel("Frequency", 5);
+  EdgeId fork_edge1 = graph_.FindOrAddEdge(event1_id, event2_id, fork_label);
+  EdgeId fork_edge2 = graph_.FindOrAddEdge(event1_id, event2_id, fork_label);
+  TaggedAST foo_label = GetStringLabel("File", "foo.txt");
+  NodeId file_id = graph_.FindOrAddNode(foo_label);
+  EdgeId file_edge = graph_.FindOrAddEdge(event1_id, file_id, freq_five);
+  graph_.FindOrAddEdge(event1_id, file_id, freq_five);
+  // The graph should have three nodes and two edges.
+  ASSERT_EQ(3, graph_.NumNodes());
+  ASSERT_EQ(3, graph_.NumEdges());
+  ASSERT_EQ(2, graph_.GetEdges(fork_label).size());
+  // After updating the label of event1 to be event2, there will be two event
+  // nodes with the same label.
+  TaggedAST child_label = GetStringLabel("Relation", "child");
+  graph_.UpdateEdgeLabel(fork_edge1, child_label);
+  EXPECT_EQ(3, graph_.NumNodes());
+  EXPECT_EQ(3, graph_.NumEdges());
+  std::set<EdgeId> edges = graph_.GetEdges(fork_label);
+  EXPECT_EQ(1, edges.size());
+  EXPECT_EQ(fork_edge2, *edges.begin());
+  edges = graph_.GetEdges(child_label);
+  EXPECT_EQ(1, edges.size());
+  EXPECT_EQ(fork_edge1, *edges.begin());
+  EXPECT_EQ(1, graph_.GetEdges(freq_five).size());
+  TaggedAST freq_two = GetIntLabel("Frequency", 2);
+  graph_.UpdateEdgeLabel(file_edge, freq_two);
+  EXPECT_EQ(0, graph_.GetEdges(freq_five).size());
+  EXPECT_EQ(1, graph_.GetEdges(freq_two).size());
+}
+
+TEST_F(LabeledGraphTest, UniqueEdgeUpdateClash) {
+  ASSERT_TRUE(Initialize(&graph_).ok());
+  TaggedAST event_label = GetIntLabel("Event", 13);
+  TaggedAST bar_label = GetStringLabel("File", "bar.txt");
+  NodeId event_id = graph_.FindOrAddNode(event_label);
+  NodeId file_id = graph_.FindOrAddNode(bar_label);
+  TaggedAST freq1_label = GetIntLabel("Frequency", 31);
+  TaggedAST freq2_label = GetIntLabel("Frequency", 175);
+  graph_.FindOrAddEdge(event_id, file_id, freq1_label);
+  EdgeId edge2_id = graph_.FindOrAddEdge(event_id, file_id, freq2_label);
+  EXPECT_FALSE(graph_.UpdateEdgeLabel(edge2_id, freq1_label).ok());
 }
 
 }  // namespace
