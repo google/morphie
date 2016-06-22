@@ -501,10 +501,14 @@ cc_test(
     size = "small",
     srcs = ["graph_transformer_test.cc"],
     deps = [
+        ":ast",
         ":graph_transformer",
         ":gtest",
         ":labeled_graph",
         ":test_graphs",
+        ":type",
+        ":value",
+        "//third_party/logle/util:string_utils",
     ],
 )
 

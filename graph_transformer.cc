@@ -26,10 +26,7 @@ namespace type = ast::type;
 
 namespace {
 
-const char* const kBlockTag = "Block";
-const char* const kEdgeTag = "Edge";
-const char* const kQuotientGraphTag = "Quotient-Graph";
-const char* const kSubNode = "Sub-Node";
+using QuotientEdgeMap = std::map<std::pair<NodeId, NodeId>, std::set<EdgeId>>;
 
 // A Transformation consists of a reference to an input graph, an output graph
 // and a map between the nodes of the input and the output graph. A
@@ -89,55 +86,88 @@ NodeId FindOrRelabelNode(NodeId node_id, TaggedAST new_label,
   return new_node;
 }
 
-// Takes an integer and returns a block label with that integer as the AST
-// payload and the tag.
-TaggedAST MakeBlockLabel(int label) {
-  TaggedAST tast;
-  *tast.mutable_ast() = ast::value::MakeInt(label);
-  tast.set_tag(kBlockTag);
-  return tast;
-}
-
-// Takes an id and adds the corresponding block to transform->output as dictated
-// by 'partition'. 'blocks' is used to keep track of duplicate blocks, as at the
-// moment FindOrAddNode does not check for duplicates as needed here. b/29351440
-//
-// Returns the id of the corresponding block node in the output graph.
-NodeId FindOrAddBlock(NodeId node_id, const std::map<NodeId, int>& partition,
-               std::map<int, NodeId>* blocks,
-               Transformation* transform) {
-    const auto node_it = partition.find(node_id);
-    CHECK(node_it != partition.end(),
-          util::StrCat("The following node is missing from the partition: ",
-                       std::to_string(node_id)));
-
-    int block_num = node_it->second;
-    // If the corresponding block is not in the graph, add it.
-    auto block_it = blocks->find(block_num);
-    NodeId block_id;
-    if (block_it == blocks->end()) {
-      TaggedAST block_label = MakeBlockLabel(block_num);
-      block_id = transform->output->FindOrAddNode(block_label);
-      (*blocks)[block_num] = block_id;
+void BuildQuotientEdgeMap(const std::map<NodeId, int>& partition,
+                          bool allow_multi_edges, std::map<int, NodeId>* blocks,
+                          QuotientEdgeMap* block_edge_members,
+                          Transformation* transform) {
+  const LabeledGraph& graph = transform->input;
+  EdgeIterator end_it = graph.EdgeSetEnd();
+  for (EdgeIterator edge_it = graph.EdgeSetBegin(); edge_it != end_it;
+       ++edge_it) {
+    NodeId src = graph.Source(*edge_it);
+    NodeId src_block = blocks->at(partition.at(src));
+    NodeId tgt = graph.Target(*edge_it);
+    NodeId tgt_block = blocks->at(partition.at(tgt));
+    // If multi-edges are allowed the FindOrAddEdge method is used to add
+    // multi-edges. Otherwise 'block_edge_members' records the EdgeId's of the
+    // edges from 'src_block' to 'tgt_block'. The edges are added to the graph
+    // at the end.
+    if (allow_multi_edges) {
+      transform->output->FindOrAddEdge(src_block, tgt_block,
+                                       graph.GetEdgeLabel(*edge_it));
     } else {
-      block_id = block_it->second;
+      std::pair<NodeId, NodeId> quotient_edge(src_block, tgt_block);
+      auto member_it = block_edge_members->find(quotient_edge);
+      if (member_it == block_edge_members->end()) {
+        block_edge_members->insert({quotient_edge, {*edge_it}});
+      } else {
+        member_it->second.insert(*edge_it);
+      }
     }
-    return block_id;
+  }
 }
 
-std::unique_ptr<LabeledGraph> MakeBlockGraph() {
-  std::unique_ptr<LabeledGraph> new_graph(new LabeledGraph());
+// Add the relabeled, collapsed edges to the graph.
+void AddQuotientEdges(const QuotientEdgeMap& block_edge_members,
+                      const graph::EdgeLabelFn& edge_label_fn,
+                      Transformation* transform) {
+  auto member_end_it = block_edge_members.end();
+  for (auto member_it = block_edge_members.begin(); member_it != member_end_it;
+       ++member_it) {
+    auto edge_pair = member_it->first;
+    NodeId src = edge_pair.first;
+    NodeId tgt = edge_pair.second;
+    TaggedAST edge_tag = edge_label_fn(transform->input, member_it->second);
+    transform->output->FindOrAddEdge(src, tgt, edge_tag);
+  }
+}
 
-  type::Types node_types;
-  node_types.emplace(kBlockTag,
-                     type::MakeInt(kBlockTag, /*Must not be null*/ false));
-  type::Types edge_types;
-  edge_types.emplace(kEdgeTag,
-                     type::MakeInt(kEdgeTag, /*Must not be null*/ false));
-  AST graph_type = type::MakeNull(kQuotientGraphTag);
-  new_graph->Initialize(node_types, {}, edge_types, {}, graph_type);
+void BuildQuotientNodeMap(const std::map<NodeId, int>& partition,
+                          const Transformation& transform,
+                          std::map<int, std::set<NodeId>>* block_members) {
+  const LabeledGraph& input_graph = transform.input;
+  NodeIterator node_end_it = input_graph.NodeSetEnd();
+  for (NodeIterator node_it = input_graph.NodeSetBegin();
+       node_it != node_end_it; ++node_it) {
+    NodeId src = *node_it;
+    // Keep track of all of the nodes in each block. The set of nodes will be
+    // passed to 'node_label_fn' to properly label each block node.
+    const auto partition_it = partition.find(src);
+    CHECK(partition_it != partition.end(),
+          util::StrCat("The following node is missing from the partition: ",
+                       std::to_string(src)));
+    int block_id = partition_it->second;
+    auto block_it = block_members->find(block_id);
+    if (block_it == block_members->end()) {
+      block_members->insert({block_id, {src}});
+    } else {
+      block_it->second.insert(src);
+    }
+  }
+}
 
-  return new_graph;
+void AddQuotientNodes(const graph::NodeLabelFn& node_label_fn,
+                      const std::map<int, std::set<NodeId>>& block_members,
+                      std::map<int, NodeId>* block_node_ids,
+                      Transformation* transform) {
+  auto block_end_it = block_members.end();
+  for (auto block_it = block_members.begin(); block_it != block_end_it;
+       ++block_it) {
+    int block_id = block_it->first;
+    TaggedAST block_label = node_label_fn(transform->input, block_it->second);
+    NodeId block_node_id = transform->output->FindOrAddNode(block_label);
+    block_node_ids->insert({block_id, block_node_id});
+  }
 }
 
 }  // namespace
@@ -185,30 +215,28 @@ std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
   return std::move(transform.output);
 }
 
-
 std::unique_ptr<LabeledGraph> QuotientGraph(
-                              const LabeledGraph& graph,
-                              const std::map<NodeId, int>& partition) {
-  Transformation transform(graph);
-  transform.output = MakeBlockGraph();
+    const LabeledGraph& input_graph, const LabeledGraph& output_graph_type,
+    const std::map<NodeId, int>& partition, const NodeLabelFn& node_label_fn,
+    const EdgeLabelFn& edge_label_fn, bool allow_multi_edges) {
+  Transformation transform(input_graph);
+  transform.output = CloneGraphType(output_graph_type);
   if (transform.output == nullptr) {
     return std::move(transform.output);
   }
-  std::map<int, NodeId> blocks;
-  NodeIterator node_end_it = graph.NodeSetEnd();
-  for (NodeIterator node_it = graph.NodeSetBegin(); node_it != node_end_it;
-       ++node_it) {
-    NodeId src = *node_it;
-    NodeId src_block = FindOrAddBlock(src, partition, &blocks, &transform);
-    OutEdgeIterator edge_end_it = graph.OutEdgeEnd(src);
-    for (OutEdgeIterator edge_it = graph.OutEdgeBegin(src);
-         edge_it != edge_end_it; ++edge_it) {
-      NodeId tgt = graph.Target(*edge_it);
-      NodeId tgt_block = FindOrAddBlock(tgt, partition, &blocks, &transform);
-      TaggedAST new_edge_label(graph.GetEdgeLabel(*edge_it));
-      new_edge_label.set_tag(kEdgeTag);
-      transform.output->FindOrAddEdge(src_block, tgt_block, new_edge_label);
-    }
+  std::map<int, std::set<NodeId>> block_members;
+  BuildQuotientNodeMap(partition, transform, &block_members);
+  // Add blocks to the output graph with the label generated by 'node_label_fn'.
+  std::map<int, NodeId> block_node_ids;
+  AddQuotientNodes(node_label_fn, block_members, &block_node_ids, &transform);
+
+  std::map<std::pair<NodeId, NodeId>, std::set<EdgeId>> block_edge_members;
+  BuildQuotientEdgeMap(partition, allow_multi_edges, &block_node_ids,
+                       &block_edge_members, &transform);
+  // If multi-edges are not allowed, add edges from 'block_edge_members' to the
+  // graph.
+  if (!allow_multi_edges) {
+    AddQuotientEdges(block_edge_members, edge_label_fn, &transform);
   }
   return std::move(transform.output);
 }
