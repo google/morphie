@@ -41,14 +41,11 @@ class PlasoAnalyzer {
 
   // Initializes the log analyzer with a JSON document.
   //  * Requires that 'json_doc' is not null.
-  //  * Returns OK if the JSON document is
-  //    - an object with a member "hits",
-  //    - which is an object with a member also named "hits",
-  //    - which is an array containing at least one element.
+  //  * Returns OK if the JSON document is an object containing key-value pairs.
   //  * Returns INVALID_ARGUMENT otherwise.
-  // The document structure is defined by the data source not by logle. Each
-  // element of the array is a Plaso event object and must contain the fields
-  // listed in the class-level comment. Additional error validation is done
+  // The document structure is defined by the data source not by logle. The keys
+  // in the object specify an event identifier and the value is another object
+  // containing event data. Additional error validation is done
   // during graph construction.
   util::Status Initialize(std::unique_ptr<::Json::Value> json_doc);
 

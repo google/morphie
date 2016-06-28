@@ -62,7 +62,7 @@ string GetTimeline(const map<int64_t, set<NodeId>>& time_index) {
     node_name = util::StrCat("T", std::to_string(timed_events.first));
     util::StrAppend(&timeline, "  ", node_name, " [shape=plaintext, ",
                     R"(label=")", util::UnixMicrosToRFC3339(timed_events.first),
-                    "];\n");
+                    "\"];\n");
     timestamps.emplace_back(node_name);
     util::StrAppend(&time_aligned_nodes, "  {rank=same; ", node_name, "; ",
                     util::SetJoin(timed_events.second, "; "), "}\n");
