@@ -37,6 +37,10 @@ namespace {
 namespace logle = third_party_logle;
 namespace util = third_party_logle::util;
 
+const char kInvalidAnalyzerErr[] =
+    "Invalid analysis. The analysis must be one of 'curio', 'mail', or "
+    "'plaso'.";
+
 // Returns a pair consisting of a status object and a CSV parser for 'filename'.
 // The return value is:
 //  - OK if 'filename' could be opened successfully. In this case, the second
@@ -183,19 +187,19 @@ util::Status RunMailAccessAnalyzer(const AnalysisOptions& options,
 
 // Invokes the specified analyzer. If the analysis generates a 'dot_graph', will
 // write that graph to 'options.output_dot_file()' if that field is set.
-util::Status Run(Analyzer analyzer, const AnalysisOptions& options) {
+util::Status Run(const AnalysisOptions& options) {
   util::Status status = util::Status::OK;
   string dot_graph;
-  switch (analyzer) {
-    case Analyzer::kCurio:
-      status = RunCurioAnalyzer(options, &dot_graph);
-      break;
-    case Analyzer::kMailAccess:
-      status = RunMailAccessAnalyzer(options, &dot_graph);
-      break;
-    case Analyzer::kPlaso:
-      status = RunPlasoAnalyzer(options, &dot_graph);
-      break;
+  if (!options.has_analyzer()) {
+    return util::Status(Code::INVALID_ARGUMENT, kInvalidAnalyzerErr);
+  } else if (options.analyzer() == "curio") {
+    status = RunCurioAnalyzer(options, &dot_graph);
+  } else if (options.analyzer() == "mail") {
+    status = RunMailAccessAnalyzer(options, &dot_graph);
+  } else if (options.analyzer() == "plaso") {
+    status = RunPlasoAnalyzer(options, &dot_graph);
+  } else {
+    return util::Status(Code::INVALID_ARGUMENT, kInvalidAnalyzerErr);
   }
   if (!status.ok() || dot_graph == "") {
     return status;

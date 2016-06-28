@@ -32,10 +32,8 @@ namespace logle = third_party_logle;
 namespace protobuf = google::protobuf;
 using Analyzer = third_party_logle::frontend::Analyzer;
 
-// Flags that determine which analyzer to use and the options with which to
-// invoke that analyzer..
+// The input string containing analysis options as a human-readable protobuf.
 DEFINE_string(analysis_options, "", "Analysis options as a protocol buffer.");
-DEFINE_string(analyzer, "", "One of 'curio', 'mail' or 'plaso'.");
 
 // Returns true and logs an error message if 'value' is empty. This function is
 // called by InitGoogle. More complex validation takes place separately.
@@ -47,34 +45,11 @@ static bool CheckFlagValueNotEmpty(const char* flagname, const string& value) {
   return true;
 }
 
-static bool CheckValidAnalyzer(const char* flagname, const string& value) {
-  if (!(value == "curio" || value == "mail" || value == "plaso")) {
-    std::cerr << flagname << " must be 'curio', 'mail' or 'plaso'.";
-    return false;
-  }
-  return true;
-}
-
 static bool is_config_empty =
     RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
-static bool is_analyzer_empty =
-    RegisterFlagValidator(&FLAGS_analyzer, &CheckFlagValueNotEmpty);
 
 int main(int argc, char** argv) {
   InitGoogle(argv[0], &argc, &argv, true);
-
-  Analyzer analyzer;
-  if (FLAGS_analyzer == "curio") {
-    analyzer = Analyzer::kCurio;
-  } else if (FLAGS_analyzer == "mail") {
-    analyzer = Analyzer::kMailAccess;
-  } else if (FLAGS_analyzer == "plaso") {
-    analyzer = Analyzer::kPlaso;
-  } else {
-    std::cerr << "Input validation failed!";
-    return -1;
-  }
-
   logle::AnalysisOptions options;
   string out;
   if (!protobuf::TextFormat::ParseFromString(FLAGS_analysis_options,
@@ -83,12 +58,10 @@ int main(int argc, char** argv) {
                  "AnalysisOptions proto.";
     return -1;
   }
-
-  logle::util::Status status = logle::frontend::Run(analyzer, options);
+  logle::util::Status status = logle::frontend::Run(options);
   if (!status.ok()) {
     std::cerr << status.message();
     return -1;
   }
-
   return 0;
 }
