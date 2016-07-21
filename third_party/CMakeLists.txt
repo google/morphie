@@ -26,15 +26,19 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
 # CMakeLists.txt.jsoncpp there.
 configure_file(CMakeLists.txt.jsoncpp
 	jsoncpp/CMakeLists.txt)
-set(jsoncpp_download_dir "${CMAKE_BINARY_DIR}/third_party/jsoncpp")
+set(jsoncpp_work_dir "${CMAKE_BINARY_DIR}/third_party/jsoncpp")
+set(jsoncpp_build_dir "${CMAKE_BINARY_DIR}/jsoncpp-build")
+set(jsoncpp_lib_dir "${CMAKE_BINARY_DIR}/jsoncpp-lib")
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-	WORKING_DIRECTORY ${jsoncpp_download_dir} )
+	WORKING_DIRECTORY ${jsoncpp_work_dir} )
+message(STATUS "INSTALL DIR is ${CMAKE_INSTALL_PREFIX}")
+set(CMAKE_INSTALL_COMPONENT "${CMAKE_BINARY_DIR}/jsoncpp-lib")
+message(STATUS "INSTALL COMPONENT is ${CMAKE_INSTALL_COMPONENT}")
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
-	WORKING_DIRECTORY ${jsoncpp_download_dir} )
-# Adds the build options 'gtest' and 'gtest_main', which are defined in the
-# CMakeLists file of googletest to this build.
-add_subdirectory(${CMAKE_BINARY_DIR}/jsoncpp-src
- 	${CMAKE_BINARY_DIR}/jsoncpp-build)
+	WORKING_DIRECTORY ${jsoncpp_work_dir} )
+# The relevant jsoncpp header files are in the 'include' directory below
+# and statically compiled libraries will be in the 'lib' directory.
+# add_subdirectory(${jsoncpp_lib_dir}/include ${jsoncpp_lib_dir}/lib)
 
 
 # Download and install the gflags command line library.
