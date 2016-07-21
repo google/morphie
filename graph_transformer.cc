@@ -215,6 +215,35 @@ std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
   return std::move(transform.output);
 }
 
+// The deletion function iterates over edges in the input graph and copies the
+// source and target node of each edge to the new graph. An edge is copied to
+// the new graph if the edge is not in the set of edges to delete.
+std::unique_ptr<LabeledGraph> DeleteEdges(const LabeledGraph& graph,
+                                          const set<EdgeId>& edges) {
+  Transformation transform(graph);
+  transform.output = CloneGraphType(graph);
+  if (transform.output == nullptr) {
+    return std::move(transform.output);
+  }
+  EdgeIterator end_it = graph.EdgeSetEnd();
+  for (EdgeIterator edge_it = graph.EdgeSetBegin(); edge_it != end_it;
+       ++edge_it) {
+    EdgeId old_edge = *edge_it;
+    NodeId old_src = graph.Source(*edge_it);
+    NodeId old_tgt = graph.Target(*edge_it);
+    NodeId new_src =
+        FindOrRelabelNode(old_src, graph.GetNodeLabel(old_src), &transform);
+    NodeId new_tgt =
+        FindOrRelabelNode(old_tgt, graph.GetNodeLabel(old_tgt), &transform);
+    if (edges.find(old_edge) != edges.end()) {
+      continue;
+    }
+    transform.output->FindOrAddEdge(new_src, new_tgt,
+                                    graph.GetEdgeLabel(*edge_it));
+  }
+  return std::move(transform.output);
+}
+
 std::unique_ptr<LabeledGraph> QuotientGraph(
     const LabeledGraph& input_graph, const LabeledGraph& output_graph_type,
     const std::map<NodeId, int>& partition, const NodeLabelFn& node_label_fn,

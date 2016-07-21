@@ -46,6 +46,15 @@ using EdgeLabelFn =
 std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
                                           const set<NodeId>& nodes);
 
+// If G = (V, E) is a graph and F is a subset of edges of E, the result of
+// deleting F from G is the graph with nodes V and edges H = (E - F). The
+// resulting graph has the same set of nodes as the original graph though some
+// of these nodes may have no incoming or outgoing edges.
+//
+// Returns a labeled graph obtained by deleting 'edges' from the input graph.
+std::unique_ptr<LabeledGraph> DeleteEdges(const LabeledGraph& graph,
+                                          const set<EdgeId>& edges);
+
 // The Quotient graph Q of a graph G is a graph whose vertices are blocks of a
 // partition of the vertices of G and where block B is adjacent to block C if
 // some vertex in B is adjacent to some vertex in C with respect to the edge

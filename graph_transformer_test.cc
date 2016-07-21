@@ -111,6 +111,45 @@ TEST(GraphTransformerTest, DeleteNodeFromCycle) {
   EXPECT_TRUE(ast::value::Isomorphic(zero_label.ast(), src_label.ast()));
 }
 
+TEST(GraphTransformerTest, DeleteSingleEdge) {
+  // Create the graph { 0 -> 1 } and test deletion of edges from it.
+  test::WeightedGraph one_edge;
+  test::GetPathGraph(2, &one_edge);
+  ASSERT_EQ(2, one_edge.NumNodes());
+  ASSERT_EQ(1, one_edge.NumEdges());
+  const LabeledGraph& input_graph = *one_edge.GetGraph();
+  // If no edges are deleted, the graph should not change.
+  std::unique_ptr<LabeledGraph> graph1 = graph::DeleteEdges(input_graph, {});
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(2, graph1->NumNodes());
+  EXPECT_EQ(1, graph1->NumEdges());
+  // If the edge (0 -> 1) is deleted, there will be two nodes and zero edges
+  // left in the graph.
+  EdgeId edge = *input_graph.EdgeSetBegin();
+  std::unique_ptr<LabeledGraph> graph2 =
+      graph::DeleteEdges(input_graph, {edge});
+  EXPECT_TRUE(graph2 != nullptr);
+  EXPECT_EQ(2, graph2->NumNodes());
+  EXPECT_EQ(0, graph2->NumEdges());
+}
+
+TEST(GraphTransformerTest, DeleteEdgeFromCycle) {
+  // Create the graph { 0 -> 1, 1 -> 2, 2 -> 0 }.
+  test::WeightedGraph triangle;
+  test::GetCycleGraph(3, &triangle);
+  ASSERT_EQ(3, triangle.NumNodes());
+  ASSERT_EQ(3, triangle.NumEdges());
+  const LabeledGraph& input_graph = *triangle.GetGraph();
+  EdgeIterator edge_it = input_graph.EdgeSetBegin();
+  EdgeId edge = *(++edge_it);
+  // Check that deleting '1 -> 2' results in the graph { 0 -> 1, 2 -> 0}.
+  std::unique_ptr<LabeledGraph> graph1 =
+      graph::DeleteEdges(input_graph, {edge});
+  // Check that the graph has two nodes and one edge.
+  EXPECT_EQ(3, graph1->NumNodes());
+  EXPECT_EQ(2, graph1->NumEdges());
+}
+
 // Label functions for QuotientGraph. All of these functions are required to be
 // NodeLabelFn's or EdgeLabelFn's so they can be passed as arguments to
 // QuotientGraph. Some arguments may not be used by these methods.
