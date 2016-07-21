@@ -365,7 +365,7 @@ util::Status LabeledGraph::UpdateEdgeLabel(EdgeId edge_id,
 // where NumNodes() is the number of nodes in the graph.
 // http://www.boost.org/doc/libs/1_37_0/libs/graph/doc/adjacency_list.html
 bool LabeledGraph::HasNode(NodeId node_id) const {
-  return node_id < NumNodes();
+  return static_cast<int>(node_id) < NumNodes();
 }
 
 // An EdgeId in Boost is implemented as a struct containing a source and a

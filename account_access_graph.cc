@@ -58,7 +58,7 @@ string GetField(const string& field_name,
   logle::CHECK(0 <= field_it->second,
                (logle::util::StrCat("Index of ", field_name, " is negative.")));
   logle::CHECK(
-      fields.size() > field_it->second,
+      static_cast<int>(fields.size()) > field_it->second,
       (logle::util::StrCat("Index of ", field_name, " exceeds bounds.")));
   return fields[field_it->second];
 }
