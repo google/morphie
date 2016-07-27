@@ -76,6 +76,12 @@ void GetPathGraph(int num_nodes, WeightedGraph* graph);
 // A cycle graph can be drawn as a simple cycle.
 void GetCycleGraph(int num_nodes, WeightedGraph* graph);
 
+// Returns true if 'graph' is a path graph.
+bool IsPath(const LabeledGraph& graph);
+
+// Returns true if 'graph' is a cycle graph.
+bool IsCycle(const LabeledGraph& graph);
+
 }  // namespace test
 }  // namespace third_party_logle
 #endif  // THIRD_PARTY_LOGLE_TEST_GRAPHS_H_
