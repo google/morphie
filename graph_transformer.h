@@ -35,6 +35,41 @@ using NodeLabelFn =
 using EdgeLabelFn =
     std::function<TaggedAST(const LabeledGraph&, const std::set<EdgeId>&)>;
 
+// Struct to hold options data for QuotientGraph:
+// - The 'output_graph_type' specifies the types of nodes and edges permitted in
+//   the output graph.
+// - The 'node_label_fn' determines how the blocks are labeled in the output.
+// - The 'edge_label_fn' determines how the edges between the blocks are
+//   labeled. This function is only applied if 'allow_multi_edges' is false.
+// - The flag 'allow_multi_edges' dictates whether the output graph will allow
+//    multi-edges between nodes, or will instead have a single edge, labeled by
+//    'edge_label_fn'.
+// - The flag 'allow_self_edges' dictates if the output graph should contain
+//    self-edges.
+//
+// Requires that:
+// - Both 'node_label_fn' and 'edge_label_fn' respect the types of
+//   'output_graph_type'.
+// - If 'allow_multi_edges' is true, the edge types of 'input_graph' and
+//   'output_graph_type' must be the same.
+struct QuotientConfig {
+ public:
+  explicit QuotientConfig(const LabeledGraph& output_graph_type,
+                          const NodeLabelFn& node_label_fn,
+                          const EdgeLabelFn& edge_label_fn,
+                          bool allow_multi_edges, bool allow_self_edges)
+      : output_graph_type(output_graph_type),
+      node_label_fn(node_label_fn),
+      edge_label_fn(edge_label_fn),
+      allow_multi_edges(allow_multi_edges),
+      allow_self_edges(allow_self_edges) {}
+  const LabeledGraph& output_graph_type;
+  const NodeLabelFn& node_label_fn;
+  const EdgeLabelFn& edge_label_fn;
+  bool allow_multi_edges;
+  bool allow_self_edges;
+};  // struct QuotientConfig
+
 // If G = (V, E) is a graph and N is a subset of nodes of V, the result of
 // deleting N from G is the graph with vertices W = (V - N) and with those edges
 // in E whose source and target are both in W.
@@ -69,27 +104,22 @@ std::unique_ptr<LabeledGraph> DeleteEdges(const LabeledGraph& graph,
 // Returns a labeled graph that is the quotient of the input graph with respect
 // to the partition.
 //
-// The 'output_graph_type' specifies the types of nodes and edges permitted in
-// the output graph.
 // The 'partition' maps each node in the graph onto some block of the partition,
 // which we represent by an integer label.
-// The 'node_label_fn' determines how the blocks are labeled in the output.
-// The 'edge_label_fn' determines how the edges between the blocks are labeled.
-// This function is only applied if 'allow_multi_edges' is false.
-// The flag 'allow_multi_edges' dictates whether the output graph will allow
-// multi-edges between nodes, or will instead have a single edge, labeled by
-// 'edge_label_fn'.
 //
 // Requires that:
 // - The 'partition' has every node in 'graph' as a key.
-// - Both 'node_label_fn' and 'edge_label_fn' respect the types of
-//   'output_graph_type'.
-// - If 'allow_multi_edges' is true, the edge types of 'input_graph' and
-//   'output_graph_type' must be the same.
+// - 'config' meets the requirements of a QuotientConfig, given above.
 std::unique_ptr<LabeledGraph> QuotientGraph(
-    const LabeledGraph& input_graph, const LabeledGraph& output_graph_type,
-    const std::map<NodeId, int>& partition, const NodeLabelFn& node_label_fn,
-    const EdgeLabelFn& edge_label_fn, bool allow_multi_edges);
+    const LabeledGraph& input_graph, const std::map<NodeId, int>& partition,
+    const QuotientConfig& config);
+
+// Edge contraction replaces an edge (u, v) with a new node w such that for each
+// edge (x, u) or (x, v) in the input graph there is an edge (x, w) in the
+// output graph. This applies likewise for edges (u, x) and (u, v).
+std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
+                                            const set<EdgeId>& edges,
+                                            const QuotientConfig& config);
 }  // namespace graph
 
 }  // namespace third_party_logle

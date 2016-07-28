@@ -276,12 +276,15 @@ TEST(GraphTransformerTest, IdentityPathQuotient) {
   // Check that the quotient of the graph {0 -> 1} is the same graph.
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config1(graphtype, ConcatLabels,
+                                EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph1 = graph::QuotientGraph(
-      input_graph1, graphtype, partition1, ConcatLabels, EdgeCountLabel, false);
+      input_graph1, partition1, config1);
 
   EXPECT_TRUE(graph1 != nullptr);
   EXPECT_EQ(2, graph1->NumNodes());
   EXPECT_EQ(1, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
 
   // Check the same for a path graph with 6 nodes and 5 edges.
   test::WeightedGraph path2;
@@ -300,12 +303,15 @@ TEST(GraphTransformerTest, IdentityPathQuotient) {
   }
 
   // Check the quotient of this longer path is the same graph.
+  graph::QuotientConfig config2(graphtype, ConcatLabels,
+                                EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph2 = graph::QuotientGraph(
-      input_graph2, graphtype, partition2, ConcatLabels, EdgeCountLabel, false);
+      input_graph2, partition2, config2);
 
   EXPECT_TRUE(graph2 != nullptr);
   EXPECT_EQ(6, graph2->NumNodes());
   EXPECT_EQ(5, graph2->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph2));
 }
 
 TEST(GraphTransformerTest, IdentityCycleQuotient) {
@@ -330,12 +336,15 @@ TEST(GraphTransformerTest, IdentityCycleQuotient) {
   // Check that the quotient of the graph {0 <-> 1} is the same graph.
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config1(graphtype, ConcatLabels,
+                                EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph1 = graph::QuotientGraph(
-      input_graph1, graphtype, partition1, ConcatLabels, EdgeCountLabel, false);
+      input_graph1, partition1, config1);
 
   EXPECT_TRUE(graph1 != nullptr);
   EXPECT_EQ(2, graph1->NumNodes());
   EXPECT_EQ(2, graph1->NumEdges());
+  EXPECT_TRUE(test::IsCycle(*graph1));
 
   // Check the same on a cycle with 6 nodes and edges.
   test::WeightedGraph cycle2;
@@ -355,12 +364,15 @@ TEST(GraphTransformerTest, IdentityCycleQuotient) {
   }
 
   // Check the identity partition preserves the graph under graph quotients.
+  graph::QuotientConfig config2(graphtype, ConcatLabels,
+                                EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph2 = graph::QuotientGraph(
-      input_graph2, graphtype, partition2, ConcatLabels, EdgeCountLabel, false);
+      input_graph2, partition2, config2);
 
   EXPECT_TRUE(graph2 != nullptr);
   EXPECT_EQ(6, graph2->NumNodes());
   EXPECT_EQ(6, graph2->NumEdges());
+  EXPECT_TRUE(test::IsCycle(*graph2));
 }
 
 TEST(GraphTransformerTest, SimplePathQuotient) {
@@ -386,13 +398,17 @@ TEST(GraphTransformerTest, SimplePathQuotient) {
   // self-edge.
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph1 = graph::QuotientGraph(
-      input_graph, graphtype, partition1, ConcatLabels, EdgeCountLabel, false);
+      input_graph, partition1, config);
 
   EXPECT_TRUE(graph1 != nullptr);
   EXPECT_EQ(1, graph1->NumNodes());
   EXPECT_EQ(1, graph1->NumEdges());
-  //
+  EXPECT_FALSE(test::IsPath(*graph1));
+  EXPECT_TRUE(test::IsCycle(*graph1));
+
   // Check that the label records the original edge multiplicity.
   EdgeIterator edge_it = graph1->EdgeSetBegin();
   TaggedAST edge_label = graph1->GetEdgeLabel(*edge_it);
@@ -422,12 +438,15 @@ TEST(GraphTransformerTest, SimpleCycleQuotient) {
   // self-edge.
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph1 = graph::QuotientGraph(
-      input_graph, graphtype, partition1, ConcatLabels, EdgeCountLabel, false);
+      input_graph, partition1, config);
 
   EXPECT_TRUE(graph1 != nullptr);
   EXPECT_EQ(1, graph1->NumNodes());
   EXPECT_EQ(1, graph1->NumEdges());
+  EXPECT_TRUE(test::IsCycle(*graph1));
 
   // Check that the label records the original edge multiplicity.
   EdgeIterator edge_it = graph1->EdgeSetBegin();
@@ -455,13 +474,16 @@ TEST(GraphTransformerTest, MultiEdgeQuotient) {
 
   // Check that the quotient of the graph {0 <-> 1} is one node with a two
   // self-edges.
-  std::unique_ptr<LabeledGraph> graph1 =
-      graph::QuotientGraph(input_graph1, input_graph1, partition1,
-                           LowestIdWeightedGraphLabel, EdgeCountLabel, true);
+  graph::QuotientConfig config1(input_graph1, LowestIdWeightedGraphLabel,
+                                EdgeCountLabel, true, true);
+  std::unique_ptr<LabeledGraph> graph1 = graph::QuotientGraph(
+      input_graph1, partition1, config1);
 
   EXPECT_TRUE(graph1 != nullptr);
   EXPECT_EQ(1, graph1->NumNodes());
   EXPECT_EQ(2, graph1->NumEdges());
+  EXPECT_FALSE(test::IsPath(*graph1));
+  EXPECT_FALSE(test::IsCycle(*graph1));
 
   // Check the same on a cycle with 3 nodes and edges.
   test::WeightedGraph cycle2;
@@ -479,13 +501,16 @@ TEST(GraphTransformerTest, MultiEdgeQuotient) {
   }
 
   // Check that the quotient has 1 node with 3 self-edges.
-  std::unique_ptr<LabeledGraph> graph2 =
-      graph::QuotientGraph(input_graph2, input_graph2, partition2,
-                           LowestIdWeightedGraphLabel, EdgeCountLabel, true);
+  graph::QuotientConfig config2(input_graph2, LowestIdWeightedGraphLabel,
+                                EdgeCountLabel, true, true);
+  std::unique_ptr<LabeledGraph> graph2 = graph::QuotientGraph(
+      input_graph2, partition2, config2);
 
   EXPECT_TRUE(graph2 != nullptr);
   EXPECT_EQ(1, graph2->NumNodes());
   EXPECT_EQ(3, graph2->NumEdges());
+  EXPECT_FALSE(test::IsPath(*graph2));
+  EXPECT_FALSE(test::IsCycle(*graph2));
 }
 
 TEST(GraphTransformerTest, RelabelQuotient) {
@@ -502,6 +527,7 @@ TEST(GraphTransformerTest, RelabelQuotient) {
   int i = 0;
   // Make partition with two blocks, with the first and last three nodes grouped
   // together.
+  // TODO(jefflai): Remove reliance on node id arithmetic.
   for (auto node_it = input_graph.NodeSetBegin(); node_it != end_it;
        ++node_it) {
     partition[*node_it] = i < 3 ? 1 : 2;
@@ -513,11 +539,15 @@ TEST(GraphTransformerTest, RelabelQuotient) {
   // direction.
   LabeledGraph graphtype;
   SetIntTypes(&graphtype);
+  graph::QuotientConfig config(graphtype, LowestIdLabel,
+                               EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph = graph::QuotientGraph(
-      input_graph, graphtype, partition, LowestIdLabel, EdgeCountLabel, false);
+      input_graph, partition, config);
   EXPECT_TRUE(graph != nullptr);
   EXPECT_EQ(2, graph->NumNodes());
   EXPECT_EQ(4, graph->NumEdges());
+  EXPECT_FALSE(test::IsPath(*graph));
+  EXPECT_FALSE(test::IsCycle(*graph));
 
   // Get the two nodes.
   auto output_node_it = graph->NodeSetBegin();
@@ -545,6 +575,161 @@ TEST(GraphTransformerTest, RelabelQuotient) {
       EXPECT_EQ(1, weight);
     }
   }
+}
+
+// Takes the graph { 0 <-> 1 } and quotient's it as a single block, disallowing
+// self-edges. The result should be a graph with just one node.
+TEST(GraphTransformerTest, SimpleNoSelfEdgeQuotient) {
+  test::WeightedGraph cycle1;
+  test::GetCycleGraph(2, &cycle1);
+  ASSERT_EQ(2, cycle1.NumNodes());
+  ASSERT_EQ(2, cycle1.NumEdges());
+  const LabeledGraph& input_graph = *cycle1.GetGraph();
+  NodeIterator node_it = input_graph.NodeSetBegin();
+  NodeId first_node = *node_it;
+  ++node_it;
+  NodeId second_node = *node_it;
+
+  // Make partition with a single block.
+  std::map<NodeId, int> partition1 {
+    {first_node, 1},
+    {second_node, 1},
+  };
+
+  // Check that the quotient of the graph is one node without edges.
+  LabeledGraph graphtype;
+  SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, false);
+  std::unique_ptr<LabeledGraph> graph1 = graph::QuotientGraph(
+      input_graph, partition1, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(0, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Calls edge contraction on an empty edge-set. The graph should be unchanged
+// after the contraction.
+TEST(GraphTransformerTest, NoEdgeContraction) {
+  // Create the graph { 0 -> 1 -> 2}.
+  test::WeightedGraph path;
+  test::GetPathGraph(3, &path);
+  ASSERT_EQ(3, path.NumNodes());
+  ASSERT_EQ(2, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+
+  // Check that contracting no edges results in the same graph.
+  LabeledGraph graphtype;
+  SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
+  std::unique_ptr<LabeledGraph> graph1 = graph::ContractEdges(
+      input_graph, {}, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(3, graph1->NumNodes());
+  EXPECT_EQ(2, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Takes the graph with a single node with a single self-edge and contracts that
+// self-edge. The result should be just the one node.
+TEST(GraphTransformerTest, SelfLoopEdgeContraction) {
+  test::WeightedGraph cycle;
+  test::GetCycleGraph(1, &cycle);
+  ASSERT_EQ(1, cycle.NumNodes());
+  ASSERT_EQ(1, cycle.NumEdges());
+  const LabeledGraph& input_graph = *cycle.GetGraph();
+  auto edge_it = input_graph.EdgeSetBegin();
+  auto edge = *edge_it;
+
+  LabeledGraph graphtype;
+  SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
+  std::unique_ptr<LabeledGraph> graph1 = graph::ContractEdges(
+      input_graph, {edge}, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(0, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Contracts the one edge in the graph { 0 -> 1}. Should result in a graph with
+// one node and no edges.
+TEST(GraphTransformerTest, SimplePathEdgeContraction) {
+  test::WeightedGraph path;
+  test::GetPathGraph(2, &path);
+  ASSERT_EQ(2, path.NumNodes());
+  ASSERT_EQ(1, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+  auto edge_it = input_graph.EdgeSetBegin();
+  auto edge = *edge_it;
+
+  LabeledGraph graphtype;
+  SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
+  std::unique_ptr<LabeledGraph> graph1 = graph::ContractEdges(
+      input_graph, {edge}, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(0, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Contracts one of the edges in the graph { 0 <-> 1}. Should result in a graph
+// with a one node and one self-edge.
+TEST(GraphTransformerTest, SimpleCycleEdgeContraction) {
+  test::WeightedGraph cycle;
+  test::GetCycleGraph(2, &cycle);
+  ASSERT_EQ(2, cycle.NumNodes());
+  ASSERT_EQ(2, cycle.NumEdges());
+  const LabeledGraph& input_graph = *cycle.GetGraph();
+  auto edge_it = input_graph.EdgeSetBegin();
+  auto edge = *edge_it;
+
+  LabeledGraph graphtype;
+  SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
+  std::unique_ptr<LabeledGraph> graph1 = graph::ContractEdges(
+      input_graph, {edge}, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(1, graph1->NumEdges());
+  EXPECT_TRUE(test::IsCycle(*graph1));
+}
+
+// Takes the graph { 0 -> 1 -> 2 -> 3 -> 4 -> 5} and contracts two edges. The
+// result should be a path of length 4.
+TEST(GraphTransformerTest, LongPathEdgeContraction) {
+  test::WeightedGraph path;
+  test::GetPathGraph(6, &path);
+  ASSERT_EQ(6, path.NumNodes());
+  ASSERT_EQ(5, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+  auto edge_it = input_graph.EdgeSetBegin();
+  EdgeId edge1 = *edge_it;
+  ++edge_it;
+  EdgeId edge2 = *edge_it;
+
+  LabeledGraph graphtype;
+  SetStringNodeIntEdgeType(&graphtype);
+  graph::QuotientConfig config(graphtype, ConcatLabels,
+                               EdgeCountLabel, false, true);
+  std::unique_ptr<LabeledGraph> graph1 = graph::ContractEdges(
+      input_graph, {edge1, edge2}, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(4, graph1->NumNodes());
+  EXPECT_EQ(3, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
 }
 
 }  // namespace

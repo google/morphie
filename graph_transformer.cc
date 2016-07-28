@@ -12,6 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+#include <queue>
+
 #include "third_party/logle/graph_transformer.h"
 #include "third_party/logle/type.h"
 #include "third_party/logle/util/logging.h"
@@ -86,8 +88,9 @@ NodeId FindOrRelabelNode(NodeId node_id, TaggedAST new_label,
   return new_node;
 }
 
-void BuildQuotientEdgeMap(const std::map<NodeId, int>& partition,
-                          bool allow_multi_edges, std::map<int, NodeId>* blocks,
+void BuildQuotientEdgeMap(const graph::QuotientConfig& config,
+                          const std::map<NodeId, int>& partition,
+                          std::map<int, NodeId>* blocks,
                           QuotientEdgeMap* block_edge_members,
                           Transformation* transform) {
   const LabeledGraph& graph = transform->input;
@@ -98,11 +101,15 @@ void BuildQuotientEdgeMap(const std::map<NodeId, int>& partition,
     NodeId src_block = blocks->at(partition.at(src));
     NodeId tgt = graph.Target(*edge_it);
     NodeId tgt_block = blocks->at(partition.at(tgt));
+    // Do not include self-edges if they are not allowed.
+    if (!config.allow_self_edges && src_block == tgt_block) {
+      continue;
+    }
     // If multi-edges are allowed the FindOrAddEdge method is used to add
     // multi-edges. Otherwise 'block_edge_members' records the EdgeId's of the
     // edges from 'src_block' to 'tgt_block'. The edges are added to the graph
     // at the end.
-    if (allow_multi_edges) {
+    if (config.allow_multi_edges) {
       transform->output->FindOrAddEdge(src_block, tgt_block,
                                        graph.GetEdgeLabel(*edge_it));
     } else {
@@ -168,6 +175,72 @@ void AddQuotientNodes(const graph::NodeLabelFn& node_label_fn,
     NodeId block_node_id = transform->output->FindOrAddNode(block_label);
     block_node_ids->insert({block_id, block_node_id});
   }
+}
+
+// Returns a map from each node to its adjacent nodes in the 'edges' relation.
+std::map<NodeId, std::set<NodeId>> MakeAdjacencyMap(
+    const LabeledGraph& graph, const std::set<EdgeId>& edges) {
+  std::map<NodeId, std::set<NodeId>> adj_map;
+  for (const auto& edge : edges) {
+    NodeId src = graph.Source(edge);
+    NodeId tgt = graph.Target(edge);
+    auto src_it = adj_map.find(src);
+    if (src_it == adj_map.end()) {
+      adj_map[src] = {tgt};
+    } else {
+      src_it->second.insert(tgt);
+    }
+    auto tgt_it = adj_map.find(tgt);
+    if (tgt_it == adj_map.end()) {
+      adj_map[tgt] = {src};
+    } else {
+      tgt_it->second.insert(src);
+    }
+  }
+  return adj_map;
+}
+
+// Returns a partition where each block is a connected component under the
+// relation 'edges'. The label of each block ranges from 0 to b-1 where b is the
+// number of blocks.
+std::map<NodeId, int> MakePartitionFromRelation(
+    const LabeledGraph& graph,
+    const std::map<NodeId, std::set<NodeId>>& adj_map) {
+  std::map <NodeId, int> partition;
+  // Go through each node in 'graph' and do a BFS to assign it to some block. A
+  // node is assigned a block by assigning it a value in the 'partition' map.
+  int current_block_id = 0;
+  auto end_it = graph.NodeSetEnd();
+  for (auto node_it = graph.NodeSetBegin(); node_it != end_it; ++node_it) {
+    auto part_it = partition.find(*node_it);
+    if (part_it != partition.end()) {
+      continue;
+    }
+    std::queue<NodeId> frontier;
+    frontier.push(*node_it);
+    while (!frontier.empty()) {
+      NodeId node = frontier.front();
+      frontier.pop();
+      // Check if the node has already been assigned a block. If so, then there
+      // is not need to process it again.
+      part_it = partition.find(node);
+      if (part_it != partition.end()) {
+        continue;
+      }
+      partition[node] = current_block_id;
+      // Check that the current node has neighbors.
+      auto adj_it = adj_map.find(node);
+      if (adj_it == adj_map.end()) {
+        continue;
+      }
+      const auto& adjacent_nodes = adj_it->second;
+      for (auto& node : adjacent_nodes) {
+        frontier.push(node);
+      }
+    }
+    ++current_block_id;
+  }
+  return partition;
 }
 
 }  // namespace
@@ -245,11 +318,10 @@ std::unique_ptr<LabeledGraph> DeleteEdges(const LabeledGraph& graph,
 }
 
 std::unique_ptr<LabeledGraph> QuotientGraph(
-    const LabeledGraph& input_graph, const LabeledGraph& output_graph_type,
-    const std::map<NodeId, int>& partition, const NodeLabelFn& node_label_fn,
-    const EdgeLabelFn& edge_label_fn, bool allow_multi_edges) {
+    const LabeledGraph& input_graph, const std::map<NodeId, int>& partition,
+    const QuotientConfig& config) {
   Transformation transform(input_graph);
-  transform.output = CloneGraphType(output_graph_type);
+  transform.output = CloneGraphType(config.output_graph_type);
   if (transform.output == nullptr) {
     return std::move(transform.output);
   }
@@ -257,17 +329,27 @@ std::unique_ptr<LabeledGraph> QuotientGraph(
   BuildQuotientNodeMap(partition, transform, &block_members);
   // Add blocks to the output graph with the label generated by 'node_label_fn'.
   std::map<int, NodeId> block_node_ids;
-  AddQuotientNodes(node_label_fn, block_members, &block_node_ids, &transform);
+  AddQuotientNodes(config.node_label_fn, block_members,
+                   &block_node_ids, &transform);
 
   std::map<std::pair<NodeId, NodeId>, std::set<EdgeId>> block_edge_members;
-  BuildQuotientEdgeMap(partition, allow_multi_edges, &block_node_ids,
-                       &block_edge_members, &transform);
+  BuildQuotientEdgeMap(config, partition,
+                       &block_node_ids, &block_edge_members, &transform);
   // If multi-edges are not allowed, add edges from 'block_edge_members' to the
   // graph.
-  if (!allow_multi_edges) {
-    AddQuotientEdges(block_edge_members, edge_label_fn, &transform);
+  if (!config.allow_multi_edges) {
+    AddQuotientEdges(block_edge_members, config.edge_label_fn, &transform);
   }
   return std::move(transform.output);
+}
+
+std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
+                                            const set<EdgeId>& edges,
+                                            const QuotientConfig& config) {
+  std::map<NodeId, std::set<NodeId>> adj_map = MakeAdjacencyMap(graph, edges);
+  std::map<NodeId, int> partition = MakePartitionFromRelation(graph, adj_map);
+  auto graph_with_edges_removed = DeleteEdges(graph, edges);
+  return QuotientGraph(*graph_with_edges_removed, partition, config);
 }
 
 }  // namespace graph
