@@ -1,0 +1,3 @@
+This directory contains simple C++ .cc files that link to intermediate libraries
+in the project. These files are used to test and debug issues that may arise
+when compiling or linking with CMake.
