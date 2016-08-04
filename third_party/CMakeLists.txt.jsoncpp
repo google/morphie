@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(jsoncpp-download NONE)
 
+message(STATUS "IN JSONCPP DOWNLOAD FILE")
 # The install prefix is the location in which the static libraries
 # will be installed.
 set(jsoncpp_install_prefix "${CMAKE_BINARY_DIR}/jsoncpp-lib")
-set(CMAKE_INSTALL_COMPONENT "${jsoncpp_install_prefix}")
 
 # The ExternalProject CMake module provides functionality for
 # downloading and installing a library from a remote repository. In
@@ -22,6 +22,6 @@ ExternalProject_Add(jsoncpp-parser
   GIT_TAG           master
   SOURCE_DIR        "${CMAKE_BINARY_DIR}/jsoncpp-src"
   BINARY_DIR        "${CMAKE_BINARY_DIR}/jsoncpp-build"
-  INSTALL_DIR       "${CMAKE_BINARY_DIR}/jsoncpp-lib"
-  CMAKE_ARGS        "-DCMAKE_INSTALL_PREFIX=${jsoncpp_install_prefix}"
+  INSTALL_DIR       "${CMAKE_BINARY_DIR}/jsoncpp-build"
+  CMAKE_ARGS        "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
 )
