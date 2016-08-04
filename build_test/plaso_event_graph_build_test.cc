@@ -12,16 +12,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// Construct and print an empty labeled graph.
+// Test building and linking of the PlasoEventGraph by printing the empty graph.
 #include <iostream>
 
-#include "ast.pb.h"
-#include "labeled_graph.h"
-#include "type.h"
+#include "plaso_event_graph.h"
 
 int main(int argc, char **argv) {
-  logle::LabeledGraph graph;
-  logle::AST ast = logle::ast::type::MakeInt("int label", false);
-  graph.Initialize({}, {}, {}, {}, ast);
-  std::cout << "Initialized graph." << std::endl;
+  logle::PlasoEventGraph graph;
+  graph.Initialize();
+  std::cout << "Initialized Plaso event graph." << graph.ToDot() << std::endl;
 }

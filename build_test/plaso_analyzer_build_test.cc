@@ -12,16 +12,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// Construct and print an empty labeled graph.
+// Initialize the Plaso analyzer with an empty JSON document.
 #include <iostream>
+#include <memory>
 
-#include "ast.pb.h"
-#include "labeled_graph.h"
-#include "type.h"
+#include "json/json.h"
+#include "plaso_analyzer.h"
 
 int main(int argc, char **argv) {
-  logle::LabeledGraph graph;
-  logle::AST ast = logle::ast::type::MakeInt("int label", false);
-  graph.Initialize({}, {}, {}, {}, ast);
-  std::cout << "Initialized graph." << std::endl;
+  logle::PlasoAnalyzer analyzer;
+  std::unique_ptr<::Json::Value> parser(new ::Json::Value);
+  analyzer.Initialize(std::move(parser));
+  std::cout << "Initialized Plaso analyzer." << std::endl;
 }

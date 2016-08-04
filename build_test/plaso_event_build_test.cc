@@ -12,16 +12,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// Construct and print an empty labeled graph.
+// Test building and linking of the PlasoEvent proto and related utilities. The
+// executable should print a proto representation of a filename.
 #include <iostream>
 
-#include "ast.pb.h"
-#include "labeled_graph.h"
-#include "type.h"
+#include "plaso_event.h"
+#include "plaso_event.pb.h"
 
 int main(int argc, char **argv) {
-  logle::LabeledGraph graph;
-  logle::AST ast = logle::ast::type::MakeInt("int label", false);
-  graph.Initialize({}, {}, {}, {}, ast);
-  std::cout << "Initialized graph." << std::endl;
+  logle::File file = logle::plaso::ParseFilename("/tmp/build/test/file.txt");
+  std::cout << file.DebugString() << std::endl;
 }

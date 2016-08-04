@@ -12,16 +12,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// Construct and print an empty labeled graph.
+// Tests that the AnalysisOptions proto can be built and linked to.
 #include <iostream>
 
-#include "ast.pb.h"
-#include "labeled_graph.h"
-#include "type.h"
+#include "analysis_options.pb.h"
 
 int main(int argc, char **argv) {
-  logle::LabeledGraph graph;
-  logle::AST ast = logle::ast::type::MakeInt("int label", false);
-  graph.Initialize({}, {}, {}, {}, ast);
-  std::cout << "Initialized graph." << std::endl;
+  logle::AnalysisOptions options;
+  options.set_output_dot_file("/tmp/out.dot");
+  std::cout << options.DebugString() << std::endl;
+  return 0;
 }
