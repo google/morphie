@@ -20,7 +20,7 @@
 #include "third_party/logle/gtest.h"
 #include "third_party/logle/value_checker.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 namespace {
@@ -622,4 +622,4 @@ TEST(CanonicalizerTest, TupleCanonicalization) {
 }  // namespace
 }  // namespace value
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren

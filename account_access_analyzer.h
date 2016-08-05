@@ -27,7 +27,7 @@
 #include "third_party/logle/util/csv.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The AccessAnalyzer is initialized with a CSV parser. The fields that must be
 // present in the CSV input are defined in account_access_defs.h.
@@ -72,6 +72,6 @@ class AccessAnalyzer {
   std::unique_ptr<util::CSVParser> csv_parser_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_ACCOUNT_ACCESS_ANALYZER_H_

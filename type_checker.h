@@ -78,7 +78,7 @@
 #include "third_party/logle/ast.pb.h"
 #include "third_party/logle/base/string.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 
@@ -120,6 +120,6 @@ bool IsTyped(const Types& types, const TaggedAST& val, string* err);
 
 }  // namespace type
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_TYPE_CHECKER_H_

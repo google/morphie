@@ -20,7 +20,7 @@
 #include "util/regexp/re2/re2.h"
 #include "util/task/codes.pb.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 ::util::Status DotRenderer::RenderWithGraphViz(const RendererConfig& config,
                                                const string& dot_graph,
@@ -113,4 +113,4 @@ namespace third_party_logle {
   return rpc.util_status();
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

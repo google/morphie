@@ -13,7 +13,7 @@
 // the License.
 #include "third_party/logle/util/string_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 std::set<string> SplitToSet(const string& str, char delim) {
@@ -99,4 +99,4 @@ void StrAppend(string* out, const string& str1, const string& str2,
 }
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren

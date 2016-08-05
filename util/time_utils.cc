@@ -36,7 +36,7 @@
 #include <cstdio>
 #include <ctime>
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 // Uses the function gmtime_r to convert time in seconds to civil time in UTC
@@ -96,4 +96,4 @@ bool RFC3339ToUnixMicros(const string& time_str, int64_t* unix_micros) {
 }
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren

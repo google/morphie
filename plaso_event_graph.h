@@ -39,7 +39,7 @@
 #include "third_party/logle/plaso_event.pb.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // An event graph (lower case refers to the concept, not its implementation) is
 // a graph with labelled nodes and edges. The types of node and edge labels are
@@ -131,6 +131,6 @@ class PlasoEventGraph : public GraphInterface {
   map<int64_t, set<NodeId>> time_index_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_PLASO_EVENT_GRAPH_H_

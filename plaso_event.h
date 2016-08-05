@@ -25,7 +25,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/plaso_event.pb.h"
 
-namespace third_party_logle {
+namespace tervuren {
 // The 'plaso' namespace contains utilities for dealing with Plaso output.
 namespace plaso {
 
@@ -54,6 +54,6 @@ AST ToAST(const File& file);
 string ToString(const File& file);
 
 }  // namespace plaso
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_PLASO_EVENT_H_

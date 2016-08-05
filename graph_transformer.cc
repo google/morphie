@@ -21,7 +21,7 @@
 #include "third_party/logle/util/string_utils.h"
 #include "third_party/logle/value.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 using ast::type::Types;
 namespace type = ast::type;
@@ -353,4 +353,4 @@ std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
 }
 
 }  // namespace graph
-}  // namespace third_party_logle
+}  // namespace tervuren

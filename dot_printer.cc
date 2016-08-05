@@ -27,7 +27,7 @@
 #include "third_party/logle/value.h"
 #include "third_party/logle/value_checker.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 namespace {
 
@@ -217,4 +217,4 @@ string DotPrinter::DotGraph(const LabeledGraph& graph) {
   return util::StrCat("digraph logle_graph {\n", dot_graph, "}");
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

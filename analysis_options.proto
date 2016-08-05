@@ -14,7 +14,7 @@
 
 syntax = "proto2";
 
-package third_party_logle;
+package tervuren;
 
 // An AnalysisOptions message specifies which analyzer should be run and the
 // input and output formats for that analyzer.

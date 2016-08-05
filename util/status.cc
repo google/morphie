@@ -13,7 +13,7 @@
 // the License.
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 namespace {
@@ -28,4 +28,4 @@ const Status& GetOkStatus() {
 const Status& Status::OK = GetOkStatus();
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren

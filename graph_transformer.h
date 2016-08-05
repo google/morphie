@@ -22,7 +22,7 @@
 
 #include "third_party/logle/labeled_graph.h"
 
-namespace third_party_logle {
+namespace tervuren {
 // The 'graph' namespace contains functions for manipulating graphs.
 namespace graph {
 
@@ -122,6 +122,6 @@ std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
                                             const QuotientConfig& config);
 }  // namespace graph
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_GRAPH_TRANSFORMER_H_

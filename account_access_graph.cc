@@ -31,7 +31,7 @@ namespace {
 // is within the logle namespace.
 using std::string;
 
-namespace logle = third_party_logle;
+namespace logle = tervuren;
 
 // Error messages.
 const char kInitializationErr[] = "The graph is not initialized.";
@@ -65,7 +65,7 @@ string GetField(const string& field_name,
 
 }  // namespace
 
-namespace third_party_logle {
+namespace tervuren {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -180,4 +180,4 @@ TaggedAST AccountAccessGraph::MakeEdgeLabel(
   return count;
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

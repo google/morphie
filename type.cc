@@ -20,7 +20,7 @@
 #include "third_party/logle/type_checker.h"
 #include "third_party/logle/util/logging.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 
@@ -136,4 +136,4 @@ AST MakeURL() {
 
 }  // namespace type
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren

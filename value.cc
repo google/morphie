@@ -23,7 +23,7 @@
 #include "third_party/logle/util/time_utils.h"
 #include "third_party/logle/value_checker.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 
@@ -277,4 +277,4 @@ void SetField(const AST& type, int field_num, const AST& arg, AST* tuple) {
 
 }  // namespace value
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren

@@ -32,7 +32,7 @@
 #include "third_party/logle/labeled_graph.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The account access graph contains labels with the following names and types.
 // The labels are all unique, meaning there can be at most one node with each
@@ -97,6 +97,6 @@ class AccountAccessGraph : public GraphInterface {
   LabeledGraph graph_;
 };  // class AccountAccessGraph
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_ACCOUNT_ACCESS_GRAPH_H_

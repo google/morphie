@@ -40,7 +40,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/labeled_graph.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // An attribute function returns a GraphViz DOT attribute for a node or an edge.
 // The first argument represents a tag and the second is an abstract syntax tree
@@ -119,5 +119,5 @@ class DotPrinter {
   AttributeFn edge_attribute_;
 };  // class DotPrinter
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 #endif  // THIRD_PARTY_LOGLE_DOT_PRINTER_H_

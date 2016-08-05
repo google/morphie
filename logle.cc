@@ -28,9 +28,9 @@
 #include "third_party/logle/frontend.h"
 #include "third_party/logle/util/status.h"
 
-namespace logle = third_party_logle;
+namespace logle = tervuren;
 namespace protobuf = google::protobuf;
-using Analyzer = third_party_logle::frontend::Analyzer;
+using Analyzer = tervuren::frontend::Analyzer;
 
 // The input string containing analysis options as a human-readable protobuf.
 DEFINE_string(analysis_options, "", "Analysis options as a protocol buffer.");

@@ -24,7 +24,7 @@
 #include "third_party/logle/type_checker.h"
 #include "third_party/logle/util/time_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
 
 static const char kJSONstring[] =
@@ -473,4 +473,4 @@ TEST_F(PlasoEventTest, FileMessageToAST) {
 }
 
 }  // namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

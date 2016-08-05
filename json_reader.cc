@@ -6,7 +6,7 @@
 #include "third_party/logle/json_reader.h"
 #include "third_party/logle/util/logging.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 std::unique_ptr<Json::Value> GetJsonDoc(std::istream* json_stream) {
   Json::Reader json_reader;
@@ -64,4 +64,4 @@ const Json::Value* StreamJson::Next() {
 StreamJson::~StreamJson() {
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

@@ -16,7 +16,7 @@
 
 #include "third_party/logle/gtest.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace test {
 namespace {
 
@@ -110,4 +110,4 @@ TEST(TestGraphsTest, IsCycleGraph) {
 
 }  // namespace
 }  // namespace test
-}  // namespace third_party_logle
+}  // namespace tervuren

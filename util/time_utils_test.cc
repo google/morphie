@@ -19,7 +19,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/gtest.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 namespace {
 
@@ -61,4 +61,4 @@ TEST(TimeUtilsTest, MicrosToRFC3339) {
 
 }  // anonymous namespace
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren

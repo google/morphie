@@ -26,7 +26,7 @@
 #include "third_party/logle/ast.pb.h"
 #include "third_party/logle/base/string.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 
@@ -131,6 +131,6 @@ void Canonicalize(AST* val);
 
 }  // namespace value
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_VALUE_CHECKER_H_

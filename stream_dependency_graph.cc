@@ -27,7 +27,7 @@
 #include "third_party/logle/util/string_utils.h"
 #include "third_party/logle/value.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -123,4 +123,4 @@ string StreamDependencyGraph::ToDot() const {
   return util::StrCat("digraph stream_dependencies {\n", dot_graph, "}");
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

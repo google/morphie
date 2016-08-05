@@ -27,7 +27,7 @@
 #include "third_party/logle/util/logging.h"
 #include "third_party/logle/util/string_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 
@@ -265,4 +265,4 @@ void Canonicalize(AST* val) {
 
 }  // namespace value
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren

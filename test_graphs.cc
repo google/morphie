@@ -33,7 +33,7 @@ const char kWeightedGraphTag[] = "Weighted-Graph";
 
 }  // namespace
 
-namespace third_party_logle {
+namespace tervuren {
 namespace test {
 
 namespace type = ast::type;
@@ -193,4 +193,4 @@ bool IsCycle(const LabeledGraph& graph) {
 }
 
 }  // namespace test
-}  // namespace third_party_logle
+}  // namespace tervuren

@@ -25,7 +25,7 @@
 #include "third_party/logle/stream_dependency_graph.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The CurioAnalyzer ingests stream definitions provided in JSON and calls the
 // appropriate APIs for graph construction and visualization. Initialize() must
@@ -80,6 +80,6 @@ class CurioAnalyzer {
   std::unique_ptr<StreamDependencyGraph> dependency_graph_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_CURIO_ANALYZER_H_

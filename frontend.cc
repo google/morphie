@@ -36,8 +36,8 @@
 
 namespace {
 
-namespace logle = third_party_logle;
-namespace util = third_party_logle::util;
+namespace logle = tervuren;
+namespace util = tervuren::util;
 
 // Error messages.
 const char kInvalidAnalyzerErr[] =
@@ -110,7 +110,7 @@ util::Status WriteToFile(const string& filename, const string& contents) {
 
 }  // namespace
 
-namespace third_party_logle {
+namespace tervuren {
 namespace frontend {
 
 // Runs the Curio analyzer in curio_analyzer.h on the input. Returns an error
@@ -230,4 +230,4 @@ util::Status Run(const AnalysisOptions& options) {
 }
 
 }  // namespace frontend
-}  // namespace third_party_logle
+}  // namespace tervuren

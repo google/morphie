@@ -25,7 +25,7 @@
 #include "third_party/logle/util/time_utils.h"
 #include "third_party/logle/value.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace plaso {
 
 namespace type = ast::type;
@@ -285,4 +285,4 @@ string ToString(const File& file) {
 }
 
 }  // namespace plaso
-}  // namespace third_party_logle
+}  // namespace tervuren

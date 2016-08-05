@@ -23,7 +23,7 @@
 #include "third_party/logle/ast.pb.h"
 #include "third_party/logle/base/string.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 
@@ -71,6 +71,6 @@ AST MakeURL();
 
 }  // namespace type
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_TYPE_H_

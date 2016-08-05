@@ -33,7 +33,7 @@ const int kMaxMalformedLines = 1000000;
 
 }  // namespace
 
-namespace third_party_logle {
+namespace tervuren {
 
 util::Status PlasoAnalyzer::Initialize(
     JsonDocumentIterator* doc_iterator) {
@@ -96,4 +96,4 @@ void PlasoAnalyzer::BuildPlasoGraphFromJSON() {
   plaso_graph_->AddTemporalEdges();
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

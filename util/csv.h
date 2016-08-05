@@ -60,7 +60,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 using std::vector;
@@ -168,6 +168,6 @@ class CSVParser {
 };
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_UTIL_CSV_H_

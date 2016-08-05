@@ -20,7 +20,7 @@
 // details about why the operation failed.
 #include "third_party/logle/base/string.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // A set of error codes.
 enum class Code {
@@ -79,6 +79,6 @@ class Status {
 };
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_UTIL_STATUS_H_

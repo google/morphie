@@ -20,7 +20,7 @@
 // the client is required to define this function.
 void boost::throw_exception(std::exception const& e) {}
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 CSVParser::Iterator& CSVParser::Iterator::operator++() {
@@ -89,4 +89,4 @@ void CSVParser::Advance() {
 }
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren

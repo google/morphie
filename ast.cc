@@ -25,7 +25,7 @@
 #include "third_party/logle/util/string_utils.h"
 #include "third_party/logle/util/time_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 
 namespace {
@@ -240,4 +240,4 @@ string ToStringRoot(const AST& ast, PrintOption opt) {
 }
 
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren

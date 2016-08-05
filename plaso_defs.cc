@@ -14,7 +14,7 @@
 
 #include "third_party/logle/plaso_defs.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace plaso {
 
 const char kRequiredFields[] =
@@ -27,4 +27,4 @@ const char kSourceFileName[] = "display_name";
 const char kTimestampName[] = "timestamp";
 
 }  // namespace plaso
-}  // namespace third_party_logle
+}  // namespace tervuren

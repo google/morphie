@@ -20,10 +20,10 @@
 #include "third_party/logle/plaso_analyzer.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
-namespace logle = third_party_logle;
-namespace util = third_party_logle::util;
+namespace logle = tervuren;
+namespace util = tervuren::util;
 
 // Tests of JSON input validation and input processing.
 // NOLINTNEXTLINE
@@ -71,4 +71,4 @@ TEST(PlasoAnalyzerDeathTest, RequiresCorrectJSONDoc) {
     ".*JSON*");
 }
 }  // namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

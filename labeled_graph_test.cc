@@ -26,7 +26,7 @@
 #include "third_party/logle/value.h"
 #include "third_party/logle/value_checker.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
 
 using ast::type::Types;
@@ -870,4 +870,4 @@ TEST_F(LabeledGraphTest, UniqueEdgeUpdateClash) {
 }
 
 }  // namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

@@ -21,7 +21,7 @@
 #include "third_party/logle/util/status.h"
 #include "third_party/logle/util/string_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
 
 void TestCSVInitialization(const char* kInput, Code code) {
@@ -103,4 +103,4 @@ TEST(AccessAnalyzerTest, TestGraphConstruction) {
 }
 
 }  // namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

@@ -23,7 +23,7 @@
 #include "third_party/logle/type_checker.h"
 #include "third_party/logle/value.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
 
 const char kNodeLabelTag_[] = "NodeLabel";
@@ -129,4 +129,4 @@ TEST_F(TFGraphExporterTest, ExportsTFNode) {
 }
 
 }  // unnamed namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

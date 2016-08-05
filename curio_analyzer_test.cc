@@ -17,7 +17,7 @@
 #include "third_party/logle/gtest.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
 
 // Returns a JSON object constructed from 'input'.
@@ -342,4 +342,4 @@ TEST(CurioAnalyzerTest, MalformedChainMid) {
 }
 
 }  // namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

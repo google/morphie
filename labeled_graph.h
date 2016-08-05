@@ -63,7 +63,7 @@
 
 using std::unordered_map;
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The declaration below defines a Graph type using the Boost Graph Library. A
 // graph is represented as an adjacency_list. The set of nodes and set of edges
@@ -330,6 +330,6 @@ class LabeledGraph {
   UniqueEdges named_edges_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_LABELED_GRAPH_H_

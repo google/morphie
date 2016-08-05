@@ -30,7 +30,7 @@
 #include "third_party/logle/plaso_event_graph.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The PlasoAnalyzer uses graphs to extract information from log data. The
 // analyzer must be initialized with a JSON document (a Json::Value object from
@@ -85,6 +85,6 @@ class PlasoAnalyzer {
   JsonDocumentIterator* doc_iterator_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_PLASO_ANALYZER_H_

@@ -19,7 +19,7 @@
 #include "third_party/logle/analysis_options.pb.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace frontend {
 
 enum class Analyzer { kCurio, kMailAccess, kPlaso };
@@ -36,5 +36,5 @@ enum class Analyzer { kCurio, kMailAccess, kPlaso };
 util::Status Run(const AnalysisOptions& options);
 
 }  // namespace frontend
-}  // namespace third_party_logle
+}  // namespace tervuren
 #endif  // THIRD_PARTY_LOGLE_FRONTEND_H_

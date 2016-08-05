@@ -5,8 +5,7 @@
 #include <memory>
 #include "third_party/jsoncpp/json.h"
 
-namespace third_party_logle {
-namespace logle = third_party_logle;
+namespace tervuren {
 
 // Contains classes that handle loading of input files in different formats.
 // It supports JSON and JSON stream format.
@@ -70,6 +69,6 @@ class StreamJson: public JsonDocumentIterator{
   Json::Value current_object_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif

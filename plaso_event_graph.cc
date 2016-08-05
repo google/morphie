@@ -32,7 +32,7 @@
 #include "third_party/logle/util/time_utils.h"
 #include "third_party/logle/value.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -279,4 +279,4 @@ string PlasoEventGraph::ToDot() const {
   return util::StrCat("digraph logle_graph {\n", dot_graph, "}");
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

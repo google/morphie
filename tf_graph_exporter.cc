@@ -19,7 +19,7 @@
 #include "third_party/logle/ast.h"
 #include "third_party/logle/util/string_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 TFGraphExporter::TFGraphExporter(const LabeledGraph& graph)
     : graph_(graph), node_label_(NodeLabel) {}
@@ -89,4 +89,4 @@ tensorflow::NodeDef TFGraphExporter::TFNode(NodeId node_id) {
   return tf_node;
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

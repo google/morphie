@@ -23,7 +23,7 @@
 #include "third_party/logle/labeled_graph.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace test {
 
 // A weighted graph is one in which the nodes and edges have int weights. There
@@ -83,5 +83,5 @@ bool IsPath(const LabeledGraph& graph);
 bool IsCycle(const LabeledGraph& graph);
 
 }  // namespace test
-}  // namespace third_party_logle
+}  // namespace tervuren
 #endif  // THIRD_PARTY_LOGLE_TEST_GRAPHS_H_

@@ -28,7 +28,7 @@
 #include "third_party/logle/util/logging.h"
 #include "third_party/logle/util/string_utils.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 using ast::type::Types;
 namespace type = ast::type;
@@ -604,4 +604,4 @@ EdgeId LabeledGraph::InsertEdge(NodeId source, NodeId target, TaggedAST label) {
   return edge_id;
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

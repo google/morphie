@@ -22,7 +22,7 @@
 
 #include "third_party/logle/base/string.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 // Returns a container of strings obtained by splitting 'str' using the
@@ -81,6 +81,6 @@ string SetJoin(const std::set<T>& args, const string& sep) {
 }
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_UTIL_STRING_UTILS_H_

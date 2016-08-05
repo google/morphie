@@ -21,7 +21,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/gtest.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 namespace {
 
@@ -151,6 +151,6 @@ TEST(SetJoinTest, OutputProperties) {
 
 }  // anonymous namespace
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_UTIL_STRING_UTILS_TEST_H_

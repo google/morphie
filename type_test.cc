@@ -19,7 +19,7 @@
 #include "third_party/logle/gtest.h"
 #include "third_party/logle/type_checker.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 namespace {
@@ -144,4 +144,4 @@ TEST(TypeDeathTest, NonTypeASTToCompositeArg) {
 }  // namespace
 }  // namespace type
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren

@@ -17,7 +17,7 @@
 
 #include "third_party/logle/gtest.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 namespace {
 
@@ -220,4 +220,4 @@ TEST(CSVTest, EscapedInput) {
 
 }  // unnamed namespace
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren

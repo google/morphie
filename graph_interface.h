@@ -18,7 +18,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The GraphInterface class is an abstract class that specifies the common API
 // for instantiations of the labeled graph.
@@ -43,6 +43,6 @@ class GraphInterface {
   virtual string ToDot() const = 0;
 };  // class GraphInterface
 
-}   // namespace third_party_logle
+}  // namespace tervuren
 #endif  // THIRD_PARTY_LOGLE_GRAPH_INTERFACE_H_
 

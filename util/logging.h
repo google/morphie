@@ -25,7 +25,7 @@
 #define CHECK(c, err) util::Check(c, LOCATION_STR, err)
 #define FAIL(err) util::Check(false, LOCATION_STR, err)
 
-namespace third_party_logle {
+namespace tervuren {
 namespace util {
 
 // Produces an error message and aborts if the condition is false.
@@ -34,6 +34,6 @@ void Check(bool condition, const string& location);
 void Check(bool condition);
 
 }  // namespace util
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_UTIL_LOGGING_H_

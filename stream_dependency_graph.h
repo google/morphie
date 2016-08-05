@@ -29,7 +29,7 @@
 #include "third_party/logle/labeled_graph.h"
 #include "third_party/logle/util/status.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 // The StreamDependencyGraph class implements a stream dependency graph. The
 // nodes in the graph are labels represented as abstract syntax trees (see
@@ -70,5 +70,5 @@ class StreamDependencyGraph : public GraphInterface {
   LabeledGraph graph_;
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 #endif  // THIRD_PARTY_LOGLE_STREAM_DEPENDENCY_GRAPH_H_

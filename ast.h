@@ -38,7 +38,7 @@
 #include "third_party/logle/ast.pb.h"
 #include "third_party/logle/base/string.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 
 // Constants used by AST utilities.
@@ -154,6 +154,6 @@ string ToString(const Operator& op);
 string ToStringRoot(const AST& ast, PrintOption opt);
 
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_AST_H_

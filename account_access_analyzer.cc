@@ -32,7 +32,7 @@ const char kNullAccessGraphErr[] = "The access graph is null.";
 
 }  // namespace
 
-namespace third_party_logle {
+namespace tervuren {
 
 // This function performs a series of checks, described by the error message
 // generated if the check fails.
@@ -139,4 +139,4 @@ util::Status AccessAnalyzer::InitializeFieldMap() {
   return util::Status::OK;
 }
 
-}  // namespace third_party_logle
+}  // namespace tervuren

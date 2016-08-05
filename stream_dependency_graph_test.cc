@@ -19,7 +19,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/gtest.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace {
 
 TEST(PlasoEventGraphDeathTest, UninitializedCalls) {
@@ -67,4 +67,4 @@ TEST(PlasoEventGraphTest, AddDependency) {
 }
 
 }  // namespace
-}  // namespace third_party_logle
+}  // namespace tervuren

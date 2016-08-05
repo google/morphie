@@ -48,7 +48,7 @@
 #include "visualization/graphviz_server/proto/graphviz-server.pb.h"
 #include "visualization/graphviz_server/public/graphviz-stubby-channel.h"
 
-namespace third_party_logle {
+namespace tervuren {
 
 class DotRenderer {
  public:
@@ -79,6 +79,6 @@ class DotRenderer {
   DISALLOW_COPY_AND_ASSIGN(DotRenderer);
 };
 
-}  // namespace third_party_logle
+}  // namespace tervuren
 
 #endif  // THIRD_PARTY_LOGLE_DOT_RENDERER_H_

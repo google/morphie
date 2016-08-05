@@ -16,7 +16,7 @@
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/gtest.h"
 
-namespace third_party_logle {
+namespace tervuren {
 namespace ast {
 namespace {
 
@@ -256,4 +256,4 @@ TEST_F(ASTTest, PrintSet) {
 
 }  // namespace
 }  // namespace ast
-}  // namespace third_party_logle
+}  // namespace tervuren
