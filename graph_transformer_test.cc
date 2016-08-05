@@ -203,6 +203,15 @@ TaggedAST LowestIdWeightedGraphLabel(const LabeledGraph& graph,
   return tagged_label;
 }
 
+TaggedAST ConstantNodeFoldingLabel(const LabeledGraph& graph,
+                                     NodeId node, NodeId predecessor,
+                                     NodeId successor) {
+  TaggedAST tagged_label;
+  *tagged_label.mutable_ast() = ast::value::MakeInt(1);
+  tagged_label.set_tag("Edge-Weight");
+  return tagged_label;
+}
+
 // Initialization functions for QuotientGraph tests.
 // Initialize 'graph' with strings for node and edge labels.
 void SetStringTypes(LabeledGraph* graph) {
@@ -725,6 +734,105 @@ TEST(GraphTransformerTest, LongPathEdgeContraction) {
                                EdgeCountLabel, false, true);
   std::unique_ptr<LabeledGraph> graph1 = graph::ContractEdges(
       input_graph, {edge1, edge2}, config);
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(4, graph1->NumNodes());
+  EXPECT_EQ(3, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+TEST(GraphTransformerTest, NoNodeFold) {
+  // Create the graph { 0 -> 1 -> 2}.
+  test::WeightedGraph path;
+  test::GetPathGraph(3, &path);
+  ASSERT_EQ(3, path.NumNodes());
+  ASSERT_EQ(2, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+
+  // Check that folding no vertices results in the same graph.
+  std::unique_ptr<LabeledGraph> graph1 = graph::FoldNodes(
+      input_graph, ConstantNodeFoldingLabel, {});
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(3, graph1->NumNodes());
+  EXPECT_EQ(2, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Takes the graph with a single node with a single self-edge and folds that
+// node. The result should be an empty graph.
+TEST(GraphTransformerTest, SingleNodeNodeFold) {
+  test::WeightedGraph cycle;
+  test::GetCycleGraph(1, &cycle);
+  ASSERT_EQ(1, cycle.NumNodes());
+  ASSERT_EQ(1, cycle.NumEdges());
+  const LabeledGraph& input_graph = *cycle.GetGraph();
+  auto node_it = input_graph.NodeSetBegin();
+  auto node = *node_it;
+
+  std::unique_ptr<LabeledGraph> graph1 = graph::FoldNodes(
+      input_graph, ConstantNodeFoldingLabel, {node});
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(0, graph1->NumNodes());
+  EXPECT_EQ(0, graph1->NumEdges());
+}
+
+// Folds a node in the graph { 0 -> 1}. Should result in a graph with
+// one node and no edges.
+TEST(GraphTransformerTest, SimplePathNodeFold) {
+  test::WeightedGraph path;
+  test::GetPathGraph(2, &path);
+  ASSERT_EQ(2, path.NumNodes());
+  ASSERT_EQ(1, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+  auto node_it = input_graph.NodeSetBegin();
+  auto node = *node_it;
+
+  std::unique_ptr<LabeledGraph> graph1 = graph::FoldNodes(
+      input_graph, ConstantNodeFoldingLabel, {node});
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(0, graph1->NumEdges());
+  EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Folds a node in the graph { 0 <-> 1}. Should result in a graph
+// with a one node and one self-edge.
+TEST(GraphTransformerTest, SimpleCycleNodeFold) {
+  test::WeightedGraph cycle;
+  test::GetCycleGraph(2, &cycle);
+  ASSERT_EQ(2, cycle.NumNodes());
+  ASSERT_EQ(2, cycle.NumEdges());
+  const LabeledGraph& input_graph = *cycle.GetGraph();
+  auto node_it = input_graph.NodeSetBegin();
+  auto node = *node_it;
+
+  std::unique_ptr<LabeledGraph> graph1 = graph::FoldNodes(
+      input_graph, ConstantNodeFoldingLabel, {node});
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(1, graph1->NumNodes());
+  EXPECT_EQ(1, graph1->NumEdges());
+  EXPECT_TRUE(test::IsCycle(*graph1));
+}
+
+// Takes the graph { 0 -> 1 -> 2 -> 3 -> 4 -> 5} and folds two nodes. The
+// result should be a path of length 4.
+TEST(GraphTransformerTest, LongPathNodeFold) {
+  test::WeightedGraph path;
+  test::GetPathGraph(6, &path);
+  ASSERT_EQ(6, path.NumNodes());
+  ASSERT_EQ(5, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+  auto node_it = input_graph.NodeSetBegin();
+  auto node1 = *node_it;
+  ++node_it;
+  auto node2 = *node_it;
+
+  std::unique_ptr<LabeledGraph> graph1 = graph::FoldNodes(
+      input_graph, ConstantNodeFoldingLabel, {node1, node2});
 
   EXPECT_TRUE(graph1 != nullptr);
   EXPECT_EQ(4, graph1->NumNodes());
