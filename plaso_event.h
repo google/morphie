@@ -22,7 +22,7 @@
 
 #include "third_party/jsoncpp/json.h"
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
+#include "base/string.h"
 #include "third_party/logle/plaso_event.pb.h"
 
 namespace tervuren {

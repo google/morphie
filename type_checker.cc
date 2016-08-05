@@ -20,16 +20,16 @@
 // value respects a type simultaneously walk the type and value ASTs and check
 // if the node in the value AST has the appropriate operator and number of
 // arguments as specified by the type AST.
-#include "third_party/logle/type_checker.h"
+#include "type_checker.h"
 
 #include <algorithm>
 #include <iostream>
 #include <utility>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/value_checker.h"
+#include "ast.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
+#include "value_checker.h"
 
 namespace tervuren {
 namespace ast {

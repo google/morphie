@@ -12,17 +12,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/graph_transformer.h"
+#include "graph_transformer.h"
 
 #include <memory>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/test_graphs.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/value.h"
-#include "third_party/logle/value_checker.h"
+#include "ast.h"
+#include "gtest.h"
+#include "test_graphs.h"
+#include "type.h"
+#include "util/string_utils.h"
+#include "value.h"
+#include "value_checker.h"
 
 namespace tervuren {
 namespace {

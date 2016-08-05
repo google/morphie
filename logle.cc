@@ -24,9 +24,9 @@
 #include "base/integral_types.h"
 #include <google/protobuf/text_format.h>
 #include "third_party/logle/analysis_options.pb.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/frontend.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "frontend.h"
+#include "util/status.h"
 
 namespace logle = tervuren;
 namespace protobuf = google::protobuf;

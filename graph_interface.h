@@ -15,8 +15,8 @@
 #ifndef THIRD_PARTY_LOGLE_GRAPH_INTERFACE_H_
 #define THIRD_PARTY_LOGLE_GRAPH_INTERFACE_H_
 
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "util/status.h"
 
 namespace tervuren {
 

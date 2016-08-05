@@ -17,7 +17,7 @@
 #ifndef THIRD_PARTY_LOGLE_UTIL_LOGGING_H_
 #define THIRD_PARTY_LOGLE_UTIL_LOGGING_H_
 
-#include "third_party/logle/base/string.h"
+#include "base/string.h"
 
 #define MAKE_STR(x) #x
 #define TOSTRING(x) MAKE_STR(x)

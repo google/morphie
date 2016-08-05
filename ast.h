@@ -35,8 +35,8 @@
 #ifndef THIRD_PARTY_LOGLE_AST_H_
 #define THIRD_PARTY_LOGLE_AST_H_
 
-#include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
+#include "third_party/logle/third_party/logle/ast.pb.h"
+#include "base/string.h"
 
 namespace tervuren {
 namespace ast {

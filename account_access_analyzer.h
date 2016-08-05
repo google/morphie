@@ -22,10 +22,10 @@
 #include <memory>
 #include <unordered_map>
 
-#include "third_party/logle/account_access_graph.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/util/csv.h"
-#include "third_party/logle/util/status.h"
+#include "account_access_graph.h"
+#include "base/string.h"
+#include "util/csv.h"
+#include "util/status.h"
 
 namespace tervuren {
 

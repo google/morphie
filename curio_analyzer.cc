@@ -12,13 +12,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/curio_analyzer.h"
+#include "curio_analyzer.h"
 
 #include <algorithm>
 
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/string_utils.h"
+#include "util/logging.h"
+#include "util/status.h"
+#include "util/string_utils.h"
 
 namespace {
 

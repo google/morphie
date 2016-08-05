@@ -15,22 +15,22 @@
 // This file contains functions that initialize and manipulate an event graph.
 // Much of the work done in these functions is creating abstract syntax trees
 // (ASTs) representing either types for labels or values for labels.
-#include "third_party/logle/plaso_event_graph.h"
+#include "plaso_event_graph.h"
 
 #include <boost/algorithm/string/join.hpp>  // NOLINT
 #include <sstream>
 #include <utility>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/dot_printer.h"
-#include "third_party/logle/plaso_event.h"
+#include "ast.h"
+#include "dot_printer.h"
+#include "plaso_event.h"
 #include "third_party/logle/plaso_event.pb.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/util/time_utils.h"
-#include "third_party/logle/value.h"
+#include "type.h"
+#include "type_checker.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
+#include "util/time_utils.h"
+#include "value.h"
 
 namespace tervuren {
 

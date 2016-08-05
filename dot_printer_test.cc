@@ -12,25 +12,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/dot_printer.h"
+#include "dot_printer.h"
 
 #include <algorithm>
 #include <boost/regex.hpp>
 #include <set>
 #include <vector>
 
-#include "third_party/logle/ast.h"
+#include "ast.h"
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/labeled_graph.h"
-#include "third_party/logle/plaso_event.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/value.h"
+#include "base/string.h"
+#include "base/string.h"
+#include "gtest.h"
+#include "labeled_graph.h"
+#include "plaso_event.h"
+#include "type.h"
+#include "type_checker.h"
+#include "util/status.h"
+#include "util/string_utils.h"
+#include "value.h"
 
 namespace tervuren {
 namespace {

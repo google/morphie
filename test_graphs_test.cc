@@ -12,9 +12,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/test_graphs.h"
+#include "test_graphs.h"
 
-#include "third_party/logle/gtest.h"
+#include "gtest.h"
 
 namespace tervuren {
 namespace test {

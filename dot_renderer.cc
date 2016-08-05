@@ -12,13 +12,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/dot_renderer.h"
+#include "dot_renderer.h"
 
 #include <memory>
 #include "net/rpc/rpc-errorspace.h"
 #include "net/rpc2/rpc2.h"
 #include "util/regexp/re2/re2.h"
-#include "util/task/codes.pb.h"
+#include "third_party/logle/util/task/codes.pb.h"
 
 namespace tervuren {
 

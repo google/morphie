@@ -17,15 +17,15 @@
 // running time linear in the size of the argument ASTs. Only interval and set
 // values can have redundant representations, so the canonicalization methods
 // walk an AST to find an interval or set and then apply a transformation.
-#include "third_party/logle/value_checker.h"
+#include "value_checker.h"
 
 #include <algorithm>
 #include <vector>
 
 #include "google/protobuf/message_lite.h"
-#include "third_party/logle/ast.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
+#include "ast.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
 
 namespace tervuren {
 namespace ast {

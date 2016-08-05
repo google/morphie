@@ -12,14 +12,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/account_access_analyzer.h"
+#include "account_access_analyzer.h"
 
 #include <sstream>
 
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/util/csv.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/string_utils.h"
+#include "gtest.h"
+#include "util/csv.h"
+#include "util/status.h"
+#include "util/string_utils.h"
 
 namespace tervuren {
 namespace {

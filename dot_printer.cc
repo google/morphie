@@ -12,20 +12,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/dot_printer.h"
+#include "dot_printer.h"
 
 #include <boost/algorithm/string/join.hpp>  // NOLINT
 #include <boost/algorithm/string/replace.hpp>  // NOLINT
 
 #include "third_party/boost/allowed/graph/directed_graph.hpp"
-#include "third_party/logle/ast.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/value.h"
-#include "third_party/logle/value_checker.h"
+#include "ast.h"
+#include "type.h"
+#include "type_checker.h"
+#include "util/logging.h"
+#include "util/status.h"
+#include "util/string_utils.h"
+#include "value.h"
+#include "value_checker.h"
 
 namespace tervuren {
 

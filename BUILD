@@ -34,6 +34,67 @@ package_group(
     packages = ["//third_party/logle/..."],
 )
 
+# Utilities
+
+# A parser for Comma Separated Values (CSV).
+cc_library(
+    name = "util_csv",
+    srcs = ["util/csv.cc"],
+    hdrs = [
+        "base/string.h",
+        "util/csv.h",
+    ],
+    includes = ["."],
+    deps = [
+        BOOST,
+        ":util_status",
+    ],
+)
+
+# Assertion checking utilities.
+cc_library(
+    name = "util_logging",
+    srcs = ["util/logging.cc"],
+    hdrs = [
+        "base/string.h",
+        "util/logging.h",
+    ],
+    includes = ["."],
+)
+
+# Error codes and status.
+cc_library(
+    name = "util_status",
+    srcs = ["util/status.cc"],
+    hdrs = [
+        "base/string.h",
+        "util/status.h",
+    ],
+    includes = ["."],
+)
+
+# String manipulation utilities.
+cc_library(
+    name = "util_string_utils",
+    srcs = ["util/string_utils.cc"],
+    hdrs = [
+        "base/string.h",
+        "util/string_utils.h",
+    ],
+    includes = ["."],
+)
+
+# Time utilities.
+cc_library(
+    name = "util_time_utils",
+    srcs = ["util/time_utils.cc"],
+    hdrs = [
+        "base/string.h",
+        "util/time_utils.h",
+    ],
+    includes = ["."],
+)
+
 cc_library(
     name = "gtest",
     testonly = 1,
@@ -69,10 +130,10 @@ cc_library(
         ":labeled_graph",
         ":type",
         ":type_checker",
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
         ":value",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -82,10 +143,10 @@ cc_library(
     hdrs = ["curio_analyzer.h"],
     deps = [
         ":stream_dependency_graph",
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -101,34 +162,44 @@ portable_proto_library(
 cc_library(
     name = "ast",
     srcs = ["ast.cc"],
-    hdrs = ["ast.h"],
+    hdrs = [
+        "ast.h",
+        "base/string.h",
+    ],
+    includes = ["."],
     deps = [
         ":ast_proto",
         BOOST,
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:string_utils",
-        "//third_party/logle/util:time_utils",
+        ":util_string_utils",
+        ":util_time_utils",
     ],
 )
 
 cc_library(
     name = "type_checker",
     srcs = ["type_checker.cc"],
-    hdrs = ["type_checker.h"],
+    hdrs = [
+        "base/string.h",
+        "type_checker.h",
+    ],
+    includes = ["."],
     deps = [
         ":ast",
         ":ast_proto",
+        ":util_logging",
+        ":util_string_utils",
         ":value_checker",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
 cc_library(
     name = "type",
     srcs = ["type.cc"],
-    hdrs = ["type.h"],
+    hdrs = [
+        "base/string.h",
+        "type.h",
+    ],
+    includes = ["."],
     deps = [
         ":ast",
         ":ast_proto",
@@ -139,43 +210,52 @@ cc_library(
 cc_library(
     name = "value_checker",
     srcs = ["value_checker.cc"],
-    hdrs = ["value_checker.h"],
+    hdrs = [
+        "base/string.h",
+        "value_checker.h",
+    ],
+    includes = ["."],
     deps = [
         ":ast",
         ":ast_proto",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:string_utils",
+        ":util_logging",
+        ":util_string_utils",
     ],
 )
 
 cc_library(
     name = "value",
     srcs = ["value.cc"],
-    hdrs = ["value.h"],
+    hdrs = [
+        "base/string.h",
+        "value.h",
+    ],
+    includes = ["."],
     deps = [
         ":ast",
         ":ast_proto",
         ":type_checker",
+        ":util_logging",
+        ":util_time_utils",
         ":value_checker",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:time_utils",
     ],
 )
 
 cc_library(
     name = "labeled_graph",
     srcs = ["labeled_graph.cc"],
-    hdrs = ["labeled_graph.h"],
+    hdrs = [
+        "base/string.h",
+        "labeled_graph.h",
+    ],
     deps = [
         ":ast_proto",
         ":type_checker",
         BOOST,
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
         "//third_party/boost/allowed",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -186,10 +266,10 @@ cc_library(
     deps = [
         ":labeled_graph",
         ":type",
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
         ":value",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -201,8 +281,8 @@ cc_library(
         ":dot_printer",
         ":labeled_graph",
         ":type",
+        ":util_logging",
         ":value",
-        "//third_party/logle/util:logging",
     ],
 )
 
@@ -223,18 +303,20 @@ portable_proto_library(
 cc_library(
     name = "plaso_event",
     srcs = ["plaso_event.cc"],
-    hdrs = ["plaso_event.h"],
+    hdrs = [
+        "base/string.h",
+        "plaso_event.h",
+    ],
     deps = [
         ":ast_proto",
         ":plaso_defs",
         ":plaso_event_proto",
         ":type",
+        ":util_logging",
+        ":util_string_utils",
+        ":util_time_utils",
         ":value",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:string_utils",
-        "//third_party/logle/util:time_utils",
     ],
 )
 
@@ -255,11 +337,11 @@ cc_library(
         ":type",
         ":type_checker",
         BOOST,
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
+        ":util_time_utils",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
-        "//third_party/logle/util:time_utils",
     ],
 )
 
@@ -273,24 +355,26 @@ cc_library(
         ":type_checker",
         ":value",
         BOOST,
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
         "//third_party/boost/allowed",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
 cc_library(
     name = "tf_graph_exporter",
     srcs = ["tf_graph_exporter.cc"],
-    hdrs = ["tf_graph_exporter.h"],
+    hdrs = [
+        "base/string.h",
+        "tf_graph_exporter.h",
+    ],
     deps = [
         ":ast",
         ":ast_proto",
         ":labeled_graph",
         BOOST,
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:string_utils",
+        ":util_string_utils",
         "//third_party/tensorflow/core:protos_all",
     ],
 )
@@ -298,16 +382,18 @@ cc_library(
 cc_library(
     name = "plaso_analyzer",
     srcs = ["plaso_analyzer.cc"],
-    hdrs = ["plaso_analyzer.h"],
+    hdrs = [
+        "base/string.h",
+        "plaso_analyzer.h",
+    ],
     deps = [
         ":json_reader",
         ":plaso_defs",
         ":plaso_event",
         ":plaso_event_graph",
+        ":util_status",
+        ":util_string_utils",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -323,6 +409,7 @@ cc_library(
     srcs = ["account_access_graph.cc"],
     hdrs = [
         "account_access_graph.h",
+        "base/string.h",
         "graph_interface.h",
     ],
     deps = [
@@ -331,26 +418,27 @@ cc_library(
         ":labeled_graph",
         ":type",
         ":type_checker",
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
         ":value",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
 cc_library(
     name = "account_access_analyzer",
     srcs = ["account_access_analyzer.cc"],
-    hdrs = ["account_access_analyzer.h"],
+    hdrs = [
+        "account_access_analyzer.h",
+        "base/string.h",
+    ],
     deps = [
         ":account_access_defs",
         ":account_access_graph",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:csv",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
+        ":util_csv",
+        ":util_logging",
+        ":util_status",
+        ":util_string_utils",
     ],
 )
 
@@ -364,28 +452,33 @@ portable_proto_library(
 cc_library(
     name = "json_reader",
     srcs = ["json_reader.cc"],
-    hdrs = ["json_reader.h"],
+    hdrs = [
+        "base/string.h",
+        "json_reader.h",
+    ],
+    includes = ["."],
     deps = [
+        ":util_logging",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
     ],
 )
 
 cc_library(
     name = "frontend",
     srcs = ["frontend.cc"],
-    hdrs = ["frontend.h"],
+    hdrs = [
+        "base/string.h",
+        "frontend.h",
+    ],
     deps = [
         ":account_access_analyzer",
         ":analysis_options_proto",
         ":curio_analyzer",
         ":json_reader",
         ":plaso_analyzer",
+        ":util_logging",
+        ":util_string_utils",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:logging",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -395,8 +488,7 @@ cc_binary(
     deps = [
         ":frontend",
         PROTO_LIB,
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:status",
+        ":util_status",
     ],
 )
 
@@ -419,8 +511,8 @@ cc_test(
     deps = [
         ":curio_analyzer",
         ":gtest",
+        ":util_status",
         "//third_party/jsoncpp:json",
-        "//third_party/logle/util:status",
     ],
 )
 
@@ -433,7 +525,6 @@ cc_test(
     deps = [
         ":ast",
         ":gtest",
-        "//third_party/logle/base:string",
     ],
 )
 
@@ -444,7 +535,6 @@ cc_test(
     deps = [
         ":gtest",
         ":type_checker",
-        "//third_party/logle/base:string",
     ],
 )
 
@@ -466,7 +556,6 @@ cc_test(
         ":ast",
         ":gtest",
         ":value_checker",
-        "//third_party/logle/base:string",
     ],
 )
 
@@ -493,10 +582,9 @@ cc_test(
         ":labeled_graph",
         ":type",
         ":type_checker",
+        ":util_status",
         ":value",
         ":value_checker",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:status",
     ],
 )
 
@@ -521,8 +609,8 @@ cc_test(
         ":labeled_graph",
         ":test_graphs",
         ":type",
+        ":util_string_utils",
         ":value",
-        "//third_party/logle/util:string_utils",
     ],
 )
 
@@ -540,8 +628,7 @@ cc_test(
         ":type",
         ":value",
         BOOST_REGEX,
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:status",
+        ":util_status",
     ],
 )
 
@@ -557,9 +644,8 @@ cc_test(
         ":plaso_event",
         ":tf_graph_exporter",
         ":type",
+        ":util_status",
         ":value",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:status",
     ],
 )
 
@@ -573,8 +659,7 @@ cc_test(
         ":plaso_event_proto",
         ":type",
         ":type_checker",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:time_utils",
+        ":util_time_utils",
     ],
 )
 
@@ -586,21 +671,26 @@ cc_test(
         ":gtest",
         ":plaso_event",
         ":plaso_event_graph",
-        "//third_party/logle/util:status",
+        ":util_status",
     ],
 )
 
 cc_test(
     name = "plaso_analyzer_test",
     size = "small",
-    srcs = ["plaso_analyzer_test.cc"],
+    srcs = [
+        "base/string.h",
+        "plaso_analyzer_test.cc",
+    ],
+    includes = ["."],
     deps = [
         ":gtest",
         ":json_reader",
         ":plaso_analyzer",
         ":plaso_defs",
-        "//third_party/logle/base:string",
-        "//third_party/logle/util:status",
+        ":util_csv",
+        ":util_status",
+        ":util_string_utils",
     ],
 )
 
@@ -622,6 +712,6 @@ cc_test(
     deps = [
         ":account_access_analyzer",
         ":gtest",
-        "//third_party/logle/util:csv",
+        ":util_csv",
     ],
 )

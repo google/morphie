@@ -25,10 +25,10 @@
 #include <unordered_map>
 
 #include "third_party/jsoncpp/json.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/json_reader.h"
-#include "third_party/logle/plaso_event_graph.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "json_reader.h"
+#include "plaso_event_graph.h"
+#include "util/status.h"
 
 namespace tervuren {
 

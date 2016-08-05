@@ -12,13 +12,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include <stdio.h>
+#include "plaso_analyzer.h"
 
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/json_reader.h"
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/plaso_analyzer.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "gtest.h"
+#include "json_reader.h"
+#include "plaso_defs.h"
+#include "util/string_utils.h"
 
 namespace tervuren {
 namespace {

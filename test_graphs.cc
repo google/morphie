@@ -12,12 +12,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/test_graphs.h"
+#include "test_graphs.h"
 
-#include "third_party/logle/dot_printer.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/value.h"
+#include "dot_printer.h"
+#include "type.h"
+#include "util/logging.h"
+#include "value.h"
 
 namespace {
 

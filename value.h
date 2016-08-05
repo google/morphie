@@ -34,7 +34,7 @@
 #include <cstdint>
 
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
+#include "base/string.h"
 
 namespace tervuren {
 namespace ast {

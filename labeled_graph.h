@@ -57,9 +57,9 @@
 
 #include "third_party/boost/allowed/graph/directed_graph.hpp"
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "type_checker.h"
+#include "util/status.h"
 
 using std::unordered_map;
 

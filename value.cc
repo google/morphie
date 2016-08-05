@@ -13,15 +13,15 @@
 // the License.
 
 // See third_party/logle/value_checker.h for details on values.
-#include "third_party/logle/value.h"
+#include "value.h"
 
 #include <algorithm>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/time_utils.h"
-#include "third_party/logle/value_checker.h"
+#include "ast.h"
+#include "type_checker.h"
+#include "util/logging.h"
+#include "util/time_utils.h"
+#include "value_checker.h"
 
 namespace tervuren {
 namespace ast {

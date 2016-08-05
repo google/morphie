@@ -14,12 +14,12 @@
 
 #include <queue>
 
-#include "third_party/logle/graph_transformer.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/value.h"
+#include "graph_transformer.h"
+#include "type.h"
+#include "util/logging.h"
+#include "util/status.h"
+#include "util/string_utils.h"
+#include "value.h"
 
 namespace tervuren {
 

@@ -20,7 +20,7 @@
 #include <sstream>
 #include <vector>
 
-#include "third_party/logle/base/string.h"
+#include "base/string.h"
 
 namespace tervuren {
 namespace util {

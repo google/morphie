@@ -43,9 +43,9 @@
 
 #include <string>
 
-#include "third_party/logle/renderer_config.proto.h"
+#include "renderer_config.proto.h"
 #include "util/task/status.h"
-#include "visualization/graphviz_server/proto/graphviz-server.pb.h"
+#include "third_party/logle/visualization/graphviz_server/proto/graphviz-server.pb.h"
 #include "visualization/graphviz_server/public/graphviz-stubby-channel.h"
 
 namespace tervuren {

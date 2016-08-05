@@ -20,13 +20,13 @@
 // different graph library if required at a later point. Moreover, the BGL does
 // not provide a convenient way to look up graph elements based on their labels,
 // which LabeledGraph does by using indexes.
-#include "third_party/logle/labeled_graph.h"
+#include "labeled_graph.h"
 
 #include <utility>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
+#include "ast.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
 
 namespace tervuren {
 

@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/plaso_defs.h"
+#include "plaso_defs.h"
 
 namespace tervuren {
 namespace plaso {

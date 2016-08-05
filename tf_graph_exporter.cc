@@ -12,12 +12,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/tf_graph_exporter.h"
+#include "tf_graph_exporter.h"
 
 #include <unordered_map>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/util/string_utils.h"
+#include "ast.h"
+#include "util/string_utils.h"
 
 namespace tervuren {
 

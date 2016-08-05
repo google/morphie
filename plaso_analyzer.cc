@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/plaso_analyzer.h"
+#include "plaso_analyzer.h"
 
 #include <boost/algorithm/string/join.hpp>  // NOLINT
 
@@ -20,12 +20,12 @@
 #include <utility>
 #include <vector>
 
-#include "third_party/logle/json_reader.h"
-#include "third_party/logle/plaso_defs.h"
-#include "third_party/logle/plaso_event.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/string_utils.h"
+#include "json_reader.h"
+#include "plaso_defs.h"
+#include "plaso_event.h"
+#include "util/logging.h"
+#include "util/status.h"
+#include "util/string_utils.h"
 
 namespace {
 

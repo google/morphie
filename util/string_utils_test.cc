@@ -14,12 +14,12 @@
 #ifndef THIRD_PARTY_LOGLE_UTIL_STRING_UTILS_TEST_H_
 #define THIRD_PARTY_LOGLE_UTIL_STRING_UTILS_TEST_H_
 
-#include "third_party/logle/util/string_utils.h"
+#include "util/string_utils.h"
 
 #include <set>
 
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/gtest.h"
+#include "base/string.h"
+#include "gtest.h"
 
 namespace tervuren {
 namespace util {

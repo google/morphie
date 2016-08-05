@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/account_access_analyzer.h"
+#include "account_access_analyzer.h"
 
 #include <boost/algorithm/string/join.hpp>  // NOLINT
 
@@ -21,9 +21,9 @@
 #include <utility>
 #include <vector>
 
-#include "third_party/logle/account_access_defs.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
+#include "account_access_defs.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
 
 namespace {
 

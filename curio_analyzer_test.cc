@@ -12,10 +12,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/curio_analyzer.h"
+#include "curio_analyzer.h"
 
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/util/status.h"
+#include "gtest.h"
+#include "util/status.h"
 
 namespace tervuren {
 namespace {

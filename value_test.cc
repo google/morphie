@@ -12,12 +12,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/value.h"
+#include "value.h"
 
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/value_checker.h"
+#include "gtest.h"
+#include "type.h"
+#include "type_checker.h"
+#include "value_checker.h"
 
 namespace tervuren {
 namespace ast {

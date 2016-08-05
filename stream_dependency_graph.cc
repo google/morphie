@@ -12,20 +12,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/stream_dependency_graph.h"
+#include "stream_dependency_graph.h"
 
 #include <set>
 #include <utility>
 #include <vector>
 
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/curio_defs.h"
-#include "third_party/logle/dot_printer.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/value.h"
+#include "curio_defs.h"
+#include "dot_printer.h"
+#include "type.h"
+#include "type_checker.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
+#include "value.h"
 
 namespace tervuren {
 

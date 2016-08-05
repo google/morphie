@@ -37,8 +37,8 @@
 #include <functional>
 
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/labeled_graph.h"
+#include "base/string.h"
+#include "labeled_graph.h"
 
 namespace tervuren {
 

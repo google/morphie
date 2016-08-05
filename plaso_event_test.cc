@@ -12,17 +12,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/plaso_event.h"
+#include "plaso_event.h"
 
 #include <cstdint>
 #include <map>
 
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/gtest.h"
+#include "base/string.h"
+#include "gtest.h"
 #include "third_party/logle/plaso_event.pb.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/time_utils.h"
+#include "type.h"
+#include "type_checker.h"
+#include "util/time_utils.h"
 
 namespace tervuren {
 namespace {

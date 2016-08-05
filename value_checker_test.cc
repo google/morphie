@@ -15,10 +15,10 @@
 #include <map>
 #include <vector>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/value_checker.h"
+#include "ast.h"
+#include "base/string.h"
+#include "gtest.h"
+#include "value_checker.h"
 
 namespace tervuren {
 namespace ast {

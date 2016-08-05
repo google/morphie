@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/util/logging.h"
+#include "util/logging.h"
 
 #include <cassert>   // for assert()
 #include <cstdlib>   // for abort()

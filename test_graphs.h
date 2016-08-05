@@ -19,9 +19,9 @@
 
 #include <set>
 
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/labeled_graph.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "labeled_graph.h"
+#include "util/status.h"
 
 namespace tervuren {
 namespace test {

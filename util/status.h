@@ -18,7 +18,7 @@
 // operation. A function that operates successfully returns an OK status object.
 // A function whose operation fails returns a non-OK object, which contains
 // details about why the operation failed.
-#include "third_party/logle/base/string.h"
+#include "base/string.h"
 
 namespace tervuren {
 

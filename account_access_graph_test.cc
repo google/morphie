@@ -12,10 +12,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/account_access_graph.h"
+#include "account_access_graph.h"
 
-#include "third_party/logle/account_access_defs.h"
-#include "third_party/logle/gtest.h"
+#include "account_access_defs.h"
+#include "gtest.h"
 
 namespace tervuren {
 namespace {

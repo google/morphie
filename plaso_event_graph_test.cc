@@ -12,16 +12,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/plaso_event_graph.h"
+#include "plaso_event_graph.h"
 
 #include <memory>  // for __alloc_traits<>::value_type
 
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/plaso_event.h"
+#include "gtest.h"
+#include "plaso_event.h"
 #include "third_party/logle/plaso_event.pb.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/util/time_utils.h"
-#include "third_party/logle/value.h"
+#include "util/status.h"
+#include "util/time_utils.h"
+#include "value.h"
 
 namespace tervuren {
 namespace {

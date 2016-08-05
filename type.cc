@@ -12,13 +12,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/type.h"
+#include "type.h"
 
 #include <cstdlib>
 
-#include "third_party/logle/ast.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/logging.h"
+#include "ast.h"
+#include "type_checker.h"
+#include "util/logging.h"
 
 namespace tervuren {
 namespace ast {

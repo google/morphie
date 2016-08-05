@@ -12,19 +12,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/labeled_graph.h"
+#include "labeled_graph.h"
 
 #include <set>
 #include <utility>
 
 #include "third_party/logle/ast.pb.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/gtest.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/type_checker.h"
-#include "third_party/logle/util/status.h"
-#include "third_party/logle/value.h"
-#include "third_party/logle/value_checker.h"
+#include "base/string.h"
+#include "gtest.h"
+#include "type.h"
+#include "type_checker.h"
+#include "util/status.h"
+#include "value.h"
+#include "value_checker.h"
 
 namespace tervuren {
 namespace {

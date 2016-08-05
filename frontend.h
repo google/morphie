@@ -17,7 +17,7 @@
 #define THIRD_PARTY_LOGLE_FRONTEND_H_
 
 #include "third_party/logle/analysis_options.pb.h"
-#include "third_party/logle/util/status.h"
+#include "util/status.h"
 
 namespace tervuren {
 namespace frontend {

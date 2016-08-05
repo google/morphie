@@ -21,9 +21,9 @@
 #include <memory>
 
 #include "third_party/jsoncpp/json.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/stream_dependency_graph.h"
-#include "third_party/logle/util/status.h"
+#include "base/string.h"
+#include "stream_dependency_graph.h"
+#include "util/status.h"
 
 namespace tervuren {
 

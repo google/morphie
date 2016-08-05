@@ -17,13 +17,13 @@
 // and return the type stored at each node. Most functions also have an argument
 // 'show_value'. The value branch of a PrimitiveAST is only visited when this
 // argument is true.
-#include "third_party/logle/ast.h"
+#include "ast.h"
 
 #include <boost/algorithm/string/join.hpp>  // NOLINT
 #include <vector>
 
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/util/time_utils.h"
+#include "util/string_utils.h"
+#include "util/time_utils.h"
 
 namespace tervuren {
 namespace ast {

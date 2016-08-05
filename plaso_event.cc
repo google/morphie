@@ -12,18 +12,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/plaso_event.h"
+#include "plaso_event.h"
 
 #include <iostream>
 #include <map>
 
 #include "google/protobuf/message.h"
-#include "third_party/logle/plaso_defs.h"
-#include "third_party/logle/type.h"
-#include "third_party/logle/util/logging.h"
-#include "third_party/logle/util/string_utils.h"
-#include "third_party/logle/util/time_utils.h"
-#include "third_party/logle/value.h"
+#include "plaso_defs.h"
+#include "type.h"
+#include "util/logging.h"
+#include "util/string_utils.h"
+#include "util/time_utils.h"
+#include "value.h"
 
 namespace tervuren {
 namespace plaso {

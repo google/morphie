@@ -20,7 +20,7 @@
 #include <memory>
 #include <set>
 
-#include "third_party/logle/labeled_graph.h"
+#include "labeled_graph.h"
 
 namespace tervuren {
 // The 'graph' namespace contains functions for manipulating graphs.

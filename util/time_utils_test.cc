@@ -12,12 +12,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/util/time_utils.h"
+#include "util/time_utils.h"
 
 #include <cstdint>
 
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/gtest.h"
+#include "base/string.h"
+#include "gtest.h"
 
 namespace tervuren {
 namespace util {
