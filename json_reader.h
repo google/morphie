@@ -23,6 +23,8 @@ namespace tervuren {
 // Interface that handles loading of input JSON file.
 class JsonDocumentIterator{
  public:
+  virtual ~JsonDocumentIterator() {}
+
   // Returns whether Next() could be called.
   // This will not change the iterator.
   virtual bool HasNext() = 0;
