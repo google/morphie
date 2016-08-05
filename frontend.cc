@@ -27,8 +27,10 @@
 #include "third_party/logle/account_access_analyzer.h"
 #include "third_party/logle/base/string.h"
 #include "third_party/logle/curio_analyzer.h"
+#include "third_party/logle/json_reader.h"
 #include "third_party/logle/plaso_analyzer.h"
 #include "third_party/logle/util/csv.h"
+#include "third_party/logle/util/logging.h"
 #include "third_party/logle/util/status.h"
 #include "third_party/logle/util/string_utils.h"
 
@@ -37,9 +39,12 @@ namespace {
 namespace logle = third_party_logle;
 namespace util = third_party_logle::util;
 
+// Error messages.
 const char kInvalidAnalyzerErr[] =
     "Invalid analysis. The analysis must be one of 'curio', 'mail', or "
     "'plaso'.";
+const char kOpenFileErr[] = "Error opening file: ";
+
 
 // Returns a pair consisting of a status object and a CSV parser for 'filename'.
 // The return value is:
@@ -57,8 +62,7 @@ std::pair<util::Status, std::unique_ptr<util::CSVParser>> GetCSVParser(
   std::ifstream* csv_stream = new std::ifstream(filename);
   if (csv_stream == nullptr || !*csv_stream) {
     return {util::Status(logle::Code::EXTERNAL,
-                         util::StrCat("Error opening file: ", filename)),
-            nullptr};
+                         util::StrCat(kOpenFileErr, filename)), nullptr};
   }
   // The CSV parser takes ownership of the csv_stream and will close the file
   // once parsing is done.
@@ -132,20 +136,35 @@ util::Status RunCurioAnalyzer(const AnalysisOptions& options,
 }
 
 // Runs the Plaso analyzer in plaso_analyzer.h on the input. The input can be in
-// CSV or JSON format. Returns an error code if file I/O fails. If the analyzer
-// is run successfully, a GraphViz DOT representation of the constructed graph
-// is returned in 'dot_graph'.
+// JSON or JSON stream format. Returns an error code if file I/O fails. If the
+// analyzer is run successfully, a GraphViz DOT representation of the
+// constructed graph is returned in 'dot_graph'.
 util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
                               string* dot_graph) {
   util::Status status;
-  if (!options.has_json_file()) {
-    return util::Status(logle::Code::INVALID_ARGUMENT,
-                        "The Plaso analyzer requires a JSON input file.");
-  }
 
   PlasoAnalyzer plaso_analyzer;
-  std::unique_ptr<Json::Value> json_doc = GetJsonDoc(options.json_file());
-  status = plaso_analyzer.Initialize(std::move(json_doc));
+  switch (options.input_file_case()) {
+    case AnalysisOptions::InputFileCase::kJsonFile:{
+      std::ifstream file(options.json_file());
+      CHECK(file.is_open(),
+            util::StrCat(kOpenFileErr, options.json_file()));
+      status = plaso_analyzer.Initialize(new logle::FullJson(&file));
+      break;
+    }
+    case AnalysisOptions::InputFileCase::kJsonStreamFile:{
+      std::ifstream file(options.json_stream_file());
+      CHECK(file.is_open(),
+            util::StrCat(kOpenFileErr, options.json_stream_file()));
+      status = plaso_analyzer.Initialize(new logle::StreamJson(&file));
+      break;
+    }
+    default:{
+      FAIL("Unsupported input parameter. Plaso analyzer supports only "
+           "json_file and json_stream_file.");
+      break;
+    }
+  }
   if (!status.ok()) {
     return status;
   }

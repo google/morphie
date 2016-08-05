@@ -20,9 +20,11 @@
 #include <utility>
 #include <vector>
 
+#include "third_party/logle/json_reader.h"
 #include "third_party/logle/plaso_defs.h"
 #include "third_party/logle/plaso_event.h"
 #include "third_party/logle/util/logging.h"
+#include "third_party/logle/util/status.h"
 #include "third_party/logle/util/string_utils.h"
 
 namespace {
@@ -34,21 +36,13 @@ const int kMaxMalformedLines = 1000000;
 namespace third_party_logle {
 
 util::Status PlasoAnalyzer::Initialize(
-    std::unique_ptr<::Json::Value> json_doc) {
-  CHECK(json_doc != nullptr, "The pointer to the JSON document is null.");
-  json_doc_ = std::move(json_doc);
-  if (!json_doc_->isObject()) {
-    return util::Status(Code::INVALID_ARGUMENT,
-                        "The JSON doc does not have the expected format.");
-  }
-  if (json_doc_->empty()) {
-    return util::Status(Code::INVALID_ARGUMENT, "No data in the input.");
-  }
+    JsonDocumentIterator* doc_iterator) {
+  CHECK(doc_iterator != nullptr, "The pointer to the JSON document is null.");
+  this-> doc_iterator_ = doc_iterator;
   return util::Status::OK;
 }
 
 void PlasoAnalyzer::BuildPlasoGraph() {
-  CHECK(json_doc_ != nullptr, "No input provided");
   plaso_graph_.reset(new PlasoEventGraph);
   if (!plaso_graph_->Initialize().ok()) {
     plaso_graph_.reset(nullptr);
@@ -79,14 +73,14 @@ void PlasoAnalyzer::BuildPlasoGraphFromJSON() {
       util::SplitToSet(plaso::kRequiredFields, ',');
   CHECK(!required_fields.empty(), "No required fields in input.");
   // List of all event names.
-  Json::Value::Members event_ids = json_doc_->getMemberNames();
   // This variable will point to the data for a single event.
-  Json::Value* json_event;
+  const Json::Value* json_event;
   // This proto will contain fields extracted from '*json_event'.
   PlasoEvent event_data;
   bool has_all_fields;
-  for (const std::string& event_id : event_ids) {
-    json_event = &((*json_doc_)[event_id]);
+
+  while (this->doc_iterator_->HasNext()) {
+    json_event = this->doc_iterator_->Next();
     CHECK(json_event != nullptr, "json_event is null!");
     has_all_fields = std::all_of(required_fields.begin(), required_fields.end(),
                                  [json_event](const string& field) {

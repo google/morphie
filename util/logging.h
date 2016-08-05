@@ -23,6 +23,7 @@
 #define TOSTRING(x) MAKE_STR(x)
 #define LOCATION_STR __FILE__ ":" TOSTRING(__LINE__)
 #define CHECK(c, err) util::Check(c, LOCATION_STR, err)
+#define FAIL(err) util::Check(false, LOCATION_STR, err)
 
 namespace third_party_logle {
 namespace util {

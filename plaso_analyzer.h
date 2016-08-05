@@ -26,6 +26,7 @@
 
 #include "third_party/jsoncpp/json.h"
 #include "third_party/logle/base/string.h"
+#include "third_party/logle/json_reader.h"
 #include "third_party/logle/plaso_event_graph.h"
 #include "third_party/logle/util/status.h"
 
@@ -47,7 +48,7 @@ class PlasoAnalyzer {
   // in the object specify an event identifier and the value is another object
   // containing event data. Additional error validation is done
   // during graph construction.
-  util::Status Initialize(std::unique_ptr<::Json::Value> json_doc);
+  util::Status Initialize(JsonDocumentIterator* json_doc);
 
   // Constructs a PlasoEventGraph (defined in plaso_event_graph.h) from the
   // input data. Requires that the analyzer has been initialized and that every
@@ -81,7 +82,7 @@ class PlasoAnalyzer {
   std::unique_ptr<PlasoEventGraph> plaso_graph_;
   int num_lines_read_;
   int num_lines_skipped_;
-  std::unique_ptr<Json::Value> json_doc_;
+  JsonDocumentIterator* doc_iterator_;
 };
 
 }  // namespace third_party_logle

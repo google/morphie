@@ -300,6 +300,7 @@ cc_library(
     srcs = ["plaso_analyzer.cc"],
     hdrs = ["plaso_analyzer.h"],
     deps = [
+        ":json_reader",
         ":plaso_defs",
         ":plaso_event",
         ":plaso_event_graph",
@@ -361,6 +362,17 @@ portable_proto_library(
 )
 
 cc_library(
+    name = "json_reader",
+    srcs = ["json_reader.cc"],
+    hdrs = ["json_reader.h"],
+    deps = [
+        "//third_party/jsoncpp:json",
+        "//third_party/logle/base:string",
+        "//third_party/logle/util:logging",
+    ],
+)
+
+cc_library(
     name = "frontend",
     srcs = ["frontend.cc"],
     hdrs = ["frontend.h"],
@@ -368,9 +380,11 @@ cc_library(
         ":account_access_analyzer",
         ":analysis_options_proto",
         ":curio_analyzer",
+        ":json_reader",
         ":plaso_analyzer",
         "//third_party/jsoncpp:json",
         "//third_party/logle/base:string",
+        "//third_party/logle/util:logging",
         "//third_party/logle/util:string_utils",
     ],
 )
@@ -582,12 +596,11 @@ cc_test(
     srcs = ["plaso_analyzer_test.cc"],
     deps = [
         ":gtest",
+        ":json_reader",
         ":plaso_analyzer",
         ":plaso_defs",
         "//third_party/logle/base:string",
-        "//third_party/logle/util:csv",
         "//third_party/logle/util:status",
-        "//third_party/logle/util:string_utils",
     ],
 )
 

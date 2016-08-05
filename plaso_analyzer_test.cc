@@ -12,52 +12,63 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "third_party/logle/plaso_analyzer.h"
-
-#include <sstream>
-#include <vector>
+#include <stdio.h>
 
 #include "third_party/logle/base/string.h"
+#include "third_party/logle/json_reader.h"
 #include "third_party/logle/gtest.h"
-#include "third_party/logle/plaso_defs.h"
-#include "third_party/logle/util/string_utils.h"
+#include "third_party/logle/plaso_analyzer.h"
+#include "third_party/logle/util/status.h"
 
 namespace third_party_logle {
 namespace {
+namespace logle = third_party_logle;
+namespace util = third_party_logle::util;
 
 // Tests of JSON input validation and input processing.
-void TestJSONInitialization(const string& input, Code code) {
-  std::unique_ptr<::Json::Value> doc(new ::Json::Value);
-  ::Json::Reader reader;
-  ASSERT_TRUE(reader.parse(input, *doc, false /*Ignore comments.*/));
+// NOLINTNEXTLINE
+string json_object = R"({"event1":{"data_type": "fs:stat", "display_name": "GZIP:/usr/share/info/bc.info.gz", "timestamp": 0, "timestamp_desc": "mtime" }
+, "event2":{"display_name": "GZIP:/usr/share/info/bc.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime" }
+, "event3":{"display_name": "GZIP:/usr/share/info/coreutils.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime"}
+})";
+
+// NOLINTNEXTLINE
+string json_stream = R"({"data_type": "fs:stat", "display_name": "GZIP:/usr/share/info/bc.info.gz", "timestamp": 0, "timestamp_desc": "mtime" }
+{"display_name": "GZIP:/usr/share/info/bc.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime" }
+{"display_name": "GZIP:/usr/share/info/coreutils.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime"})";
+
+void TestInitialization(
+    const string& file_content, bool is_line_json) {
   PlasoAnalyzer analyzer;
-  util::Status s = analyzer.Initialize(std::move(doc));
-  EXPECT_EQ(code, s.code()) << input;
+  istringstream stream(file_content);
+  util::Status status;
+
+  if (is_line_json) {
+    logle::StreamJson jstream(&stream);
+    status = analyzer.Initialize(&jstream);
+    analyzer.BuildPlasoGraph();
+  } else {
+    logle::FullJson jstream(&stream);
+    status = analyzer.Initialize(&jstream);
+    analyzer.BuildPlasoGraph();
+  }
+  analyzer.PlasoGraphDot();
 }
 
-// The next few tests below check that the analyzer cannot be initialized with
-// invalid input.
-TEST(PlasoAnalyzerDeathTest, RequiresNonNullJSONDoc) {
+// Basic testing for correct JSON input files.
+TEST(PlasoAnalyzerTest, AcceptValidJSONInput) {
+  TestInitialization(json_object, false);
+  TestInitialization(json_stream, true);
+}
+
+// Basic testing for incorrect JSON input files.
+TEST(PlasoAnalyzerDeathTest, RequiresCorrectJSONDoc) {
   std::unique_ptr<::Json::Value> doc;
   PlasoAnalyzer analyzer;
-  EXPECT_DEATH(
-      { util::Status s = analyzer.Initialize(std::move(doc)); },
-      ".*null.*");
+  EXPECT_DEATH(TestInitialization(json_object, true),
+    ".*Line is not in JSON format.*");
+  EXPECT_DEATH(TestInitialization(json_stream, false),
+    ".*JSON*");
 }
-
-TEST(PlasoAnalyzerTest, RejectsInvalidJSONInput) {
-  TestJSONInitialization("{}", Code::INVALID_ARGUMENT);
-  TestJSONInitialization("[]", Code::INVALID_ARGUMENT);
-  TestJSONInitialization(R"({"foo" : {}})", Code::OK);
-  // Initialization expects a non-empty array but the contents of the array are
-  // only validated during graph construction.
-  TestJSONInitialization(
-      R"({ "hits" : { "hits" : [
-  { "timestamp" : "1970-01-01T00:00:00+00:00"},
-  { "timestamp" : "1970-01-01T00:00:00+00:00"}
-] } })",
-      Code::OK);
-}
-
 }  // namespace
 }  // namespace third_party_logle
