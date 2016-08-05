@@ -25,6 +25,9 @@ namespace third_party_logle {
 
 class GraphInterface {
  public:
+
+  virtual ~GraphInterface() {}
+
   // Initializes the graph. This function must be called before all other
   // functions in this class. Returns
   // - Status::OK - if a graph with the appropriate types was created.
