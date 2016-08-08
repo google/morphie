@@ -23,7 +23,7 @@
 #include "labeled_graph.h"
 #include "util/status.h"
 
-namespace logle {
+namespace tervuren {
 namespace test {
 
 // A weighted graph is one in which the nodes and edges have int weights. There
@@ -76,6 +76,12 @@ void GetPathGraph(int num_nodes, WeightedGraph* graph);
 // A cycle graph can be drawn as a simple cycle.
 void GetCycleGraph(int num_nodes, WeightedGraph* graph);
 
+// Returns true if 'graph' is a path graph.
+bool IsPath(const LabeledGraph& graph);
+
+// Returns true if 'graph' is a cycle graph.
+bool IsCycle(const LabeledGraph& graph);
+
 }  // namespace test
-}  // logle
+}  // namespace tervuren
 #endif  // LOGLE_TEST_GRAPHS_H_

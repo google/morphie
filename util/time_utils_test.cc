@@ -19,7 +19,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace util {
 namespace {
 
@@ -61,4 +61,4 @@ TEST(TimeUtilsTest, MicrosToRFC3339) {
 
 }  // anonymous namespace
 }  // namespace util
-}  // namespace logle
+}  // namespace tervuren

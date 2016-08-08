@@ -19,7 +19,7 @@
 #include "type_checker.h"
 #include "value_checker.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 namespace {
@@ -376,4 +376,4 @@ TEST_F(ValueTest, ConstructsTuples) {
 }  // namespace
 }  // namespace value
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

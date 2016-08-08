@@ -16,7 +16,7 @@
 #ifndef LOGLE_PLASO_DEFS_H_
 #define LOGLE_PLASO_DEFS_H_
 
-namespace logle {
+namespace tervuren {
 namespace plaso {
 
 // A comma-separated list of fields that must be present in the input.
@@ -35,6 +35,6 @@ extern const char kSourceFileName[];
 extern const char kTimestampName[];
 
 }  // namespace plaso
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_PLASO_DEFS_H_

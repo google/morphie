@@ -36,7 +36,7 @@
 #include "ast.pb.h"
 #include "base/string.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 
@@ -145,6 +145,6 @@ void SetField(const AST& type, int field_num, const AST& arg, AST* tuple);
 
 }  // namespace value
 }  // namespace ast
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_VALUE_H_

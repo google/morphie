@@ -27,15 +27,23 @@
 #include "account_access_analyzer.h"
 #include "base/string.h"
 #include "curio_analyzer.h"
+#include "json_reader.h"
 #include "plaso_analyzer.h"
 #include "util/csv.h"
+#include "util/logging.h"
 #include "util/status.h"
 #include "util/string_utils.h"
 
 namespace {
 
-using std::string;
-namespace util = logle::util;
+namespace util = tervuren::util;
+
+// Error messages.
+const char kInvalidAnalyzerErr[] =
+    "Invalid analysis. The analysis must be one of 'curio', 'mail', or "
+    "'plaso'.";
+const char kOpenFileErr[] = "Error opening file: ";
+
 
 // Returns a pair consisting of a status object and a CSV parser for 'filename'.
 // The return value is:
@@ -53,8 +61,7 @@ std::pair<util::Status, std::unique_ptr<util::CSVParser>> GetCSVParser(
   std::ifstream* csv_stream = new std::ifstream(filename);
   if (csv_stream == nullptr || !*csv_stream) {
     return {util::Status(logle::Code::EXTERNAL,
-                         util::StrCat("Error opening file: ", filename)),
-            nullptr};
+                         util::StrCat(kOpenFileErr, filename)), nullptr};
   }
   // The CSV parser takes ownership of the csv_stream and will close the file
   // once parsing is done.
@@ -83,23 +90,26 @@ util::Status WriteToFile(const string& filename, const string& contents) {
   // early returns will not leave the file open. The file is nonetheless
   // explicitly closed only to be able to detect errors.
   if (!out_file) {
-    return util::Status(logle::Code::EXTERNAL, "Error opening file.");
+    return util::Status(logle::Code::EXTERNAL,
+                       util::StrCat("Error opening file: ", filename));
   }
   out_file << contents;
 
   if (!out_file) {
-    return util::Status(logle::Code::INTERNAL, "Error writing to file.");
+    return util::Status(logle::Code::INTERNAL,
+                       util::StrCat("Error writing to file: ", filename));
   }
   out_file.close();
   if (!out_file) {
-    return util::Status(logle::Code::EXTERNAL, "Error closing file.");
+    return util::Status(logle::Code::EXTERNAL,
+                       util::StrCat("Error closing file: ", filename));
   }
   return util::Status::OK;
 }
 
 }  // namespace
 
-namespace logle {
+namespace tervuren {
 namespace frontend {
 
 // Runs the Curio analyzer in curio_analyzer.h on the input. Returns an error
@@ -125,20 +135,35 @@ util::Status RunCurioAnalyzer(const AnalysisOptions& options,
 }
 
 // Runs the Plaso analyzer in plaso_analyzer.h on the input. The input can be in
-// CSV or JSON format. Returns an error code if file I/O fails. If the analyzer
-// is run successfully, a GraphViz DOT representation of the constructed graph
-// is returned in 'dot_graph'.
+// JSON or JSON stream format. Returns an error code if file I/O fails. If the
+// analyzer is run successfully, a GraphViz DOT representation of the
+// constructed graph is returned in 'dot_graph'.
 util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
                               string* dot_graph) {
   util::Status status;
-  if (!options.has_json_file()) {
-    return util::Status(logle::Code::INVALID_ARGUMENT,
-                        "The Plaso analyzer requires a JSON input file.");
-  }
 
   PlasoAnalyzer plaso_analyzer;
-  std::unique_ptr<Json::Value> json_doc = GetJsonDoc(options.json_file());
-  status = plaso_analyzer.Initialize(std::move(json_doc));
+  switch (options.input_file_case()) {
+    case AnalysisOptions::InputFileCase::kJsonFile:{
+      std::ifstream file(options.json_file());
+      CHECK(file.is_open(),
+            util::StrCat(kOpenFileErr, options.json_file()));
+      status = plaso_analyzer.Initialize(new logle::FullJson(&file));
+      break;
+    }
+    case AnalysisOptions::InputFileCase::kJsonStreamFile:{
+      std::ifstream file(options.json_stream_file());
+      CHECK(file.is_open(),
+            util::StrCat(kOpenFileErr, options.json_stream_file()));
+      status = plaso_analyzer.Initialize(new logle::StreamJson(&file));
+      break;
+    }
+    default:{
+      FAIL("Unsupported input parameter. Plaso analyzer supports only "
+           "json_file and json_stream_file.");
+      break;
+    }
+  }
   if (!status.ok()) {
     return status;
   }
@@ -180,19 +205,19 @@ util::Status RunMailAccessAnalyzer(const AnalysisOptions& options,
 
 // Invokes the specified analyzer. If the analysis generates a 'dot_graph', will
 // write that graph to 'options.output_dot_file()' if that field is set.
-util::Status Run(Analyzer analyzer, const AnalysisOptions& options) {
+util::Status Run(const AnalysisOptions& options) {
   util::Status status = util::Status::OK;
   string dot_graph;
-  switch (analyzer) {
-    case Analyzer::kCurio:
-      status = RunCurioAnalyzer(options, &dot_graph);
-      break;
-    case Analyzer::kMailAccess:
-      status = RunMailAccessAnalyzer(options, &dot_graph);
-      break;
-    case Analyzer::kPlaso:
-      status = RunPlasoAnalyzer(options, &dot_graph);
-      break;
+  if (!options.has_analyzer()) {
+    return util::Status(Code::INVALID_ARGUMENT, kInvalidAnalyzerErr);
+  } else if (options.analyzer() == "curio") {
+    status = RunCurioAnalyzer(options, &dot_graph);
+  } else if (options.analyzer() == "mail") {
+    status = RunMailAccessAnalyzer(options, &dot_graph);
+  } else if (options.analyzer() == "plaso") {
+    status = RunPlasoAnalyzer(options, &dot_graph);
+  } else {
+    return util::Status(Code::INVALID_ARGUMENT, kInvalidAnalyzerErr);
   }
   if (!status.ok() || dot_graph == "") {
     return status;
@@ -204,4 +229,4 @@ util::Status Run(Analyzer analyzer, const AnalysisOptions& options) {
 }
 
 }  // namespace frontend
-}  // namespace logle
+}  // namespace tervuren

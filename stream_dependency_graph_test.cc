@@ -19,7 +19,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace {
 
 TEST(PlasoEventGraphDeathTest, UninitializedCalls) {
@@ -67,4 +67,4 @@ TEST(PlasoEventGraphTest, AddDependency) {
 }
 
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

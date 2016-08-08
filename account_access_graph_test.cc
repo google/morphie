@@ -17,7 +17,7 @@
 #include "account_access_defs.h"
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace {
 
 TEST(AccountAccessGraphDeathTest, UninitializedCall) {
@@ -77,4 +77,4 @@ TEST_F(AccountAccessGraphTest, ProcessSingleAccess) {
 }
 
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

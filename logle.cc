@@ -32,9 +32,8 @@ using Analyzer = logle::frontend::Analyzer;
 using std::string;
 
 // Flags that determine which analyzer to use and the options with which to
-// invoke that analyzer..
+// invoke that analyzer.
 DEFINE_string(analysis_options, "", "Analysis options as a protocol buffer.");
-DEFINE_string(analyzer, "", "One of 'curio', 'mail' or 'plaso'.");
 
 // Returns true and logs an error message if 'value' is empty. This function is
 // called by InitGoogle. More complex validation takes place separately.
@@ -48,24 +47,10 @@ static bool CheckFlagValueNotEmpty(const char* flagname, const string& value) {
 
 static bool is_config_empty =
     google::RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
-static bool is_analyzer_empty =
-    google::RegisterFlagValidator(&FLAGS_analyzer, &CheckFlagValueNotEmpty);
+    google::RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
 
 int main(int argc, char** argv) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
-
-  Analyzer analyzer;
-  if (FLAGS_analyzer == "curio") {
-    analyzer = Analyzer::kCurio;
-  } else if (FLAGS_analyzer == "mail") {
-    analyzer = Analyzer::kMailAccess;
-  } else if (FLAGS_analyzer == "plaso") {
-    analyzer = Analyzer::kPlaso;
-  } else {
-    std::cerr << "Input validation failed!";
-    return -1;
-  }
-
+  InitGoogle(argv[0], &argc, &argv, true);
   logle::AnalysisOptions options;
   string out;
   if (!protobuf::TextFormat::ParseFromString(FLAGS_analysis_options,
@@ -74,12 +59,10 @@ int main(int argc, char** argv) {
                  "AnalysisOptions proto.";
     return -1;
   }
-
-  logle::util::Status status = logle::frontend::Run(analyzer, options);
+  tervuren::util::Status status = logle::frontend::Run(options);
   if (!status.ok()) {
     std::cerr << status.message();
     return -1;
   }
-
   return 0;
 }

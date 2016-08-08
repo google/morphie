@@ -23,7 +23,7 @@
 #include "util/time_utils.h"
 #include "value.h"
 
-namespace logle {
+namespace tervuren {
 namespace {
 
 namespace value = ast::value;
@@ -133,4 +133,4 @@ TEST_F(PlasoEventGraphTest, ProcessEventsWithURLs) {
 }
 
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

@@ -26,13 +26,12 @@
 #include "util/string_utils.h"
 #include "value.h"
 
-using std::unordered_map;
-
 namespace {
 // These declarations are required because the using declaration in
 // base/string.h and below are within the logle namespace.
 using std::string;
 using std::vector;
+using std::unordered_map;
 
 // Error messages.
 const char kInitializationErr[] = "The graph is not initialized.";
@@ -59,14 +58,14 @@ string GetField(const string& field_name,
   logle::CHECK(0 <= field_it->second,
                (logle::util::StrCat("Index of ", field_name, " is negative.")));
   logle::CHECK(
-      fields.size() > field_it->second,
+      static_cast<int>(fields.size()) > field_it->second,
       (logle::util::StrCat("Index of ", field_name, " exceeds bounds.")));
   return fields[field_it->second];
 }
 
 }  // namespace
 
-namespace logle {
+namespace tervuren {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -181,4 +180,4 @@ TaggedAST AccountAccessGraph::MakeEdgeLabel(
   return count;
 }
 
-}  // namespace logle
+}  // namespace tervuren

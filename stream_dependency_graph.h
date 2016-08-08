@@ -25,10 +25,11 @@
 #define LOGLE_STREAM_DEPENDENCY_GRAPH_H_
 
 #include "base/string.h"
+#include "graph_interface.h"
 #include "labeled_graph.h"
 #include "util/status.h"
 
-namespace logle {
+namespace tervuren {
 
 // The StreamDependencyGraph class implements a stream dependency graph. The
 // nodes in the graph are labels represented as abstract syntax trees (see
@@ -38,7 +39,7 @@ namespace logle {
 //
 // The function Initialize() must be called before other functions are called.
 // The functions will crash otherwise.
-class StreamDependencyGraph {
+class StreamDependencyGraph : public GraphInterface {
  public:
   StreamDependencyGraph() : is_initialized_(false) {}
 
@@ -69,5 +70,5 @@ class StreamDependencyGraph {
   LabeledGraph graph_;
 };
 
-}  // logle
+}  // namespace tervuren
 #endif  // LOGLE_STREAM_DEPENDENCY_GRAPH_H_

@@ -16,7 +16,7 @@
 
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace test {
 namespace {
 
@@ -48,6 +48,66 @@ TEST(TestGraphsTest, CreatesCycleGraphs) {
   EXPECT_EQ(10, ten_cycle.NumEdges());
 }
 
+TEST(TestGraphsTest, IsPathGraph) {
+  WeightedGraph one_cycle;
+  test::GetCycleGraph(1, &one_cycle);
+  ASSERT_EQ(1, one_cycle.NumNodes());
+  ASSERT_EQ(1, one_cycle.NumEdges());
+  const auto& one_cycle_graph = *one_cycle.GetGraph();
+  EXPECT_FALSE(test::IsPath(one_cycle_graph));
+
+  WeightedGraph ten_cycle;
+  test::GetCycleGraph(10, &ten_cycle);
+  ASSERT_EQ(10, ten_cycle.NumNodes());
+  ASSERT_EQ(10, ten_cycle.NumEdges());
+  const auto& ten_cycle_graph = *ten_cycle.GetGraph();
+  EXPECT_FALSE(test::IsPath(ten_cycle_graph));
+
+  WeightedGraph one_path;
+  test::GetPathGraph(1, &one_path);
+  ASSERT_EQ(1, one_path.NumNodes());
+  ASSERT_EQ(0, one_path.NumEdges());
+  const auto& one_path_graph = *one_path.GetGraph();
+  EXPECT_TRUE(test::IsPath(one_path_graph));
+
+  WeightedGraph ten_path;
+  test::GetPathGraph(10, &ten_path);
+  ASSERT_EQ(10, ten_path.NumNodes());
+  ASSERT_EQ(9, ten_path.NumEdges());
+  const auto& ten_path_graph = *ten_path.GetGraph();
+  EXPECT_TRUE(test::IsPath(ten_path_graph));
+}
+
+TEST(TestGraphsTest, IsCycleGraph) {
+  WeightedGraph one_cycle;
+  test::GetCycleGraph(1, &one_cycle);
+  ASSERT_EQ(1, one_cycle.NumNodes());
+  ASSERT_EQ(1, one_cycle.NumEdges());
+  const auto& one_cycle_graph = *one_cycle.GetGraph();
+  EXPECT_TRUE(test::IsCycle(one_cycle_graph));
+
+  WeightedGraph ten_cycle;
+  test::GetCycleGraph(10, &ten_cycle);
+  ASSERT_EQ(10, ten_cycle.NumNodes());
+  ASSERT_EQ(10, ten_cycle.NumEdges());
+  const auto& ten_cycle_graph = *ten_cycle.GetGraph();
+  EXPECT_TRUE(test::IsCycle(ten_cycle_graph));
+
+  WeightedGraph one_path;
+  test::GetPathGraph(1, &one_path);
+  ASSERT_EQ(1, one_path.NumNodes());
+  ASSERT_EQ(0, one_path.NumEdges());
+  const auto& one_path_graph = *one_path.GetGraph();
+  EXPECT_FALSE(test::IsCycle(one_path_graph));
+
+  WeightedGraph ten_path;
+  test::GetPathGraph(10, &ten_path);
+  ASSERT_EQ(10, ten_path.NumNodes());
+  ASSERT_EQ(9, ten_path.NumEdges());
+  const auto& ten_path_graph = *ten_path.GetGraph();
+  EXPECT_FALSE(test::IsCycle(ten_path_graph));
+}
+
 }  // namespace
 }  // namespace test
-}  // namespace logle
+}  // namespace tervuren

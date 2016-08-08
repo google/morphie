@@ -17,6 +17,10 @@
 #define LOGLE_CURIO_DEFS_H_
 
 namespace logle {
+#ifndef LOGLE_CURIO_DEFS_H_
+#define LOGLE_CURIO_DEFS_H_
+
+namespace tervuren {
 // The 'curio' namespace encloses definitions used to analyze Curio streams.
 namespace curio {
 
@@ -30,6 +34,6 @@ extern const char kStreamNameTag[];
 extern const char kDependentTag[];
 
 }  // namespace curio
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_CURIO_DEFS_H_

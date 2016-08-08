@@ -32,9 +32,7 @@ const char kNullAccessGraphErr[] = "The access graph is null.";
 
 }  // namespace
 
-namespace logle {
-
-// This function performs a series of checks, described by the error message
+namespace tervuren {
 // generated if the check fails.
 util::Status AccessAnalyzer::Initialize(
     std::unique_ptr<util::CSVParser> parser) {
@@ -139,4 +137,4 @@ util::Status AccessAnalyzer::InitializeFieldMap() {
   return util::Status::OK;
 }
 
-}  // namespace logle
+}  // namespace tervuren

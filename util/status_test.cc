@@ -15,7 +15,7 @@
 
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace util {
 namespace {
 
@@ -38,4 +38,4 @@ TEST(StatusTest, MemberFunctions) {
 
 }  // unnamed namespace
 }  // namespace util
-}  // namespace logle
+}  // namespace tervuren

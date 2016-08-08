@@ -20,9 +20,11 @@
 #include <utility>
 #include <vector>
 
+#include "json_reader.h"
 #include "plaso_defs.h"
 #include "plaso_event.h"
 #include "util/logging.h"
+#include "util/status.h"
 #include "util/string_utils.h"
 
 namespace {
@@ -31,28 +33,16 @@ const int kMaxMalformedLines = 1000000;
 
 }  // namespace
 
-namespace logle {
+namespace tervuren {
 
 util::Status PlasoAnalyzer::Initialize(
-    std::unique_ptr<::Json::Value> json_doc) {
-  CHECK(json_doc != nullptr, "The pointer to the JSON document is null.");
-  json_doc_ = std::move(json_doc);
-  if (!json_doc_->isObject()
-      || !json_doc_->isMember("hits")
-      || !(*json_doc_)["hits"].isObject()
-      || !(*json_doc_)["hits"].isMember("hits")
-      || !((*json_doc_)["hits"])["hits"].isArray()) {
-    return util::Status(Code::INVALID_ARGUMENT,
-                        "The JSON doc does not have the expected format.");
-  }
-  if (((*json_doc_)["hits"])["hits"].empty()) {
-    return util::Status(Code::INVALID_ARGUMENT, "No data in the input.");
-  }
+    JsonDocumentIterator* doc_iterator) {
+  CHECK(doc_iterator != nullptr, "The pointer to the JSON document is null.");
+  this-> doc_iterator_ = doc_iterator;
   return util::Status::OK;
 }
 
 void PlasoAnalyzer::BuildPlasoGraph() {
-  CHECK(json_doc_ != nullptr, "No input provided");
   plaso_graph_.reset(new PlasoEventGraph);
   if (!plaso_graph_->Initialize().ok()) {
     plaso_graph_.reset(nullptr);
@@ -82,31 +72,28 @@ void PlasoAnalyzer::BuildPlasoGraphFromJSON() {
   const set<string> required_fields =
       util::SplitToSet(plaso::kRequiredFields, ',');
   CHECK(!required_fields.empty(), "No required fields in input.");
+  // List of all event names.
   // This variable will point to the data for a single event.
-  Json::Value* json_event;
+  const Json::Value* json_event;
   // This proto will contain fields extracted from '*json_event'.
   PlasoEvent event_data;
   bool has_all_fields;
-  for (auto event_it = ((*json_doc_)["hits"])["hits"].begin();
-       event_it != ((*json_doc_)["hits"])["hits"].end(); ++event_it) {
-    if (event_it->isObject() && event_it->isMember("_source")) {
-      json_event = &((*event_it)["_source"]);
-      CHECK(json_event != nullptr, "json_event is null!");
-      has_all_fields =
-          std::all_of(required_fields.begin(),
-                      required_fields.end(),
-                      [json_event](const string& field) {
-                        return json_event->isMember(field);
-                      });
-      if (!has_all_fields) {
-        IncrementSkipCounter();
-        continue;
-      }
-      event_data = plaso::ParseJSON(*json_event);
-      plaso_graph_->ProcessEvent(event_data);
+
+  while (this->doc_iterator_->HasNext()) {
+    json_event = this->doc_iterator_->Next();
+    CHECK(json_event != nullptr, "json_event is null!");
+    has_all_fields = std::all_of(required_fields.begin(), required_fields.end(),
+                                 [json_event](const string& field) {
+                                   return json_event->isMember(field);
+                                 });
+    if (!has_all_fields) {
+      IncrementSkipCounter();
+      continue;
     }
+    event_data = plaso::ParseJSON(*json_event);
+    plaso_graph_->ProcessEvent(event_data);
   }
   plaso_graph_->AddTemporalEdges();
 }
 
-}  // namespace logle
+}  // namespace tervuren

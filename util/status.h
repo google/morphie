@@ -20,9 +20,7 @@
 // details about why the operation failed.
 #include "base/string.h"
 
-namespace logle {
-
-// A set of error codes.
+namespace tervuren {
 enum class Code {
   // No error. Returned on success.
   OK = 0,
@@ -79,6 +77,6 @@ class Status {
 };
 
 }  // namespace util
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_UTIL_STATUS_H_

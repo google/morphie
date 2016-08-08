@@ -32,7 +32,7 @@
 #include "util/time_utils.h"
 #include "value.h"
 
-namespace logle {
+namespace tervuren {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -62,7 +62,7 @@ string GetTimeline(const std::map<int64_t, std::set<NodeId>>& time_index) {
     node_name = util::StrCat("T", std::to_string(timed_events.first));
     util::StrAppend(&timeline, "  ", node_name, " [shape=plaintext, ",
                     R"(label=")", util::UnixMicrosToRFC3339(timed_events.first),
-                    "];\n");
+                    "\"];\n");
     timestamps.emplace_back(node_name);
     util::StrAppend(&time_aligned_nodes, "  {rank=same; ", node_name, "; ",
                     util::SetJoin(timed_events.second, "; "), "}\n");
@@ -279,4 +279,4 @@ string PlasoEventGraph::ToDot() const {
   return util::StrCat("digraph logle_graph {\n", dot_graph, "}");
 }
 
-}  // namespace logle
+}  // namespace tervuren

@@ -16,7 +16,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace {
 
@@ -222,6 +222,42 @@ TEST_F(ASTTest, PrintTuple) {
   EXPECT_EQ("0\nfoo", ToString(ast_, config));
 }
 
+<<<<<<< HEAD
 }  // namespace
 }  // namespace ast
-}  // namespace logle
+=======
+TEST_F(ASTTest, PrintSet) {
+  ast_.mutable_c_ast()->set_op(Operator::SET);
+  ast_.set_is_nullable(true);
+  ast_.set_name("t");
+
+  AST arg;
+  arg.mutable_p_ast()->set_type(PrimitiveType::STRING);
+  arg.mutable_p_ast()->mutable_val()->set_string_val("foo");
+  *(ast_.mutable_c_ast()->add_arg()) = arg;
+  arg.mutable_p_ast()->set_type(PrimitiveType::STRING);
+  arg.mutable_p_ast()->mutable_val()->set_string_val("bar");
+  *(ast_.mutable_c_ast()->add_arg()) = arg;
+  arg.mutable_p_ast()->set_type(PrimitiveType::STRING);
+  arg.mutable_p_ast()->mutable_val()->set_string_val("baz");
+  *(ast_.mutable_c_ast()->add_arg()) = arg;
+
+  EXPECT_EQ("set?(string, string, string)",
+            ToString(ast_, PrintConfig(PrintOption::kType)));
+  EXPECT_EQ("(foo, bar, baz)",
+            ToString(ast_, PrintConfig(PrintOption::kValue)));
+  EXPECT_EQ("t set?(string, string, string)",
+            ToString(ast_, PrintConfig(PrintOption::kNameAndType)));
+  EXPECT_EQ("t (foo, bar, baz)",
+            ToString(ast_, PrintConfig(PrintOption::kNameAndValue)));
+  EXPECT_EQ("set?(string : foo, string : bar, string : baz)",
+            ToString(ast_, PrintConfig(PrintOption::kTypeAndValue)));
+  EXPECT_EQ("t set?(string : foo, string : bar, string : baz)",
+            ToString(ast_, PrintConfig(PrintOption::kAll)));
+  PrintConfig config("", "", "\n", PrintOption::kValue);
+  EXPECT_EQ("foo\nbar\nbaz", ToString(ast_, config));
+}
+
+}  // namespace
+}  // namespace ast
+}  // namespace tervuren

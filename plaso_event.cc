@@ -14,6 +14,7 @@
 
 #include "plaso_event.h"
 
+#include <iostream>
 #include <map>
 
 #include "google/protobuf/message.h"
@@ -24,7 +25,7 @@
 #include "util/time_utils.h"
 #include "value.h"
 
-namespace logle {
+namespace tervuren {
 namespace plaso {
 
 using std::map;
@@ -241,7 +242,11 @@ File ParseFilename(const string& filename) {
 
 PlasoEvent ParseJSON(const ::Json::Value& json_event) {
   PlasoEvent event;
-  SetTimestamp(GetJSONField(plaso::kTimestampName, json_event), &event);
+  // Convert the nanosecond timestamp from the JSON input to a microsecond
+  // timstamp used in the graph.
+  ::Json::Int64 unix_nanos = json_event[plaso::kTimestampName].asInt64();
+  event.set_timestamp(
+      static_cast<int64_t>(unix_nanos / static_cast<::Json::Int64>(1000)));
   string filename = GetJSONField(plaso::kSourceFileName, json_event);
   *event.mutable_event_source_file() = ParseFilename(filename);
   SetEventFields(json_event, &event);
@@ -282,4 +287,4 @@ string ToString(const File& file) {
 }
 
 }  // namespace plaso
-}  // namespace logle
+}  // namespace tervuren

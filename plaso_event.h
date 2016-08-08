@@ -25,7 +25,7 @@
 #include "json/json.h"
 #include "plaso_event.pb.h"
 
-namespace logle {
+namespace tervuren {
 // The 'plaso' namespace contains utilities for dealing with Plaso output.
 namespace plaso {
 
@@ -54,6 +54,6 @@ AST ToAST(const File& file);
 string ToString(const File& file);
 
 }  // namespace plaso
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_PLASO_EVENT_H_

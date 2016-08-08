@@ -28,7 +28,7 @@
 
 #include "base/string.h"
 
-namespace logle {
+namespace tervuren {
 namespace util {
 
 // Returns an RFC3339 string in UTC corresponding to the number of microseconds
@@ -40,6 +40,6 @@ string UnixMicrosToRFC3339(int64_t unix_micros);
 bool RFC3339ToUnixMicros(const string& time_str, int64_t* unix_micros);
 
 }  // namespace util
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_UTIL_TIME_UTILS_H_

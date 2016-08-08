@@ -21,7 +21,7 @@
 #include "util/status.h"
 #include "util/string_utils.h"
 
-namespace logle {
+namespace tervuren {
 namespace {
 
 void TestCSVInitialization(const char* kInput, Code code) {
@@ -103,4 +103,4 @@ TEST(AccessAnalyzerTest, TestGraphConstruction) {
 }
 
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

@@ -21,8 +21,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace logle {
-namespace util {
+namespace tervuren {
 namespace {
 
 TEST(VectorSplitTest, Correctness) {
@@ -151,6 +150,6 @@ TEST(SetJoinTest, OutputProperties) {
 
 }  // anonymous namespace
 }  // namespace util
-}  // namespace logle
+}  // namespace tervuren
 
 #endif  // LOGLE_UTIL_STRING_UTILS_TEST_H_

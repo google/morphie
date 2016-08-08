@@ -14,17 +14,17 @@
 
 #include "plaso_defs.h"
 
-namespace logle {
+namespace tervuren {
 namespace plaso {
 
 const char kRequiredFields[] =
-    "data_type,datetime,display_name,message,timestamp_desc";
+    "data_type,display_name,timestamp,timestamp_desc";
 
 const char kDataTypeName[] = "data_type";
 const char kDescriptionName[] = "timestamp_desc";
 const char kMessageName[] = "message";
 const char kSourceFileName[] = "display_name";
-const char kTimestampName[] = "datetime";
+const char kTimestampName[] = "timestamp";
 
 }  // namespace plaso
-}  // namespace logle
+}  // namespace tervuren

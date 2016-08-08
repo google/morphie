@@ -19,7 +19,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 namespace {
@@ -675,4 +675,4 @@ TEST_F(TypeCheckerTest, TypedPair) {
 }  // namespace
 }  // namespace type
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

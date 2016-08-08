@@ -38,7 +38,7 @@ bool HasRequiredFields(const Json::Value& json_tree) {
 
 }  // namespace
 
-namespace logle {
+namespace tervuren {
 
 util::Status CurioAnalyzer::Initialize(
     std::unique_ptr<::Json::Value> json_doc) {
@@ -144,4 +144,4 @@ util::Status CurioAnalyzer::IncrementSkipCounter() {
   return util::Status::OK;
 }
 
-}  // namespace logle
+}  // namespace tervuren

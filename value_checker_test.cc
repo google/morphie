@@ -20,7 +20,7 @@
 #include "gtest.h"
 #include "value_checker.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 namespace {
@@ -68,15 +68,7 @@ TEST(ValueCheckerTest, IsABool) {
   EXPECT_TRUE(IsPrimitive(ptype, ast.p_ast().val()));
   EXPECT_TRUE(IsValue(ast, &err));
 
-  ast.mutable_p_ast()->mutable_val()->set_bool_val(false);
-  EXPECT_TRUE(IsPrimitive(ptype, ast.p_ast().val()));
-  EXPECT_TRUE(IsValue(ast, &err));
-
   ast.mutable_p_ast()->mutable_val()->set_int_val(0);
-  EXPECT_FALSE(IsPrimitive(ptype, ast.p_ast().val()));
-  EXPECT_FALSE(IsValue(ast, &err));
-
-  ast.mutable_p_ast()->mutable_val()->set_string_val("");
   EXPECT_FALSE(IsPrimitive(ptype, ast.p_ast().val()));
   EXPECT_FALSE(IsValue(ast, &err));
 
@@ -414,6 +406,32 @@ TEST(IsomorphismTest, SetIsomorphism) {
   EXPECT_FALSE(Isomorphic(val1, val2));
 }
 
+TEST(IsomorphismTest, TupleIsomorphism) {
+  AST val1, val2;
+  CheckIsomorphism(Operator::TUPLE, &val1, &val2);
+
+  // The tuple (1, 2) has two non-isomoprhic representations depending on the
+  // order in which elements are added.
+  AST one;
+  AST two;
+  Initialize(PrimitiveType::INT, &one);
+  one.mutable_p_ast()->mutable_val()->set_int_val(1);
+  Initialize(PrimitiveType::INT, &two);
+  two.mutable_p_ast()->mutable_val()->set_int_val(2);
+
+  AST* arg = val1.mutable_c_ast()->add_arg();
+  *arg = one;
+  arg = val1.mutable_c_ast()->add_arg();
+  *arg = two;
+  EXPECT_FALSE(Isomorphic(val1, val2));
+
+  arg = val2.mutable_c_ast()->add_arg();
+  *arg = two;
+  arg = val2.mutable_c_ast()->add_arg();
+  *arg = one;
+  EXPECT_FALSE(Isomorphic(val1, val2));
+}
+
 // Test canonicalization methods.
 //
 // Null values of the same type are unaffected by canonicalization.
@@ -445,13 +463,13 @@ void MakeBoolInterval(bool lb, bool ub, AST* val) {
 
 void CanonicalizeBoolIntervals(bool lb1, bool ub1, bool lb2, bool ub2,
                                bool before, bool after) {
-  AST int1, int2;
-  MakeBoolInterval(lb1, ub1, &int1);
-  MakeBoolInterval(lb2, ub2, &int2);
-  EXPECT_EQ(Isomorphic(int1, int2), before);
-  Canonicalize(&int1);
-  Canonicalize(&int2);
-  EXPECT_EQ(Isomorphic(int1, int2), after);
+  AST itv1, itv2;
+  MakeBoolInterval(lb1, ub1, &itv1);
+  MakeBoolInterval(lb2, ub2, &itv2);
+  EXPECT_EQ(Isomorphic(itv1, itv2), before);
+  Canonicalize(&itv1);
+  Canonicalize(&itv2);
+  EXPECT_EQ(Isomorphic(itv1, itv2), after);
 }
 
 TEST(CanonicalizerTest, BoolIntervalCanonicalization) {
@@ -462,14 +480,14 @@ TEST(CanonicalizerTest, BoolIntervalCanonicalization) {
   CanonicalizeBoolIntervals(true, false, false, true, false, false);
   // The interval [true, false] is isomorphic to the empty interval after
   // canonicalization.
-  AST int1, int2;
-  MakeBoolInterval(true, false, &int1);
-  int1.mutable_c_ast()->clear_arg();
-  MakeBoolInterval(true, false, &int2);
-  EXPECT_FALSE(Isomorphic(int1, int2));
-  Canonicalize(&int1);
-  Canonicalize(&int2);
-  EXPECT_TRUE(Isomorphic(int1, int2));
+  AST itv1, itv2;
+  MakeBoolInterval(true, false, &itv1);
+  itv1.mutable_c_ast()->clear_arg();
+  MakeBoolInterval(true, false, &itv2);
+  EXPECT_FALSE(Isomorphic(itv1, itv2));
+  Canonicalize(&itv1);
+  Canonicalize(&itv2);
+  EXPECT_TRUE(Isomorphic(itv1, itv2));
 }
 
 void MakeIntInterval(int lb, int ub, AST* val) {
@@ -490,13 +508,13 @@ void MakeIntInterval(int lb, int ub, AST* val) {
 
 void CanonicalizeIntIntervals(int lb1, int ub1, int lb2, int ub2, int before,
                               int after) {
-  AST int1, int2;
-  MakeIntInterval(lb1, ub1, &int1);
-  MakeIntInterval(lb2, ub2, &int2);
-  EXPECT_EQ(Isomorphic(int1, int2), before);
-  Canonicalize(&int1);
-  Canonicalize(&int2);
-  EXPECT_EQ(Isomorphic(int1, int2), after);
+  AST itv1, itv2;
+  MakeIntInterval(lb1, ub1, &itv1);
+  MakeIntInterval(lb2, ub2, &itv2);
+  EXPECT_EQ(Isomorphic(itv1, itv2), before);
+  Canonicalize(&itv1);
+  Canonicalize(&itv2);
+  EXPECT_EQ(Isomorphic(itv1, itv2), after);
 }
 
 TEST(CanonicalizerTest, IntIntervalCanonicalization) {
@@ -536,14 +554,14 @@ void MakeCompositeContainer(Operator op, const vector<AST>& args, AST* val) {
 }
 
 TEST(CanonicalizerTest, IntervalListCanonicalization) {
-  AST int1;
-  MakeBoolInterval(true, false, &int1);
+  AST itv1;
+  MakeBoolInterval(true, false, &itv1);
   vector<AST> args;
 
   // A list containing the empty interval and one containing the interval
   // [true,false] are only isomorphic after canonicalization.
   AST list1, list2;
-  args.push_back(int1);
+  args.push_back(itv1);
   MakeCompositeContainer(Operator::LIST, args, &list1);
   args[0].mutable_c_ast()->clear_arg();
   MakeCompositeContainer(Operator::LIST, args, &list2);
@@ -577,7 +595,31 @@ TEST(CanonicalizerTest, SetCanonicalization) {
   EXPECT_TRUE(Isomorphic(set1, set2));
 }
 
+TEST(CanonicalizerTest, TupleCanonicalization) {
+  AST itv1;
+  AST one;
+  MakeBoolInterval(true, false, &itv1);
+  Initialize(PrimitiveType::INT, &one);
+  one.mutable_p_ast()->mutable_val()->set_int_val(1);
+
+  vector<AST> args;
+
+  // A tuple containing the empty interval and one containing the interval
+  // [true,false] are only isomorphic after canonicalization.
+  AST tuple1, tuple2;
+  args.push_back(itv1);
+  args.push_back(one);
+  MakeCompositeContainer(Operator::LIST, args, &tuple1);
+  args[0].mutable_c_ast()->clear_arg();
+  MakeCompositeContainer(Operator::LIST, args, &tuple2);
+  EXPECT_FALSE(Isomorphic(tuple1, tuple2));
+
+  Canonicalize(&tuple1);
+  Canonicalize(&tuple2);
+  EXPECT_TRUE(Isomorphic(tuple1, tuple2));
+}
+
 }  // namespace
 }  // namespace value
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

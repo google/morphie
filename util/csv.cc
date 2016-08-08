@@ -14,14 +14,18 @@
 #include "util/csv.h"
 
 #include <boost/tokenizer.hpp>  // NOLINT
+<<<<<<< HEAD
 #include <boost/exception/exception.hpp>  // NOLINT
+=======
+>>>>>>> internal/piper
 #include <sstream>
 
 // The Clang compiler does not support exceptions. Boost is compiled with Clang,
 // the client is required to define this function.
 // void boost::throw_exception(std::exception const& e) {}
 
-namespace logle {
+
+namespace tervuren {
 namespace util {
 
 CSVParser::Iterator& CSVParser::Iterator::operator++() {
@@ -90,4 +94,4 @@ void CSVParser::Advance() {
 }
 
 }  // namespace util
-}  // namespace logle
+}  // namespace tervuren

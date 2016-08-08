@@ -17,8 +17,7 @@
 
 #include "gtest.h"
 
-namespace logle {
-namespace util {
+namespace tervuren {
 namespace {
 
 // Exercise the API of the Record class.
@@ -220,4 +219,4 @@ TEST(CSVTest, EscapedInput) {
 
 }  // unnamed namespace
 }  // namespace util
-}  // namespace logle
+}  // namespace tervuren

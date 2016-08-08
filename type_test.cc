@@ -19,7 +19,7 @@
 #include "gtest.h"
 #include "type_checker.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 namespace {
@@ -144,4 +144,4 @@ TEST(TypeDeathTest, NonTypeASTToCompositeArg) {
 }  // namespace
 }  // namespace type
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

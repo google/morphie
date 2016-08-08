@@ -32,7 +32,7 @@
 #include "util/string_utils.h"
 #include "value.h"
 
-namespace logle {
+namespace tervuren {
 namespace {
 
 using ast::type::Types;
@@ -377,4 +377,4 @@ TEST_F(LabeledGraphVisualizerTest, CompleteGraphDefaultAttributes) {
 }
 
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

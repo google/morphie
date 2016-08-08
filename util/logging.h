@@ -12,8 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// This file defines a function for checking assertions and printing an error if
-// the assertion fails.
+// This file defines a function for checking assertions and printing an error
+// if the assertion fails.
 #ifndef LOGLE_UTIL_LOGGING_H_
 #define LOGLE_UTIL_LOGGING_H_
 
@@ -23,8 +23,9 @@
 #define TOSTRING(x) MAKE_STR(x)
 #define LOCATION_STR __FILE__ ":" TOSTRING(__LINE__)
 #define CHECK(c, err) util::Check(c, LOCATION_STR, err)
+#define FAIL(err) util::Check(false, LOCATION_STR, err)
 
-namespace logle {
+namespace tervuren {
 namespace util {
 
 // Produces an error message and aborts if the condition is false.
@@ -33,6 +34,6 @@ void Check(bool condition, const string& location);
 void Check(bool condition);
 
 }  // namespace util
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_UTIL_LOGGING_H_

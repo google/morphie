@@ -14,7 +14,7 @@
 
 syntax = "proto2";
 
-package logle;
+package tervuren;
 
 // Unstructured data from logs is typically processed and represented in a
 // structured way to enable analysis. The protos in this file implement an

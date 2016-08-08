@@ -16,7 +16,7 @@ syntax = "proto2";
 
 option cc_api_version = 2;
 
-package logle;
+package tervuren;
 
 // The fields in the RendererConfig proto control how a graph represented in
 // the Graphviz dot format is rendered by the Graphviz server.

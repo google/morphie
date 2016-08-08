@@ -27,7 +27,7 @@
 #include "labeled_graph.h"
 #include "third_party/tensorflow/core/framework/graph.pb.h"
 
-namespace logle {
+namespace tervuren {
 
 // A TensorFlow node label is a string that matches the regexp
 //  "[A-Za-z0-9.][A-Za-z0-9_./]*"
@@ -83,5 +83,5 @@ class TFGraphExporter {
   unordered_map<NodeId, string> node_name_;
 };  // class TFGraphExporter
 
-}  // logle
+}  // namespace tervuren
 #endif  // LOGLE_TF_GRAPH_EXPORTER_H_

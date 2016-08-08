@@ -19,63 +19,58 @@
 
 #include "base/string.h"
 #include "gtest.h"
+#include "json_reader.h"
 #include "plaso_defs.h"
 #include "util/string_utils.h"
 
-namespace logle {
-
+namespace tervuren {
 namespace {
-
-const char kFieldNames[] =
-    "datetime,timestamp_desc,data_type,message,display_name";
-const char kData[] =
-    "\n2012-04-03T00:25:21+00:00,ctime,"
-    "windows:registry:key_value,"
-    "filestat,"
-    "K:/Documents and Settings/user/Application Data/Dropbox/l/3xp701t";
-// This string is used to exercise the invalid timestamp condition
-const char kNonData[] = "\n,,,,";
+namespace util = tervuren::util;
 
 // Tests of JSON input validation and input processing.
-void TestJSONInitialization(const string& kInput, Code code) {
-  std::unique_ptr<::Json::Value> doc(new ::Json::Value);
-  ::Json::Reader reader;
-  ASSERT_TRUE(reader.parse(kInput, *doc, false /*Ignore comments.*/));
+// NOLINTNEXTLINE
+string json_object = R"({"event1":{"data_type": "fs:stat", "display_name": "GZIP:/usr/share/info/bc.info.gz", "timestamp": 0, "timestamp_desc": "mtime" }
+, "event2":{"display_name": "GZIP:/usr/share/info/bc.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime" }
+, "event3":{"display_name": "GZIP:/usr/share/info/coreutils.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime"}
+})";
+
+// NOLINTNEXTLINE
+string json_stream = R"({"data_type": "fs:stat", "display_name": "GZIP:/usr/share/info/bc.info.gz", "timestamp": 0, "timestamp_desc": "mtime" }
+{"display_name": "GZIP:/usr/share/info/bc.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime" }
+{"display_name": "GZIP:/usr/share/info/coreutils.info.gz", "data_type": "fs:stat", "timestamp": 0, "timestamp_desc": "mtime"})";
+
+void TestInitialization(
+    const string& file_content, bool is_line_json) {
   PlasoAnalyzer analyzer;
-  util::Status s = analyzer.Initialize(std::move(doc));
-  EXPECT_EQ(code, s.code());
+  istringstream stream(file_content);
+  util::Status status;
+
+  if (is_line_json) {
+    logle::StreamJson jstream(&stream);
+    status = analyzer.Initialize(&jstream);
+    analyzer.BuildPlasoGraph();
+  } else {
+    logle::FullJson jstream(&stream);
+    status = analyzer.Initialize(&jstream);
+    analyzer.BuildPlasoGraph();
+  }
+  analyzer.PlasoGraphDot();
 }
 
-// The next few tests below check that the analyzer cannot be initialized with
-// invalid input.
-TEST(PlasoAnalyzerDeathTest, RequiresNonNullJSONDoc) {
+// Basic testing for correct JSON input files.
+TEST(PlasoAnalyzerTest, AcceptValidJSONInput) {
+  TestInitialization(json_object, false);
+  TestInitialization(json_stream, true);
+}
+
+// Basic testing for incorrect JSON input files.
+TEST(PlasoAnalyzerDeathTest, RequiresCorrectJSONDoc) {
   std::unique_ptr<::Json::Value> doc;
   PlasoAnalyzer analyzer;
-  EXPECT_DEATH(
-      { util::Status s = analyzer.Initialize(std::move(doc)); },
-      ".*null.*");
+  EXPECT_DEATH(TestInitialization(json_object, true),
+    ".*Line is not in JSON format.*");
+  EXPECT_DEATH(TestInitialization(json_stream, false),
+    ".*JSON*");
 }
-
-TEST(PlasoAnalyzerTest, RejectsInvalidJSONInput) {
-  TestJSONInitialization("{}", Code::INVALID_ARGUMENT);
-  TestJSONInitialization("[]", Code::INVALID_ARGUMENT);
-  TestJSONInitialization(R"({"foo" : {}})", Code::INVALID_ARGUMENT);
-  TestJSONInitialization(R"({"hits" : {}})", Code::INVALID_ARGUMENT);
-  TestJSONInitialization(R"({ "hits" : { "foo" : [] } })",
-                         Code::INVALID_ARGUMENT);
-  TestJSONInitialization(R"({ "hits" : { "hits" : [] } })",
-                         Code::INVALID_ARGUMENT);
-  // Initialization expects a non-empty array but the contents of the array are
-  // only validated during graph construction.
-  TestJSONInitialization(R"({ "hits" : { "hits" : [ "a", "b", "c"] } })",
-                         Code::OK);
-  TestJSONInitialization(
-      R"({ "hits" : { "hits" : [
-  { "datetime" : "1970-01-01T00:00:00+00:00"},
-  { "datetime" : "1970-01-01T00:00:00+00:00"}
-] } })",
-      Code::OK);
-}
-
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

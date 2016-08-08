@@ -14,18 +14,22 @@
 
 syntax = "proto2";
 
-package logle;
+package tervuren;
 
-// An AnalysisOptions message contains the fields used to configure different
-// analyzers.
+// An AnalysisOptions message specifies which analyzer should be run and the
+// input and output formats for that analyzer.
 message AnalysisOptions {
-  // The name of the file containing the data to analyze. This must be a CSV or
-  // a JSON file.
+  // The name of the analyzer to run.
+  optional string analyzer = 1;
+  // The name of the file containing the data to analyze. This must be a CSV,
+  // JSON object or JSON stream file. A JSON object file contains one single
+  // JSON object and a JSON stream file contains a sequence of JSON objects.
   oneof input_file {
-    string csv_file = 1;
-    string json_file = 2;
+    string csv_file = 2;
+    string json_file = 3;
+    string json_stream_file = 5;
   }
 
   // The GraphViz DOT file to which an output graph can be written.
-  optional string output_dot_file = 3;
+  optional string output_dot_file = 4;
 }

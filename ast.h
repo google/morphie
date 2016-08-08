@@ -35,10 +35,10 @@
 #ifndef LOGLE_AST_H_
 #define LOGLE_AST_H_
 
-#include "ast.pb.h"
+#include "third_party/logle/third_party/logle/ast.pb.h"
 #include "base/string.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 
 // Constants used by AST utilities.
@@ -154,6 +154,6 @@ string ToString(const Operator& op);
 string ToStringRoot(const AST& ast, PrintOption opt);
 
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren
 
 #endif  // LOGLE_AST_H_

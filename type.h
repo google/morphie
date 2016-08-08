@@ -23,7 +23,7 @@
 #include "base/string.h"
 #include "base/vector.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 
@@ -71,6 +71,6 @@ AST MakeURL();
 
 }  // namespace type
 }  // namespace ast
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_TYPE_H_

@@ -11,21 +11,14 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
 // License for the specific language governing permissions and limitations under
 // the License.
-#include "util/status.h"
 
-namespace tervuren {
-namespace util {
+#ifndef LOGLE_GTEST_H_
+#define LOGLE_GTEST_H_
 
-namespace {
+#if defined(PLATFORM_GOOGLE)
+#include "testing/base/public/gunit.h"
+#else
+#include <gtest/gtest.h>
+#endif
 
-const Status& GetOkStatus() {
-  static const Status status;
-  return status;
-}
-
-}  // unnamed namespace
-
-const Status& Status::OK = GetOkStatus();
-
-}  // namespace util
-}  // namespace tervuren
+#endif  // LOGLE_GTEST_H_

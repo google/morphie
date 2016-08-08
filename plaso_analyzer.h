@@ -26,10 +26,11 @@
 
 #include "json/json.h"
 #include "base/string.h"
+#include "json_reader.h"
 #include "plaso_event_graph.h"
 #include "util/status.h"
 
-namespace logle {
+namespace tervuren {
 
 // The PlasoAnalyzer uses graphs to extract information from log data. The
 // analyzer must be initialized with a JSON document (a Json::Value object from
@@ -41,16 +42,13 @@ class PlasoAnalyzer {
 
   // Initializes the log analyzer with a JSON document.
   //  * Requires that 'json_doc' is not null.
-  //  * Returns OK if the JSON document is
-  //    - an object with a member "hits",
-  //    - which is an object with a member also named "hits",
-  //    - which is an array containing at least one element.
+  //  * Returns OK if the JSON document is an object containing key-value pairs.
   //  * Returns INVALID_ARGUMENT otherwise.
-  // The document structure is defined by the data source not by logle. Each
-  // element of the array is a Plaso event object and must contain the fields
-  // listed in the class-level comment. Additional error validation is done
+  // The document structure is defined by the data source not by logle. The keys
+  // in the object specify an event identifier and the value is another object
+  // containing event data. Additional error validation is done
   // during graph construction.
-  util::Status Initialize(std::unique_ptr<::Json::Value> json_doc);
+  util::Status Initialize(JsonDocumentIterator* json_doc);
 
   // Constructs a PlasoEventGraph (defined in plaso_event_graph.h) from the
   // input data. Requires that the analyzer has been initialized and that every
@@ -84,9 +82,9 @@ class PlasoAnalyzer {
   std::unique_ptr<PlasoEventGraph> plaso_graph_;
   int num_lines_read_;
   int num_lines_skipped_;
-  std::unique_ptr<Json::Value> json_doc_;
+  JsonDocumentIterator* doc_iterator_;
 };
 
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_PLASO_ANALYZER_H_

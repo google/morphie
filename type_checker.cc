@@ -31,7 +31,7 @@
 #include "util/string_utils.h"
 #include "value_checker.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace type {
 
@@ -325,4 +325,4 @@ bool IsTyped(const Types& types, const TaggedAST& val, string* err) {
 
 }  // namespace type
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

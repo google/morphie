@@ -25,13 +25,14 @@
 #define LOGLE_ACCOUNT_ACCESS_GRAPH_H_
 
 #include <unordered_map>
+#include <vector>
 
 #include "base/string.h"
-#include "base/vector.h"
+#include "graph_interface.h"
 #include "labeled_graph.h"
 #include "util/status.h"
 
-namespace logle {
+namespace tervuren {
 
 // The account access graph contains labels with the following names and types.
 // The labels are all unique, meaning there can be at most one node with each
@@ -45,7 +46,7 @@ namespace logle {
 // The account access graph must be initialized explicitly by calling Initialize
 // before calling any other functions. Functions will crash if the graph is not
 // initialized.
-class AccountAccessGraph {
+class AccountAccessGraph : public GraphInterface {
  public:
   AccountAccessGraph() : is_initialized_(false) {}
 
@@ -96,6 +97,6 @@ class AccountAccessGraph {
   LabeledGraph graph_;
 };  // class AccountAccessGraph
 
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_ACCOUNT_ACCESS_GRAPH_H_

@@ -20,14 +20,14 @@
 #include "value_checker.h"
 
 #include <algorithm>
+#include <vector>
 
 #include "google/protobuf/message_lite.h"
 #include "ast.h"
-#include "base/vector.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 
@@ -265,4 +265,4 @@ void Canonicalize(AST* val) {
 
 }  // namespace value
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

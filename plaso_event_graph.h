@@ -34,11 +34,12 @@
 #include "json/json.h"
 #include "ast.pb.h"
 #include "base/string.h"
+#include "graph_interface.h"
 #include "labeled_graph.h"
 #include "plaso_event.pb.h"
 #include "util/status.h"
 
-namespace logle {
+namespace tervuren {
 
 // An event graph (lower case refers to the concept, not its implementation) is
 // a graph with labelled nodes and edges. The types of node and edge labels are
@@ -57,7 +58,7 @@ namespace logle {
 // A filename is represented as a list of strings with every element of the list
 // representing the name of one sub-directory on the path. An edge label either
 // a 'Precedes' tag or a 'Uses' tag.
-class PlasoEventGraph {
+class PlasoEventGraph : public GraphInterface {
  public:
   PlasoEventGraph() : is_initialized_(false), has_temporal_edges_(false) {}
 
@@ -130,6 +131,6 @@ class PlasoEventGraph {
   std::map<int64_t, std::set<NodeId>> time_index_;
 };
 
-}  // logle
+}  // namespace tervuren
 
 #endif  // LOGLE_PLASO_EVENT_GRAPH_H_

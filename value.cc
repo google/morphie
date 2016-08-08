@@ -23,7 +23,7 @@
 #include "util/time_utils.h"
 #include "value_checker.h"
 
-namespace logle {
+namespace tervuren {
 namespace ast {
 namespace value {
 
@@ -257,9 +257,8 @@ void Insert(const AST& type, const AST& arg, AST* set) {
 AST MakeNullTuple(int num_fields) {
   CHECK(num_fields >= 0, "");
   AST ast = MakeCompositeNull(Operator::TUPLE);
-  AST* field;
   for (int i = 0; i < num_fields; ++i) {
-    field = ast.mutable_c_ast()->add_arg();
+    ast.mutable_c_ast()->add_arg();
   }
   return ast;
 }
@@ -278,4 +277,4 @@ void SetField(const AST& type, int field_num, const AST& arg, AST* tuple) {
 
 }  // namespace value
 }  // namespace ast
-}  // namespace logle
+}  // namespace tervuren

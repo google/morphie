@@ -17,7 +17,7 @@
 #include "gtest.h"
 #include "util/status.h"
 
-namespace logle {
+namespace tervuren {
 namespace {
 
 // Returns a JSON object constructed from 'input'.
@@ -342,4 +342,4 @@ TEST(CurioAnalyzerTest, MalformedChainMid) {
 }
 
 }  // namespace
-}  // namespace logle
+}  // namespace tervuren

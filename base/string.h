@@ -17,9 +17,9 @@
 
 #include <string>
 
-namespace logle {
+namespace tervuren {
 
 using std::string;
 
-}  // logle
+}  // namespace tervuren
 #endif  // LOGLE_BASE_STRING_H_
