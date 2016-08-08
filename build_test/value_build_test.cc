@@ -21,10 +21,10 @@
 #include "value_checker.h"
 
 int main(int argc, char **argv) {
-  logle::AST ast = logle::ast::value::MakeBool(false);
+  tervuren::AST ast = tervuren::ast::value::MakeBool(false);
   std::string err;
   std::cout << ast.DebugString();
-  if (logle::ast::value::IsValue(ast, &err)) {
+  if (tervuren::ast::value::IsValue(ast, &err)) {
     std::cout << " is a value." << std::endl;
   } else {
     std::cout << " is not a value." << std::endl;

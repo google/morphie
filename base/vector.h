@@ -17,9 +17,9 @@
 
 #include <vector>
 
-namespace logle {
+namespace tervuren {
 
 using std::vector;
 
-}  // logle
+}  // tervuren 
 #endif  // LOGLE_BASE_VECTOR_H_

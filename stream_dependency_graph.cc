@@ -16,7 +16,7 @@
 
 #include <set>
 #include <utility>
-#include <vector>
+#include "base/vector.h"
 
 #include "ast.pb.h"
 #include "curio_defs.h"

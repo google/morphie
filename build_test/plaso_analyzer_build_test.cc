@@ -15,13 +15,16 @@
 // Initialize the Plaso analyzer with an empty JSON document.
 #include <iostream>
 #include <memory>
+#include <sstream>
 
 #include "json/json.h"
+#include "json_reader.h"
 #include "plaso_analyzer.h"
 
 int main(int argc, char **argv) {
-  logle::PlasoAnalyzer analyzer;
-  std::unique_ptr<::Json::Value> parser(new ::Json::Value);
-  analyzer.Initialize(std::move(parser));
+  tervuren::PlasoAnalyzer analyzer;
+  std::istringstream stream("");
+  tervuren::StreamJson json_stream(&stream);
+  analyzer.Initialize(&json_stream);
   std::cout << "Initialized Plaso analyzer." << std::endl;
 }

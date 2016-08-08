@@ -1,10 +1,10 @@
 #include <iostream>
 #include <fstream>
 
-#include "third_party/jsoncpp/json.h"
-#include "third_party/logle/base/string.h"
-#include "third_party/logle/json_reader.h"
-#include "third_party/logle/util/logging.h"
+#include "base/string.h"
+#include "json/json.h"
+#include "json_reader.h"
+#include "util/logging.h"
 
 namespace tervuren {
 

@@ -21,9 +21,9 @@
 #include "type.h"
 
 int main(int argc, char **argv) {
-  logle::LabeledGraph graph;
-  logle::AST ast = logle::ast::type::MakeInt("int label", false);
+  tervuren::LabeledGraph graph;
+  tervuren::AST ast = tervuren::ast::type::MakeInt("int label", false);
   graph.Initialize({}, {}, {}, {}, ast);
-  logle::DotPrinter dot_printer;
+  tervuren::DotPrinter dot_printer;
   std::cout << dot_printer.DotGraph(graph) << std::endl;
 }

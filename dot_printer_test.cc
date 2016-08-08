@@ -17,7 +17,7 @@
 #include <algorithm>
 #include <boost/regex.hpp>
 #include <set>
-#include <vector>
+#include "base/vector.h"
 
 #include "ast.h"
 #include "ast.pb.h"

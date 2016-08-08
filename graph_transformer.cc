@@ -16,7 +16,6 @@
 
 #include <queue>
 
-#include "graph_transformer.h"
 #include "type.h"
 #include "util/logging.h"
 #include "util/status.h"
@@ -54,7 +53,7 @@ struct Transformation {
   explicit Transformation(const LabeledGraph& graph) : input(graph) {}
 
   const LabeledGraph& input;
-  map<NodeId, NodeId> node_map;
+  std::map<NodeId, NodeId> node_map;
   std::unique_ptr<LabeledGraph> output;
 };  // struct Transformation
 
@@ -85,7 +84,7 @@ std::unique_ptr<LabeledGraph> CloneGraphType(const LabeledGraph& graph) {
 NodeId FindOrRelabelNode(NodeId node_id, TaggedAST new_label,
                          Transformation* transform) {
   NodeId new_node;
-  map<NodeId, NodeId>& node_map = transform->node_map;
+  std::map<NodeId, NodeId>& node_map = transform->node_map;
   auto map_it = node_map.find(node_id);
   if (map_it == node_map.end()) {
     new_node = transform->output->FindOrAddNode(new_label);
@@ -348,7 +347,6 @@ std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
       if (nodes.find(tgt) != nodes.end()) {
         continue;
       }
-      NodeId new_tgt = FindOrCopyNode(tgt, &transform);
       NodeId new_tgt =
           FindOrRelabelNode(tgt, graph.GetNodeLabel(tgt), &transform);
       transform.output->FindOrAddEdge(new_src, new_tgt,

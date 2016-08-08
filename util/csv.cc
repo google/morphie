@@ -14,10 +14,7 @@
 #include "util/csv.h"
 
 #include <boost/tokenizer.hpp>  // NOLINT
-<<<<<<< HEAD
 #include <boost/exception/exception.hpp>  // NOLINT
-=======
->>>>>>> internal/piper
 #include <sstream>
 
 // The Clang compiler does not support exceptions. Boost is compiled with Clang,

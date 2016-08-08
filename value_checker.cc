@@ -20,7 +20,7 @@
 #include "value_checker.h"
 
 #include <algorithm>
-#include <vector>
+#include "base/vector.h"
 
 #include "google/protobuf/message_lite.h"
 #include "ast.h"

@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <set>
 #include <utility>
-#include <vector>
+#include "base/vector.h"
 
 #include "account_access_defs.h"
 #include "util/logging.h"

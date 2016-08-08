@@ -15,7 +15,7 @@
 #include "plaso_analyzer.h"
 
 #include <sstream>
-#include <vector>
+#include "base/vector.h"
 
 #include "base/string.h"
 #include "gtest.h"

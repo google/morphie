@@ -20,8 +20,8 @@
 #include "ast.h"
 
 #include <boost/algorithm/string/join.hpp>  // NOLINT
-#include <vector>
 
+#include "base/vector.h"
 #include "util/string_utils.h"
 #include "util/time_utils.h"
 

@@ -20,6 +20,6 @@
 #include "plaso_event.pb.h"
 
 int main(int argc, char **argv) {
-  logle::File file = logle::plaso::ParseFilename("/tmp/build/test/file.txt");
+  tervuren::File file = tervuren::plaso::ParseFilename("/tmp/build/test/file.txt");
   std::cout << file.DebugString() << std::endl;
 }

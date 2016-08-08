@@ -18,7 +18,7 @@
 
 #include <set>
 #include <utility>
-#include <vector>
+#include "base/vector.h"
 
 #include "json_reader.h"
 #include "plaso_defs.h"

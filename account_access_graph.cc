@@ -52,14 +52,14 @@ string GetField(const string& field_name,
                 const unordered_map<string, int>& field_index,
                 const vector<string>& fields) {
   const auto field_it = field_index.find(field_name);
-  logle::CHECK(
+  tervuren::CHECK(
       field_it != field_index.end(),
-      (logle::util::StrCat("No field named ", field_name, " in input.")));
-  logle::CHECK(0 <= field_it->second,
-               (logle::util::StrCat("Index of ", field_name, " is negative.")));
-  logle::CHECK(
+      (tervuren::util::StrCat("No field named ", field_name, " in input.")));
+  tervuren::CHECK(0 <= field_it->second,
+               (tervuren::util::StrCat("Index of ", field_name, " is negative.")));
+  tervuren::CHECK(
       static_cast<int>(fields.size()) > field_it->second,
-      (logle::util::StrCat("Index of ", field_name, " exceeds bounds.")));
+      (tervuren::util::StrCat("Index of ", field_name, " exceeds bounds.")));
   return fields[field_it->second];
 }
 

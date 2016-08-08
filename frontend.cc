@@ -57,10 +57,10 @@ const char kOpenFileErr[] = "Error opening file: ";
 // lifetime than the parser so that the file can be closed after parsing is
 // complete.
 std::pair<util::Status, std::unique_ptr<util::CSVParser>> GetCSVParser(
-    const string& filename) {
+    const std::string& filename) {
   std::ifstream* csv_stream = new std::ifstream(filename);
   if (csv_stream == nullptr || !*csv_stream) {
-    return {util::Status(logle::Code::EXTERNAL,
+    return {util::Status(tervuren::Code::EXTERNAL,
                          util::StrCat(kOpenFileErr, filename)), nullptr};
   }
   // The CSV parser takes ownership of the csv_stream and will close the file
@@ -71,7 +71,7 @@ std::pair<util::Status, std::unique_ptr<util::CSVParser>> GetCSVParser(
 
 // Returns a JSON document extracted from 'filename'. Comments in the JSON
 // document will be ignored.
-std::unique_ptr<Json::Value> GetJsonDoc(const string& filename) {
+std::unique_ptr<Json::Value> GetJsonDoc(const std::string& filename) {
   Json::Reader json_reader;
   std::unique_ptr<Json::Value> json_doc(new Json::Value);
   std::ifstream json_stream(filename);
@@ -83,25 +83,26 @@ std::unique_ptr<Json::Value> GetJsonDoc(const string& filename) {
 //  - OK if 'filename' could be opened for writing, written to, and closed
 //    successfully.
 //  - an error code with explanation otherwise.
-util::Status WriteToFile(const string& filename, const string& contents) {
+util::Status WriteToFile(const std::string& filename,
+                         const std::string& contents) {
   std::ofstream out_file;
   out_file.open(filename, std::ofstream::out);
   // An ofstream automatically closes a file when it goes out of scope, so the
   // early returns will not leave the file open. The file is nonetheless
   // explicitly closed only to be able to detect errors.
   if (!out_file) {
-    return util::Status(logle::Code::EXTERNAL,
+    return util::Status(tervuren::Code::EXTERNAL,
                        util::StrCat("Error opening file: ", filename));
   }
   out_file << contents;
 
   if (!out_file) {
-    return util::Status(logle::Code::INTERNAL,
+    return util::Status(tervuren::Code::INTERNAL,
                        util::StrCat("Error writing to file: ", filename));
   }
   out_file.close();
   if (!out_file) {
-    return util::Status(logle::Code::EXTERNAL,
+    return util::Status(tervuren::Code::EXTERNAL,
                        util::StrCat("Error closing file: ", filename));
   }
   return util::Status::OK;
@@ -117,7 +118,7 @@ namespace frontend {
 util::Status RunCurioAnalyzer(const AnalysisOptions& options,
                               string* dot_graph) {
   if (!options.has_json_file()) {
-    return util::Status(logle::Code::INVALID_ARGUMENT,
+    return util::Status(tervuren::Code::INVALID_ARGUMENT,
                         "The Curio analyzer requires a JSON input file.");
   }
   std::unique_ptr<Json::Value> json_doc = GetJsonDoc(options.json_file());
@@ -148,14 +149,14 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
       std::ifstream file(options.json_file());
       CHECK(file.is_open(),
             util::StrCat(kOpenFileErr, options.json_file()));
-      status = plaso_analyzer.Initialize(new logle::FullJson(&file));
+      status = plaso_analyzer.Initialize(new tervuren::FullJson(&file));
       break;
     }
     case AnalysisOptions::InputFileCase::kJsonStreamFile:{
       std::ifstream file(options.json_stream_file());
       CHECK(file.is_open(),
             util::StrCat(kOpenFileErr, options.json_stream_file()));
-      status = plaso_analyzer.Initialize(new logle::StreamJson(&file));
+      status = plaso_analyzer.Initialize(new tervuren::StreamJson(&file));
       break;
     }
     default:{
@@ -180,7 +181,7 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
 util::Status RunMailAccessAnalyzer(const AnalysisOptions& options,
                                    string* dot_graph) {
   if (!options.has_csv_file()) {
-    return util::Status(logle::Code::INVALID_ARGUMENT,
+    return util::Status(tervuren::Code::INVALID_ARGUMENT,
                         "The access analyzer requires a CSV input file.");
   }
   AccessAnalyzer access_analyzer;

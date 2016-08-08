@@ -14,7 +14,7 @@
 
 #include "stream_dependency_graph.h"
 
-#include <vector>
+#include "base/vector.h"
 
 #include "base/string.h"
 #include "gtest.h"

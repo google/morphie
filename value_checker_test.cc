@@ -13,7 +13,7 @@
 // the License.
 
 #include <map>
-#include <vector>
+#include "base/vector.h"
 
 #include "ast.h"
 #include "base/string.h"

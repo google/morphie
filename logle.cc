@@ -28,7 +28,7 @@
 #include "util/status.h"
 
 namespace protobuf = google::protobuf;
-using Analyzer = logle::frontend::Analyzer;
+using Analyzer = tervuren::frontend::Analyzer;
 using std::string;
 
 // Flags that determine which analyzer to use and the options with which to
@@ -47,11 +47,10 @@ static bool CheckFlagValueNotEmpty(const char* flagname, const string& value) {
 
 static bool is_config_empty =
     google::RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
-    google::RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
 
 int main(int argc, char** argv) {
-  InitGoogle(argv[0], &argc, &argv, true);
-  logle::AnalysisOptions options;
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  tervuren::AnalysisOptions options;
   string out;
   if (!protobuf::TextFormat::ParseFromString(FLAGS_analysis_options,
                                              &options)) {
@@ -59,7 +58,7 @@ int main(int argc, char** argv) {
                  "AnalysisOptions proto.";
     return -1;
   }
-  tervuren::util::Status status = logle::frontend::Run(options);
+  tervuren::util::Status status = tervuren::frontend::Run(options);
   if (!status.ok()) {
     std::cerr << status.message();
     return -1;

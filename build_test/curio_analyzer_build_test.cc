@@ -20,7 +20,7 @@
 
 int main(int argc, char **argv) {
   std::unique_ptr<::Json::Value> doc(new ::Json::Value);
-  logle::CurioAnalyzer analyzer;
+  tervuren::CurioAnalyzer analyzer;
   analyzer.Initialize(std::move(doc));
   std::cout << "Initialized Curio analyzer." << std::endl;
 }

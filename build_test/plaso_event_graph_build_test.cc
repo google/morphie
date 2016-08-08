@@ -18,7 +18,7 @@
 #include "plaso_event_graph.h"
 
 int main(int argc, char **argv) {
-  logle::PlasoEventGraph graph;
+  tervuren::PlasoEventGraph graph;
   graph.Initialize();
   std::cout << "Initialized Plaso event graph." << graph.ToDot() << std::endl;
 }

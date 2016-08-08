@@ -16,10 +16,6 @@
 #ifndef LOGLE_CURIO_DEFS_H_
 #define LOGLE_CURIO_DEFS_H_
 
-namespace logle {
-#ifndef LOGLE_CURIO_DEFS_H_
-#define LOGLE_CURIO_DEFS_H_
-
 namespace tervuren {
 // The 'curio' namespace encloses definitions used to analyze Curio streams.
 namespace curio {

@@ -50,6 +50,7 @@
 #include <stddef.h>
 
 #include <boost/functional/hash/hash.hpp>
+#include <boost/graph/directed_graph.hpp>
 #include <set>
 #include <tuple>
 #include <unordered_map>
