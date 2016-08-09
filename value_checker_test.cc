@@ -13,10 +13,10 @@
 // the License.
 
 #include <map>
-#include "base/vector.h"
 
 #include "ast.h"
 #include "base/string.h"
+#include "base/vector.h"
 #include "gtest.h"
 #include "value_checker.h"
 

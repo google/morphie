@@ -15,7 +15,6 @@
 #include "type.h"
 
 #include "base/vector.h"
-
 #include "gtest.h"
 #include "type_checker.h"
 

@@ -16,9 +16,9 @@
 
 #include <set>
 #include <utility>
-#include "base/vector.h"
 
 #include "ast.pb.h"
+#include "base/vector.h"
 #include "curio_defs.h"
 #include "dot_printer.h"
 #include "type.h"

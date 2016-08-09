@@ -20,10 +20,10 @@
 #include "value_checker.h"
 
 #include <algorithm>
-#include "base/vector.h"
 
-#include "google/protobuf/message_lite.h"
 #include "ast.h"
+#include "base/vector.h"
+#include "google/protobuf/message_lite.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
 

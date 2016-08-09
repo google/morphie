@@ -46,11 +46,11 @@ void TestInitialization(
   util::Status status;
 
   if (is_line_json) {
-    logle::StreamJson jstream(&stream);
+    tervuren::StreamJson jstream(&stream);
     status = analyzer.Initialize(&jstream);
     analyzer.BuildPlasoGraph();
   } else {
-    logle::FullJson jstream(&stream);
+    tervuren::FullJson jstream(&stream);
     status = analyzer.Initialize(&jstream);
     analyzer.BuildPlasoGraph();
   }

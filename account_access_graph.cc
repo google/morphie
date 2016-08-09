@@ -18,7 +18,6 @@
 #include <unordered_map>
 
 #include "account_access_defs.h"
-#include "base/string.h"
 #include "dot_printer.h"
 #include "type.h"
 #include "type_checker.h"
@@ -30,7 +29,6 @@ namespace {
 // These declarations are required because the using declaration in
 // base/string.h and below are within the logle namespace.
 using std::string;
-using std::vector;
 using std::unordered_map;
 
 // Error messages.
