@@ -323,37 +323,37 @@ namespace graph {
 // their source nodes. A FindOrRelabelEdge function would not know that the
 // source node of an edge in a sequence of calls is the same and would perform
 // redudnant lookups in the node map.
-std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
-                                          const set<NodeId>& nodes) {
-  Transformation transform(graph);
-  transform.output = CloneGraphType(graph);
-  if (transform.output == nullptr) {
-    return std::move(transform.output);
+std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
+                                      const set<NodeId>& nodes) {
+  std::unique_ptr<Morphism> morphism(new Morphism(&graph));
+  morphism->CloneInputType();
+  if (!morphism->HasOutputGraph()) {
+    return morphism;
   }
-
   NodeIterator end_it = graph.NodeSetEnd();
   for (NodeIterator node_it = graph.NodeSetBegin(); node_it != end_it;
        ++node_it) {
     NodeId src = *node_it;
+    // If this node is to be deleted, skip it.
     if (nodes.find(src) != nodes.end()) {
       continue;
     }
     NodeId new_src =
-        FindOrRelabelNode(src, graph.GetNodeLabel(src), &transform);
+        morphism->FindOrMapNode(src, graph.GetNodeLabel(src));
     OutEdgeIterator out_edge_end = graph.OutEdgeEnd(src);
     for (OutEdgeIterator edge_it = graph.OutEdgeBegin(src);
          edge_it != out_edge_end; ++edge_it) {
       NodeId tgt = graph.Target(*edge_it);
+      // If the target node is to be deleted, skip that node and this edge.
       if (nodes.find(tgt) != nodes.end()) {
         continue;
       }
-      NodeId new_tgt =
-          FindOrRelabelNode(tgt, graph.GetNodeLabel(tgt), &transform);
-      transform.output->FindOrAddEdge(new_src, new_tgt,
-                                      graph.GetEdgeLabel(*edge_it));
+      NodeId new_tgt = morphism->FindOrMapNode(tgt, graph.GetNodeLabel(tgt));
+      morphism->MutableOutput()->FindOrAddEdge(new_src, new_tgt,
+                                               graph.GetEdgeLabel(*edge_it));
     }
   }
-  return std::move(transform.output);
+  return morphism;
 }
 
 // The deletion function iterates over edges in the input graph and copies the

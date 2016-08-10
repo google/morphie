@@ -36,7 +36,7 @@
 #ifndef THIRD_PARTY_LOGLE_MORPHISM_H_
 #define THIRD_PARTY_LOGLE_MORPHISM_H_
 
-#include <map>
+#include <unordered_map>
 
 #include "labeled_graph.h"
 #include "third_party/logle/ast.pb.h"
@@ -60,6 +60,7 @@ class Morphism {
   // Functions that return the input and output graphs.
   const LabeledGraph& Input() const { return input_graph_; }
   const LabeledGraph& Output() const { return *output_graph_; }
+  LabeledGraph* MutableOutput() { return output_graph_.get(); }
 
   // Creates a new output graph that has the same node and edge types as the
   // input graph. An output graph that already exists will no longer be
@@ -72,7 +73,7 @@ class Morphism {
 
  private:
   const LabeledGraph& input_graph_;
-  std::map<NodeId, NodeId> node_map_;
+  std::unordered_map<NodeId, NodeId> node_map_;
   std::unique_ptr<LabeledGraph> output_graph_;
 };  // class Morphism
 

@@ -21,6 +21,7 @@
 #include <set>
 
 #include "labeled_graph.h"
+#include "morphism.h"
 
 namespace tervuren {
 // The 'graph' namespace contains functions for manipulating graphs.
@@ -84,8 +85,8 @@ struct QuotientConfig {
 // Has time complexity linear in the number of edges of the input graph and
 // space complexity linear in the number of nodes and edges of the ouput graph.
 // - Requires that 'nodes' contains valid node identifiers of the input graph.
-std::unique_ptr<LabeledGraph> DeleteNodes(const LabeledGraph& graph,
-                                          const set<NodeId>& nodes);
+std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
+                                      const set<NodeId>& nodes);
 
 // If G = (V, E) is a graph and F is a subset of edges of E, the result of
 // deleting F from G is the graph with nodes V and edges H = (E - F). The
