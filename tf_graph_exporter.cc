@@ -64,7 +64,7 @@ string TFGraphExporter::FindOrAddName(NodeId node_id) {
     return node_name_it->second;
   } else {
     TaggedAST node_label = graph_.GetNodeLabel(node_id);
-    string label = NodeLabelWithId(node_id, node_label.tag(), node_label.ast());
+    string label = NodeLabel(node_label.tag(), node_label.ast());
     node_name_.emplace(node_id, label);
     return label;
   }
@@ -77,13 +77,15 @@ tensorflow::NodeDef TFGraphExporter::TFNode(NodeId node_id) {
   }
   string node_name = FindOrAddName(node_id);
   tf_node.set_name(node_name);
+  // This field is set to satisfy the parser of the visualizer.
+  tf_node.set_op("");
   set<NodeId> in_nodes = graph_.GetPredecessors(node_id);
   string in_node_name;
   for (auto in_node : in_nodes) {
     in_node_name = FindOrAddName(in_node);
     TaggedAST in_node_label = graph_.GetNodeLabel(in_node);
     string in_node_name =
-        NodeLabelWithId(in_node, in_node_label.tag(), in_node_label.ast());
+        NodeLabel(in_node_label.tag(), in_node_label.ast());
     tf_node.add_input(in_node_name);
   }
   return tf_node;
