@@ -41,7 +41,7 @@ string json_stream = R"({"data_type": "fs:stat", "display_name": "GZIP:/usr/shar
 
 void TestInitialization(
     const string& file_content, bool is_line_json) {
-  PlasoAnalyzer analyzer;
+  PlasoAnalyzer analyzer(false);
   istringstream stream(file_content);
   util::Status status;
 
@@ -66,7 +66,7 @@ TEST(PlasoAnalyzerTest, AcceptValidJSONInput) {
 // Basic testing for incorrect JSON input files.
 TEST(PlasoAnalyzerDeathTest, RequiresCorrectJSONDoc) {
   std::unique_ptr<::Json::Value> doc;
-  PlasoAnalyzer analyzer;
+  PlasoAnalyzer analyzer(false);
   EXPECT_DEATH(TestInitialization(json_object, true),
     ".*Line is not in JSON format.*");
   EXPECT_DEATH(TestInitialization(json_stream, false),

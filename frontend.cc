@@ -143,7 +143,10 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
                               string* dot_graph) {
   util::Status status;
 
-  PlasoAnalyzer plaso_analyzer;
+  bool show_all_sources = options.has_plaso_options()
+                              ? options.plaso_options().show_all_sources()
+                              : false;
+  PlasoAnalyzer plaso_analyzer(show_all_sources);
   switch (options.input_file_case()) {
     case AnalysisOptions::InputFileCase::kJsonFile:{
       std::ifstream file(options.json_file());

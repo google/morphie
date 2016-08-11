@@ -38,7 +38,10 @@ namespace tervuren {
 // above the Initialize function.
 class PlasoAnalyzer {
  public:
-  PlasoAnalyzer() : num_lines_read_(0), num_lines_skipped_(0) {}
+  explicit PlasoAnalyzer(bool show_all_sources)
+      : show_all_sources_(show_all_sources),
+        num_lines_read_(0),
+        num_lines_skipped_(0) {}
 
   // Initializes the log analyzer with a JSON document.
   //  * Requires that 'json_doc' is not null.
@@ -79,6 +82,10 @@ class PlasoAnalyzer {
   // input that were skipped.
   void IncrementSkipCounter();
 
+  // Configuration options for the analyzer.
+  bool show_all_sources_;
+
+  // Data about analyzer state.
   std::unique_ptr<PlasoEventGraph> plaso_graph_;
   int num_lines_read_;
   int num_lines_skipped_;

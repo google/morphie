@@ -16,6 +16,11 @@ syntax = "proto2";
 
 package tervuren;
 
+// Options to use when analyzing Plaso input.
+message PlasoOptions {
+  optional bool show_all_sources = 1 [default = false];
+}
+
 // An AnalysisOptions message specifies which analyzer should be run and the
 // input and output formats for that analyzer.
 message AnalysisOptions {
@@ -27,9 +32,11 @@ message AnalysisOptions {
   oneof input_file {
     string csv_file = 2;
     string json_file = 3;
-    string json_stream_file = 5;
+    string json_stream_file = 4;
   }
 
   // The GraphViz DOT file to which an output graph can be written.
-  optional string output_dot_file = 4;
+  optional string output_dot_file = 5;
+
+  optional PlasoOptions plaso_options = 6;
 }

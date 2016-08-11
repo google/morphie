@@ -60,7 +60,10 @@ namespace tervuren {
 // a 'Precedes' tag or a 'Uses' tag.
 class PlasoEventGraph : public GraphInterface {
  public:
-  PlasoEventGraph() : is_initialized_(false), has_temporal_edges_(false) {}
+  PlasoEventGraph(bool has_all_sources)
+      : is_initialized_(false),
+        has_temporal_edges_(false),
+        has_all_sources_(has_all_sources) {}
 
   // Initialize the graph. This function must be called before all other
   // functions in this class. Returns
@@ -125,6 +128,9 @@ class PlasoEventGraph : public GraphInterface {
   bool is_initialized_;
   // True if temporal edges have been added to 'graph_'.
   bool has_temporal_edges_;
+  // True if all event sources are included in the graph.
+  bool has_all_sources_;
+
   LabeledGraph graph_;
   // Maps from a timestamp to the set of event nodes with that timestamp. This
   // index allows for conveniently processing events in chronological order.

@@ -43,7 +43,7 @@ util::Status PlasoAnalyzer::Initialize(
 }
 
 void PlasoAnalyzer::BuildPlasoGraph() {
-  plaso_graph_.reset(new PlasoEventGraph);
+  plaso_graph_.reset(new PlasoEventGraph(show_all_sources_));
   if (!plaso_graph_->Initialize().ok()) {
     plaso_graph_.reset(nullptr);
     return;

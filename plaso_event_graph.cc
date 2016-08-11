@@ -240,6 +240,10 @@ void PlasoEventGraph::AddResource(NodeId node_id, const string& tag,
 
 void PlasoEventGraph::AddEventData(NodeId node_id,
                                    const PlasoEvent& event_data) {
+  if (has_all_sources_ && event_data.has_event_source_file()) {
+    AddFile(node_id, event_data.event_source_file(),
+            true /*The file is a source.*/);
+  }
   if (event_data.has_source_file()) {
     AddFile(node_id, event_data.source_file(), true /*The file is a source.*/);
   }
