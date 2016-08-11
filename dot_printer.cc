@@ -52,8 +52,7 @@ const char kSolidGrayEdge[] =
     "penwidth=.5,arrowsize=.5,arrowhead=onormal,color=gray";
 const char kDashedGrayEdge[] =
     "penwidth=.5,arrowsize=.5,arrowhead=onormal,color=gray,style=dashed";
-const char kPrecedesStyle[] =
-    "penwidth=.5,arrowsize=.5,arrowhead=onormal,color=gray";
+const char kPrecedesStyle[] = "style=invis";
 
 // Retrieve the string at position 'pos' in the list of strings represented by
 // 'ast'. If 'ast' is not a list of strings, the method GetString will crash.
