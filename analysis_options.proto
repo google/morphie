@@ -12,12 +12,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+// Command-line options supported by the tool, represented as protocol buffers.
 syntax = "proto2";
 
 package tervuren;
 
-// Options to use when analyzing Plaso input.
+// Options available for analyzing Plaso input.
 message PlasoOptions {
+  // If true, every source file of an event will be displayed in output graphs.
   optional bool show_all_sources = 1 [default = false];
 }
 
@@ -26,6 +28,7 @@ message PlasoOptions {
 message AnalysisOptions {
   // The name of the analyzer to run.
   optional string analyzer = 1;
+
   // The name of the file containing the data to analyze. This must be a CSV,
   // JSON object or JSON stream file. A JSON object file contains one single
   // JSON object and a JSON stream file contains a sequence of JSON objects.
@@ -35,8 +38,13 @@ message AnalysisOptions {
     string json_stream_file = 4;
   }
 
-  // The GraphViz DOT file to which an output graph can be written.
-  optional string output_dot_file = 5;
+  // Visual output can be written to as a GraphViz DOT or a proto accepted by
+  // GraphExplorer. The proto is represented as a human readable string obtained
+  // by calling DebugString() on a message.
+  oneof output_file {
+    string output_dot_file = 5;
+    string output_pbtxt_file = 6;
+  }
 
-  optional PlasoOptions plaso_options = 6;
+  optional PlasoOptions plaso_options = 7;
 }

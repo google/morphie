@@ -101,8 +101,11 @@ class PlasoEventGraph : public GraphInterface {
   // before 'e4'.
   void AddTemporalEdges();
 
-  // Return a representation of the graph in Graphviz DOT format.
+  // Returns a representation of the graph in Graphviz DOT format.
   string ToDot() const;
+
+  // Returns a human-readable, protobuf representation of the graph.
+  string ToPbTxt() const;
 
  private:
   // Adds 'file' as a node to the graph if it does not already exist. If

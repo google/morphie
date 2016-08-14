@@ -116,7 +116,7 @@ namespace frontend {
 // Runs the Curio analyzer in curio_analyzer.h on the input. Returns an error
 // code if the input is not in JSON format.
 util::Status RunCurioAnalyzer(const AnalysisOptions& options,
-                              string* dot_graph) {
+                              string* output_graph) {
   if (!options.has_json_file()) {
     return util::Status(tervuren::Code::INVALID_ARGUMENT,
                         "The Curio analyzer requires a JSON input file.");
@@ -131,16 +131,16 @@ util::Status RunCurioAnalyzer(const AnalysisOptions& options,
   if (!status.ok()) {
     return status;
   }
-  *dot_graph = curio_analyzer.DependencyGraphAsDot();
+  *output_graph = curio_analyzer.DependencyGraphAsDot();
   return status;
 }
 
 // Runs the Plaso analyzer in plaso_analyzer.h on the input. The input can be in
 // JSON or JSON stream format. Returns an error code if file I/O fails. If the
 // analyzer is run successfully, a GraphViz DOT representation of the
-// constructed graph is returned in 'dot_graph'.
+// constructed graph is returned in 'output_graph'.
 util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
-                              string* dot_graph) {
+                              string* output_graph) {
   util::Status status;
 
   bool show_all_sources = options.has_plaso_options()
@@ -172,7 +172,11 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
     return status;
   }
   plaso_analyzer.BuildPlasoGraph();
-  *dot_graph = plaso_analyzer.PlasoGraphDot();
+  if (options.has_output_dot_file()) {
+    *output_graph = plaso_analyzer.PlasoGraphDot();
+  } else if (options.has_output_pbtxt_file()) {
+    *output_graph = plaso_analyzer.PlasoGraphPbTxt();
+  }
   return util::Status::OK;
 }
 
@@ -180,9 +184,9 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
 //  - INVALID_ARGUMENT if the input is not in CSV format or if
 //    file I/O causes an error or if graph initialization or construction fails.
 //  - OK otherwise.
-// If OK is returned, 'dot_graph' contains a GraphViz DOT graph.
+// If OK is returned, 'output_graph' contains a GraphViz DOT graph.
 util::Status RunMailAccessAnalyzer(const AnalysisOptions& options,
-                                   string* dot_graph) {
+                                   string* output_graph) {
   if (!options.has_csv_file()) {
     return util::Status(tervuren::Code::INVALID_ARGUMENT,
                         "The access analyzer requires a CSV input file.");
@@ -203,31 +207,36 @@ util::Status RunMailAccessAnalyzer(const AnalysisOptions& options,
   if (!status.ok()) {
     return status;
   }
-  *dot_graph = access_analyzer.AccessGraphAsDot();
+  *output_graph = access_analyzer.AccessGraphAsDot();
   return util::Status::OK;
 }
 
-// Invokes the specified analyzer. If the analysis generates a 'dot_graph', will
-// write that graph to 'options.output_dot_file()' if that field is set.
+// Invokes the specified analyzer on an input data source and after analysis,
+// writes a graph to a file if required.
 util::Status Run(const AnalysisOptions& options) {
   util::Status status = util::Status::OK;
-  string dot_graph;
+  string output_graph;
+  // Invoke an analyzer.
   if (!options.has_analyzer()) {
     return util::Status(Code::INVALID_ARGUMENT, kInvalidAnalyzerErr);
   } else if (options.analyzer() == "curio") {
-    status = RunCurioAnalyzer(options, &dot_graph);
+    status = RunCurioAnalyzer(options, &output_graph);
   } else if (options.analyzer() == "mail") {
-    status = RunMailAccessAnalyzer(options, &dot_graph);
+    status = RunMailAccessAnalyzer(options, &output_graph);
   } else if (options.analyzer() == "plaso") {
-    status = RunPlasoAnalyzer(options, &dot_graph);
+    status = RunPlasoAnalyzer(options, &output_graph);
   } else {
     return util::Status(Code::INVALID_ARGUMENT, kInvalidAnalyzerErr);
   }
-  if (!status.ok() || dot_graph == "") {
+  // Write the output of the analysis and return.
+  if (!status.ok() || output_graph == "") {
     return status;
   }
   if (options.output_dot_file() != "") {
-    status = WriteToFile(options.output_dot_file(), dot_graph);
+    status = WriteToFile(options.output_dot_file(), output_graph);
+  }
+  if (options.output_pbtxt_file() != "") {
+    status = WriteToFile(options.output_pbtxt_file(), output_graph);
   }
   return status;
 }

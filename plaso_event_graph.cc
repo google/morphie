@@ -23,6 +23,7 @@
 
 #include "ast.h"
 #include "dot_printer.h"
+#include "graph_exporter.h"
 #include "plaso_event.h"
 #include "plaso_event.pb.h"
 #include "type.h"
@@ -273,7 +274,6 @@ TaggedAST PlasoEventGraph::MakeEventLabel(const AST& timestamp,
   return event;
 }
 
-
 string PlasoEventGraph::ToDot() const {
   CHECK(is_initialized_, kInitializationErr);
   DotPrinter dot_printer;
@@ -281,6 +281,12 @@ string PlasoEventGraph::ToDot() const {
   util::StrAppend(&dot_graph, GetTimeline(time_index_), "\n");
   util::StrAppend(&dot_graph, dot_printer.AllEdgesInDot(graph_), "\n");
   return util::StrCat("digraph logle_graph {\n", dot_graph, "}");
+}
+
+string PlasoEventGraph::ToPbTxt() const {
+  CHECK(is_initialized_, kInitializationErr);
+  viz::GraphExporter exporter(graph_);
+  return exporter.GraphAsString();
 }
 
 }  // namespace tervuren

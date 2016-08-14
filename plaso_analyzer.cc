@@ -55,6 +55,10 @@ string PlasoAnalyzer::PlasoGraphDot() const {
   return (plaso_graph_ == nullptr) ? "" : plaso_graph_->ToDot();
 }
 
+string PlasoAnalyzer::PlasoGraphPbTxt() const {
+  return (plaso_graph_ == nullptr) ? "" : plaso_graph_->ToPbTxt();
+}
+
 string PlasoAnalyzer::PlasoGraphStats() const {
   if (plaso_graph_ == nullptr) {
     return "Graph has not been created!";

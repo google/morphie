@@ -74,6 +74,7 @@ class PlasoAnalyzer {
 
   string PlasoGraphStats() const;
   string PlasoGraphDot() const;
+  string PlasoGraphPbTxt() const;
 
  private:
   // Constructs a Plaso graph using a JSON document.
