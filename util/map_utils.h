@@ -17,6 +17,7 @@
 #define THIRD_PARTY_LOGLE_UTIL_MAP_UTILS_H_
 
 #include <unordered_map>
+#include <unordered_set>
 
 namespace tervuren {
 namespace util {
@@ -43,6 +44,25 @@ std::unordered_map<KeyType, KeyType> Compose(
     composition.insert({key_pair.first, value_it->second});
   }
   return composition;
+}
+
+// The preimage of a function f : A --> B is a function from B to the powerset
+// of A that maps each element 'b' to the set {a | f(a) = b}.
+//
+// Returns the preimage of the input function.
+template <typename KeyType, typename ValType>
+std::unordered_map<ValType, std::unordered_set<KeyType>> Preimage(
+    const std::unordered_map<KeyType, ValType>& fn) {
+  std::unordered_map<ValType, std::unordered_set<KeyType>> preimage;
+  for (const auto& fn_pair : fn) {
+    // If the insertion below fails, there is already an entry for this value in
+    // the preimage map, so the key has to be inserted into the preimage set.
+    auto insert_pair = preimage.insert({fn_pair.second, {fn_pair.first}});
+    if (insert_pair.second == false) {
+      insert_pair.first->second.insert(fn_pair.first);
+    }
+  }
+  return preimage;
 }
 
 }  // namespace util

@@ -45,6 +45,23 @@ TEST(MapCompositionTest, CompositionOfInjectiveMaps) {
   EXPECT_EQ(identity_02, Compose(increments, decrements));
 }
 
+TEST(MapPreimageTest, PreimageProperties) {
+  // The preimage of the empty function is an empty function.
+  std::unordered_map<int, int> empty_map;
+  std::unordered_map<int, std::unordered_set<int>> empty_pre;
+  EXPECT_EQ(empty_pre, Preimage(empty_map));
+  // An injective function will have singleton preimages.
+  std::unordered_map<int, int> increments{{0, 1}, {1, 2}, {2, 3}};
+  std::unordered_map<int, std::unordered_set<int>> pre_increments{
+      {1, {0}}, {2, {1}}, {3, {2}}};
+  EXPECT_EQ(pre_increments, Preimage(increments));
+  // A non-injective function will have non-singleton preimages.
+  std::unordered_map<int, int> parity{{0, 0}, {1, 1}, {2, 0}, {3, 1}};
+  std::unordered_map<int, std::unordered_set<int>> pre_parity{{0, {0, 2}},
+                                                              {1, {1, 3}}};
+  EXPECT_EQ(pre_parity, Preimage(parity));
+}
+
 }  // namespace
 }  // namespace util
 }  // namespace tervuren
