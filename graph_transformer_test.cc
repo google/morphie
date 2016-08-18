@@ -223,12 +223,23 @@ TaggedAST ConcatLabels(const LabeledGraph& graph,
   return tagged_label;
 }
 
-TaggedAST EdgeCountLabel(const LabeledGraph& graph,
-                         const std::set<EdgeId>& edges) {
+std::vector<TaggedAST> EdgeCountLabel(const LabeledGraph& graph,
+                                      const std::set<EdgeId>& edges) {
   TaggedAST tagged_label;
   *tagged_label.mutable_ast() = ast::value::MakeInt(edges.size());
   tagged_label.set_tag(kEdgeTag);
-  return tagged_label;
+  std::vector<TaggedAST> labels;
+  labels.push_back(tagged_label);
+  return labels;
+}
+
+std::vector<TaggedAST> CopyEdgesLabel(const LabeledGraph& graph,
+                                     const std::set<EdgeId>& edges) {
+  std::vector<TaggedAST> labels;
+  for (auto edge : edges) {
+    labels.push_back(graph.GetEdgeLabel(edge));
+  }
+  return labels;
 }
 
 TaggedAST LowestIdLabel(const LabeledGraph& graph,
@@ -338,7 +349,7 @@ TEST(GraphTransformerTest, IdentityPathQuotient) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config1(graphtype, ConcatLabels,
-                                EdgeCountLabel, false, true);
+                                EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = QuotientGraph(
       input_graph1, partition1, config1);
 
@@ -365,7 +376,7 @@ TEST(GraphTransformerTest, IdentityPathQuotient) {
 
   // Check the quotient of this longer path is the same graph.
   QuotientConfig config2(graphtype, ConcatLabels,
-                                EdgeCountLabel, false, true);
+                                EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph2 = QuotientGraph(
       input_graph2, partition2, config2);
 
@@ -398,7 +409,7 @@ TEST(GraphTransformerTest, IdentityCycleQuotient) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config1(graphtype, ConcatLabels,
-                                EdgeCountLabel, false, true);
+                                EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = QuotientGraph(
       input_graph1, partition1, config1);
 
@@ -426,7 +437,7 @@ TEST(GraphTransformerTest, IdentityCycleQuotient) {
 
   // Check the identity partition preserves the graph under graph quotients.
   QuotientConfig config2(graphtype, ConcatLabels,
-                                EdgeCountLabel, false, true);
+                                EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph2 = QuotientGraph(
       input_graph2, partition2, config2);
 
@@ -460,7 +471,7 @@ TEST(GraphTransformerTest, SimplePathQuotient) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = QuotientGraph(
       input_graph, partition1, config);
 
@@ -500,7 +511,7 @@ TEST(GraphTransformerTest, SimpleCycleQuotient) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = QuotientGraph(
       input_graph, partition1, config);
 
@@ -536,7 +547,7 @@ TEST(GraphTransformerTest, MultiEdgeQuotient) {
   // Check that the quotient of the graph {0 <-> 1} is one node with a two
   // self-edges.
   QuotientConfig config1(input_graph1, LowestIdWeightedGraphLabel,
-                                EdgeCountLabel, true, true);
+                                CopyEdgesLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = QuotientGraph(
       input_graph1, partition1, config1);
 
@@ -563,7 +574,7 @@ TEST(GraphTransformerTest, MultiEdgeQuotient) {
 
   // Check that the quotient has 1 node with 3 self-edges.
   QuotientConfig config2(input_graph2, LowestIdWeightedGraphLabel,
-                                EdgeCountLabel, true, true);
+                                CopyEdgesLabel, true);
   std::unique_ptr<LabeledGraph> graph2 = QuotientGraph(
       input_graph2, partition2, config2);
 
@@ -601,7 +612,7 @@ TEST(GraphTransformerTest, RelabelQuotient) {
   LabeledGraph graphtype;
   SetIntTypes(&graphtype);
   QuotientConfig config(graphtype, LowestIdLabel,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph = QuotientGraph(
       input_graph, partition, config);
   EXPECT_TRUE(graph != nullptr);
@@ -661,7 +672,7 @@ TEST(GraphTransformerTest, SimpleNoSelfEdgeQuotient) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, false);
+                               EdgeCountLabel, false);
   std::unique_ptr<LabeledGraph> graph1 = QuotientGraph(
       input_graph, partition1, config);
 
@@ -685,7 +696,7 @@ TEST(GraphTransformerTest, NoEdgeContraction) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = ContractEdges(
       input_graph, {}, config);
 
@@ -709,7 +720,7 @@ TEST(GraphTransformerTest, SelfLoopEdgeContraction) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = ContractEdges(
       input_graph, {edge}, config);
 
@@ -733,7 +744,7 @@ TEST(GraphTransformerTest, SimplePathEdgeContraction) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = ContractEdges(
       input_graph, {edge}, config);
 
@@ -757,7 +768,7 @@ TEST(GraphTransformerTest, SimpleCycleEdgeContraction) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = ContractEdges(
       input_graph, {edge}, config);
 
@@ -783,7 +794,7 @@ TEST(GraphTransformerTest, LongPathEdgeContraction) {
   LabeledGraph graphtype;
   SetStringNodeIntEdgeType(&graphtype);
   QuotientConfig config(graphtype, ConcatLabels,
-                               EdgeCountLabel, false, true);
+                               EdgeCountLabel, true);
   std::unique_ptr<LabeledGraph> graph1 = ContractEdges(
       input_graph, {edge1, edge2}, config);
 

@@ -31,10 +31,11 @@ namespace graph {
 using NodeLabelFn =
     std::function<TaggedAST(const LabeledGraph&, const std::set<NodeId>&)>;
 
-// A EdgeLabelFn takes as input a set of edges in a graph and generates a new
-// label.
+// A EdgeLabelFn takes as input a set of edges in a graph and generates a
+// vector of new labels.
 using EdgeLabelFn =
-    std::function<TaggedAST(const LabeledGraph&, const std::set<EdgeId>&)>;
+    std::function<std::vector<TaggedAST>(const LabeledGraph&,
+                                         const std::set<EdgeId>&)>;
 
 // A FoldLabelFn takes three nodes in a graph and generates a label for the new
 // edge to be generated. If we have nodes A -> B -> C where B is being folded,
@@ -48,32 +49,25 @@ using FoldLabelFn =
 // - The 'node_label_fn' determines how the blocks are labeled in the output.
 // - The 'edge_label_fn' determines how the edges between the blocks are
 //   labeled. This function is only applied if 'allow_multi_edges' is false.
-// - The flag 'allow_multi_edges' dictates whether the output graph will allow
-//    multi-edges between nodes, or will instead have a single edge, labeled by
-//    'edge_label_fn'.
 // - The flag 'allow_self_edges' dictates if the output graph should contain
 //    self-edges.
 //
 // Requires that:
 // - Both 'node_label_fn' and 'edge_label_fn' respect the types of
 //   'output_graph_type'.
-// - If 'allow_multi_edges' is true, the edge types of 'input_graph' and
-//   'output_graph_type' must be the same.
 struct QuotientConfig {
  public:
   explicit QuotientConfig(const LabeledGraph& output_graph_type,
                           const NodeLabelFn& node_label_fn,
                           const EdgeLabelFn& edge_label_fn,
-                          bool allow_multi_edges, bool allow_self_edges)
+                          bool allow_self_edges)
       : output_graph_type(output_graph_type),
       node_label_fn(node_label_fn),
       edge_label_fn(edge_label_fn),
-      allow_multi_edges(allow_multi_edges),
       allow_self_edges(allow_self_edges) {}
   const LabeledGraph& output_graph_type;
   const NodeLabelFn& node_label_fn;
   const EdgeLabelFn& edge_label_fn;
-  bool allow_multi_edges;
   bool allow_self_edges;
 };  // struct QuotientConfig
 

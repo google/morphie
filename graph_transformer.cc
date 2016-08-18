@@ -112,21 +112,12 @@ void BuildQuotientEdgeMap(const graph::QuotientConfig& config,
     if (!config.allow_self_edges && src_block == tgt_block) {
       continue;
     }
-    // If multi-edges are allowed the FindOrAddEdge method is used to add
-    // multi-edges. Otherwise 'block_edge_members' records the EdgeId's of the
-    // edges from 'src_block' to 'tgt_block'. The edges are added to the graph
-    // at the end.
-    if (config.allow_multi_edges) {
-      transform->output->FindOrAddEdge(src_block, tgt_block,
-                                       graph.GetEdgeLabel(*edge_it));
+    std::pair<NodeId, NodeId> quotient_edge(src_block, tgt_block);
+    auto member_it = block_edge_members->find(quotient_edge);
+    if (member_it == block_edge_members->end()) {
+      block_edge_members->insert({quotient_edge, {*edge_it}});
     } else {
-      std::pair<NodeId, NodeId> quotient_edge(src_block, tgt_block);
-      auto member_it = block_edge_members->find(quotient_edge);
-      if (member_it == block_edge_members->end()) {
-        block_edge_members->insert({quotient_edge, {*edge_it}});
-      } else {
-        member_it->second.insert(*edge_it);
-      }
+      member_it->second.insert(*edge_it);
     }
   }
 }
@@ -141,8 +132,10 @@ void AddQuotientEdges(const QuotientEdgeMap& block_edge_members,
     auto edge_pair = member_it->first;
     NodeId src = edge_pair.first;
     NodeId tgt = edge_pair.second;
-    TaggedAST edge_tag = edge_label_fn(transform->input, member_it->second);
-    transform->output->FindOrAddEdge(src, tgt, edge_tag);
+    auto labels = edge_label_fn(transform->input, member_it->second);
+    for (auto edge_label : labels) {
+      transform->output->FindOrAddEdge(src, tgt, edge_label);
+    }
   }
 }
 
@@ -423,11 +416,7 @@ std::unique_ptr<LabeledGraph> QuotientGraph(
   std::map<std::pair<NodeId, NodeId>, std::set<EdgeId>> block_edge_members;
   BuildQuotientEdgeMap(config, partition,
                        &block_node_ids, &block_edge_members, &transform);
-  // If multi-edges are not allowed, add edges from 'block_edge_members' to the
-  // graph.
-  if (!config.allow_multi_edges) {
-    AddQuotientEdges(block_edge_members, config.edge_label_fn, &transform);
-  }
+  AddQuotientEdges(block_edge_members, config.edge_label_fn, &transform);
   return std::move(transform.output);
 }
 
