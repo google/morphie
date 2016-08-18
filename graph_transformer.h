@@ -37,11 +37,15 @@ using EdgeLabelFn =
     std::function<std::vector<TaggedAST>(const LabeledGraph&,
                                          const std::set<EdgeId>&)>;
 
-// A FoldLabelFn takes three nodes in a graph and generates a label for the new
-// edge to be generated. If we have nodes A -> B -> C where B is being folded,
-// the ordering to used is (B, A, C) as input to the function.
+// A FoldLabelFn takes three nodes in a graph and generates a set of labels for
+// the new edges to be generated.
+// For example:
+// A --> B --> C
+// If B is folded, to get the labels from A -> C, the call is:
+// std::set<TaggedAST> label = fold_label_fn(graph, B, A, C);
 using FoldLabelFn =
-    std::function<TaggedAST(const LabeledGraph&, NodeId, NodeId, NodeId)>;
+    std::function<std::vector<TaggedAST>(const LabeledGraph&,
+                                         NodeId, NodeId, NodeId)>;
 
 // Struct to hold options data for QuotientGraph:
 // - The 'output_graph_type' specifies the types of nodes and edges permitted in

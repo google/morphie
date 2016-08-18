@@ -34,8 +34,7 @@ using QuotientEdgeMap = std::map<std::pair<NodeId, NodeId>, std::set<EdgeId>>;
 // This map keeps track of all of the predecessors and successors for each node
 // that is being folded. The ordering in the pair is predecessors then
 // successors.
-using NodeFoldMap =
-    std::map<NodeId, std::pair<std::set<NodeId>, std::set<NodeId>>>;
+using AdjMap = std::map<NodeId, std::pair<std::set<NodeId>, std::set<NodeId>>>;
 
 // A Transformation consists of a reference to an input graph, an output graph
 // and a map between the nodes of the input and the output graph. A
@@ -245,38 +244,38 @@ std::map<NodeId, int> MakePartitionFromRelation(
 
 // For each node that will be folded, the initial predecessors and successors
 // are just their predecessors and successors in the graph.
-NodeFoldMap CreateNodeFoldMap(const LabeledGraph& graph,
+AdjMap CreateAdjMap(const LabeledGraph& graph,
                               const set<NodeId>& nodes) {
-  NodeFoldMap node_fold_map;
+  AdjMap adj_map;
   for (NodeId node : nodes) {
     std::set<NodeId> predecessors(graph.GetPredecessors(node));
     std::set<NodeId> successors(graph.GetSuccessors(node));
     predecessors.erase(node);
     successors.erase(node);
-    node_fold_map.insert({node, {predecessors, successors}});
+    adj_map.insert({node, {predecessors, successors}});
   }
-  return node_fold_map;
+  return adj_map;
 }
 
 // Replaces 'node' in the output graph of 'transform' with a biparatite graph
 // between its predecessors and successors. For each of its neighbors that is
 // also going to be folded, instead of adding an edge it updates their
-// predecessor/successor set in the 'node_fold_map'.
+// predecessor/successor set in the 'adj_map'.
 void ReplaceNodeWithBipartite(const LabeledGraph& graph,
                               const graph::FoldLabelFn& fold_label_fn,
-                              NodeId node, NodeFoldMap* node_fold_map,
+                              NodeId node, AdjMap* adj_map,
                               Transformation* transform) {
-  auto neighbors = node_fold_map->find(node)->second;
-  auto predecessors = neighbors.first;
-  auto successors = neighbors.second;
+  auto neighbors = adj_map->find(node)->second;
+  std::set<NodeId> predecessors = neighbors.first;
+  std::set<NodeId> successors = neighbors.second;
   for (NodeId predecessor : predecessors) {
-    auto pred_map_it = node_fold_map->find(predecessor);
+    auto pred_map_it = adj_map->find(predecessor);
     // Make an edge if both predecessor and successor are not being folded.
     bool make_edge = true;
     // The set of successors for 'predecessor' in the map. nullptr if
-    // 'predecessor' is not in 'node_fold_map'.
+    // 'predecessor' is not in 'adj_map'.
     std::set<NodeId>* pred_succ_set = nullptr;
-    if (pred_map_it != node_fold_map->end()) {
+    if (pred_map_it != adj_map->end()) {
       pred_succ_set = &(pred_map_it->second.second);
       make_edge = false;
     }
@@ -284,22 +283,25 @@ void ReplaceNodeWithBipartite(const LabeledGraph& graph,
       if (pred_succ_set != nullptr) {
         pred_succ_set->insert(successor);
       }
-      auto succ_map_it = node_fold_map->find(successor);
-      if (succ_map_it != node_fold_map->end()) {
+      auto succ_map_it = adj_map->find(successor);
+      if (succ_map_it != adj_map->end()) {
         succ_map_it->second.first.insert(predecessor);
         make_edge = false;
       }
       if (!make_edge) {
         continue;
       }
-      auto label = fold_label_fn(graph, node, predecessor, successor);
+      std::vector<TaggedAST> labels = fold_label_fn(graph, node,
+                                                    predecessor, successor);
       NodeId new_pred = FindOrRelabelNode(predecessor,
                                           graph.GetNodeLabel(predecessor),
                                           transform);
       NodeId new_succ = FindOrRelabelNode(successor,
                                           graph.GetNodeLabel(successor),
                                           transform);
-      transform->output->FindOrAddEdge(new_pred, new_succ, label);
+      for (auto label : labels) {
+        transform->output->FindOrAddEdge(new_pred, new_succ, label);
+      }
     }
   }
 }
@@ -442,7 +444,7 @@ std::unique_ptr<LabeledGraph> FoldNodes(const LabeledGraph& graph,
   if (transform.output == nullptr) {
     return std::move(transform.output);
   }
-  NodeFoldMap node_fold_map = CreateNodeFoldMap(graph, nodes);
+  AdjMap adj_map = CreateAdjMap(graph, nodes);
 
   NodeIterator end_it = graph.NodeSetEnd();
   for (NodeIterator node_it = graph.NodeSetBegin(); node_it != end_it;
@@ -450,7 +452,7 @@ std::unique_ptr<LabeledGraph> FoldNodes(const LabeledGraph& graph,
     NodeId src = *node_it;
     if (nodes.find(src) != nodes.end()) {
       ReplaceNodeWithBipartite(graph, fold_label_fn, src,
-                               &node_fold_map, &transform);
+                               &adj_map, &transform);
       continue;
     }
     NodeId new_src =

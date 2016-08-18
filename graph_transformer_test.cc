@@ -266,13 +266,37 @@ TaggedAST LowestIdWeightedGraphLabel(const LabeledGraph& graph,
   return tagged_label;
 }
 
-TaggedAST ConstantNodeFoldingLabel(const LabeledGraph& graph,
-                                     NodeId node, NodeId predecessor,
-                                     NodeId successor) {
+std::vector<TaggedAST> ConstantNodeFoldingLabel(const LabeledGraph& graph,
+                                                NodeId node, NodeId predecessor,
+                                                NodeId successor) {
   TaggedAST tagged_label;
   *tagged_label.mutable_ast() = ast::value::MakeInt(1);
   tagged_label.set_tag("Edge-Weight");
-  return tagged_label;
+  std::vector<TaggedAST> labels;
+  labels.push_back(tagged_label);
+  return labels;
+}
+
+std::vector<TaggedAST> EmptyNodeFoldingLabel(const LabeledGraph& graph,
+                                             NodeId node, NodeId predecessor,
+                                             NodeId successor) {
+  std::vector<TaggedAST> labels;
+  return labels;
+}
+
+std::vector<TaggedAST> DoubleIndicatorNodeFoldingLabel(
+    const LabeledGraph& graph, NodeId node,
+    NodeId predecessor, NodeId successor) {
+  TaggedAST tagged_label_1;
+  *tagged_label_1.mutable_ast() = ast::value::MakeInt(1);
+  tagged_label_1.set_tag("Edge-Weight");
+  TaggedAST tagged_label_2;
+  *tagged_label_2.mutable_ast() = ast::value::MakeInt(2);
+  tagged_label_2.set_tag("Edge-Weight");
+  std::vector<TaggedAST> labels;
+  labels.push_back(tagged_label_1);
+  labels.push_back(tagged_label_2);
+  return labels;
 }
 
 // Initialization functions for QuotientGraph tests.
@@ -901,6 +925,46 @@ TEST(GraphTransformerTest, LongPathNodeFold) {
   EXPECT_EQ(4, graph1->NumNodes());
   EXPECT_EQ(3, graph1->NumEdges());
   EXPECT_TRUE(test::IsPath(*graph1));
+}
+
+// Folds 1 in the graph { 0 -> 1 -> 2}, with a label function that outputs an
+// empty set of labels. The output should be two nodes with no edges.
+TEST(GraphTransformerTest, EmptyLabelNodeFold) {
+  test::WeightedGraph path;
+  test::GetPathGraph(3, &path);
+  ASSERT_EQ(3, path.NumNodes());
+  ASSERT_EQ(2, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+  auto node_it = input_graph.NodeSetBegin();
+  node_it++;
+  auto node = *node_it;
+
+  std::unique_ptr<LabeledGraph> graph1 = FoldNodes(
+      input_graph, EmptyNodeFoldingLabel, {node});
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(2, graph1->NumNodes());
+  EXPECT_EQ(0, graph1->NumEdges());
+}
+
+// Folds 1 in the graph { 0 -> 1 -> 2}, with a label function that outputs a
+// set of two labels. The output should be two nodes with two edges.
+TEST(GraphTransformerTest, DoubleIndicatorLabelNodeFold) {
+  test::WeightedGraph path;
+  test::GetPathGraph(3, &path);
+  ASSERT_EQ(3, path.NumNodes());
+  ASSERT_EQ(2, path.NumEdges());
+  const LabeledGraph& input_graph = *path.GetGraph();
+  auto node_it = input_graph.NodeSetBegin();
+  node_it++;
+  auto node = *node_it;
+
+  std::unique_ptr<LabeledGraph> graph1 = FoldNodes(
+      input_graph, DoubleIndicatorNodeFoldingLabel, {node});
+
+  EXPECT_TRUE(graph1 != nullptr);
+  EXPECT_EQ(2, graph1->NumNodes());
+  EXPECT_EQ(2, graph1->NumEdges());
 }
 
 }  // namespace
