@@ -12,7 +12,7 @@ std::unique_ptr<LabeledGraph> Morphism::TakeOutput() {
   return std::move(output_graph_);
 }
 
-void Morphism::CloneInputType() {
+void Morphism::CopyInputType() {
   output_graph_.reset(new LabeledGraph());
   util::Status status = output_graph_->Initialize(
       input_graph_.GetNodeTypes(), input_graph_.GetUniqueNodeTags(),
@@ -21,6 +21,11 @@ void Morphism::CloneInputType() {
   if (!status.ok()) {
     output_graph_.reset(nullptr);
   }
+}
+
+NodeId Morphism::FindOrCopyNode(NodeId input_node) {
+  TaggedAST label = input_graph_.GetNodeLabel(input_node);
+  return FindOrMapNode(input_node, label);
 }
 
 NodeId Morphism::FindOrMapNode(NodeId input_node, TaggedAST label) {
@@ -37,6 +42,18 @@ NodeId Morphism::FindOrMapNode(NodeId input_node, TaggedAST label) {
     preimage_it->second.insert(input_node);
   }
   return output_node;
+}
+
+EdgeId Morphism::FindOrCopyEdge(EdgeId input_edge) {
+  TaggedAST label = input_graph_.GetEdgeLabel(input_edge);
+  return FindOrMapEdge(input_edge, label);
+}
+
+EdgeId Morphism::FindOrMapEdge(EdgeId input_edge, TaggedAST label) {
+  NodeId src = FindOrCopyNode(input_graph_.Source(input_edge));
+  NodeId tgt = FindOrCopyNode(input_graph_.Target(input_edge));
+  EdgeId output_edge = output_graph_->FindOrAddEdge(src, tgt, label);
+  return output_edge;
 }
 
 util::Status Morphism::ComposeWith(Morphism* morphism) {

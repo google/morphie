@@ -47,27 +47,27 @@ TEST(GraphTransformerTest, DeleteNodeFromSingleEdge) {
   NodeId second_node = *node_it;
   // If no nodes are deleted, the graph should not change.
   std::unique_ptr<Morphism> morphism1 = DeleteNodes(input_graph, {});
-  const LabeledGraph* graph1 = morphism1->MutableOutput();
-  EXPECT_TRUE(graph1 != nullptr);
-  EXPECT_EQ(2, graph1->NumNodes());
-  EXPECT_EQ(1, graph1->NumEdges());
+  EXPECT_TRUE(morphism1->HasOutputGraph());
+  const LabeledGraph& graph1 = morphism1->Output();
+  EXPECT_EQ(2, graph1.NumNodes());
+  EXPECT_EQ(1, graph1.NumEdges());
   // If the first node is deleted, the graph will have one node and no edges.
   std::unique_ptr<Morphism> morphism2 = DeleteNodes(input_graph, {first_node});
-  const LabeledGraph* graph2 = morphism2->MutableOutput();
-  EXPECT_TRUE(graph2 != nullptr);
-  EXPECT_EQ(1, graph2->NumNodes());
-  EXPECT_EQ(0, graph2->NumEdges());
+  EXPECT_TRUE(morphism2->HasOutputGraph());
+  const LabeledGraph& graph2 = morphism2->Output();
+  EXPECT_EQ(1, graph2.NumNodes());
+  EXPECT_EQ(0, graph2.NumEdges());
   // If the second node is deleted, the graph will have one node and no edges.
   std::unique_ptr<Morphism> morphism3 =
       DeleteNodes(input_graph, {second_node});
-  const LabeledGraph* graph3 = morphism3->MutableOutput();
-  EXPECT_TRUE(graph3 != nullptr);
-  EXPECT_EQ(1, graph3->NumNodes());
-  EXPECT_EQ(0, graph3->NumEdges());
+  EXPECT_TRUE(morphism3->HasOutputGraph());
+  const LabeledGraph& graph3 = morphism3->Output();
+  EXPECT_EQ(1, graph3.NumNodes());
+  EXPECT_EQ(0, graph3.NumEdges());
   // The nodes in the graphs obtained by deleting the first node and deleting
   // the second node should have different labels.
-  TaggedAST label2 = graph2->GetNodeLabel(*graph2->NodeSetBegin());
-  TaggedAST label3 = graph3->GetNodeLabel(*graph3->NodeSetBegin());
+  TaggedAST label2 = graph2.GetNodeLabel(*graph2.NodeSetBegin());
+  TaggedAST label3 = graph3.GetNodeLabel(*graph3.NodeSetBegin());
   EXPECT_EQ(label2.tag(), label3.tag());
   EXPECT_TRUE(label2.has_ast());
   EXPECT_TRUE(label3.has_ast());
@@ -75,10 +75,10 @@ TEST(GraphTransformerTest, DeleteNodeFromSingleEdge) {
   // Deleting both nodes results in the empty graph.
   std::unique_ptr<Morphism> morphism4 =
       DeleteNodes(input_graph, {first_node, second_node});
-  const LabeledGraph* graph4 = morphism4->MutableOutput();
-  EXPECT_TRUE(graph4 != nullptr);
-  EXPECT_EQ(0, graph4->NumNodes());
-  EXPECT_EQ(0, graph4->NumEdges());
+  EXPECT_TRUE(morphism4->HasOutputGraph());
+  const LabeledGraph& graph4 = morphism4->Output();
+  EXPECT_EQ(0, graph4.NumNodes());
+  EXPECT_EQ(0, graph4.NumEdges());
 }
 
 TEST(GraphTransformerTest, DeleteNodeFromCycle) {
@@ -125,21 +125,47 @@ TEST(GraphTransformerTest, DeleteSingleEdge) {
   ASSERT_EQ(1, one_edge.NumEdges());
   const LabeledGraph& input_graph = *one_edge.GetGraph();
   // If no edges are deleted, the graph should not change.
-  std::unique_ptr<LabeledGraph> graph1 = DeleteEdges(input_graph, {});
-  EXPECT_TRUE(graph1 != nullptr);
-  EXPECT_EQ(2, graph1->NumNodes());
-  EXPECT_EQ(1, graph1->NumEdges());
+  std::unique_ptr<Morphism> morphism1 = DeleteEdgesNotNodes(input_graph, {});
+  EXPECT_TRUE(morphism1->HasOutputGraph());
+  const LabeledGraph& graph1 = morphism1->Output();
+  EXPECT_EQ(2, graph1.NumNodes());
+  EXPECT_EQ(1, graph1.NumEdges());
   // If the edge (0 -> 1) is deleted, there will be two nodes and zero edges
   // left in the graph.
   EdgeId edge = *input_graph.EdgeSetBegin();
-  std::unique_ptr<LabeledGraph> graph2 =
-      DeleteEdges(input_graph, {edge});
-  EXPECT_TRUE(graph2 != nullptr);
-  EXPECT_EQ(2, graph2->NumNodes());
-  EXPECT_EQ(0, graph2->NumEdges());
+  std::unique_ptr<Morphism> morphism2 =
+      DeleteEdgesNotNodes(input_graph, {edge});
+  EXPECT_TRUE(morphism2->HasOutputGraph());
+  const LabeledGraph& graph2 = morphism2->Output();
+  EXPECT_EQ(2, graph2.NumNodes());
+  EXPECT_EQ(0, graph2.NumEdges());
 }
 
-TEST(GraphTransformerTest, DeleteEdgeFromCycle) {
+TEST(GraphTransformerTest, DeleteSingleEdgeAndNodes) {
+  // Create the graph { 0 -> 1 } and test deletion of edges and disconnected
+  // nodes.
+  test::WeightedGraph one_edge;
+  test::GetPathGraph(2, &one_edge);
+  ASSERT_EQ(2, one_edge.NumNodes());
+  ASSERT_EQ(1, one_edge.NumEdges());
+  const LabeledGraph& input_graph = *one_edge.GetGraph();
+  // If no edges are deleted, the graph should not change.
+  std::unique_ptr<Morphism> morphism1 = DeleteEdgesAndNodes(input_graph, {});
+  EXPECT_TRUE(morphism1->HasOutputGraph());
+  const LabeledGraph& graph1 = morphism1->Output();
+  EXPECT_EQ(2, graph1.NumNodes());
+  EXPECT_EQ(1, graph1.NumEdges());
+  // If the edge (0 -> 1) is deleted, there will be zero nodes and edges left.
+  EdgeId edge = *input_graph.EdgeSetBegin();
+  std::unique_ptr<Morphism> morphism2 =
+      DeleteEdgesAndNodes(input_graph, {edge});
+  EXPECT_TRUE(morphism2->HasOutputGraph());
+  const LabeledGraph& graph2 = morphism2->Output();
+  EXPECT_EQ(0, graph2.NumNodes());
+  EXPECT_EQ(0, graph2.NumEdges());
+}
+
+TEST(GraphTransformerTest, DeleteOnlyEdgeFromCycle) {
   // Create the graph { 0 -> 1, 1 -> 2, 2 -> 0 }.
   test::WeightedGraph triangle;
   test::GetCycleGraph(3, &triangle);
@@ -149,11 +175,31 @@ TEST(GraphTransformerTest, DeleteEdgeFromCycle) {
   EdgeIterator edge_it = input_graph.EdgeSetBegin();
   EdgeId edge = *(++edge_it);
   // Check that deleting '1 -> 2' results in the graph { 0 -> 1, 2 -> 0}.
-  std::unique_ptr<LabeledGraph> graph1 =
-      DeleteEdges(input_graph, {edge});
+  std::unique_ptr<Morphism> morphism1 =
+      DeleteEdgesNotNodes(input_graph, {edge});
+  const LabeledGraph& graph1 = morphism1->Output();
   // Check that the graph has two nodes and one edge.
-  EXPECT_EQ(3, graph1->NumNodes());
-  EXPECT_EQ(2, graph1->NumEdges());
+  EXPECT_EQ(3, graph1.NumNodes());
+  EXPECT_EQ(2, graph1.NumEdges());
+}
+
+TEST(GraphTransformerTest, DeleteEdgeAndNodesFromCycle) {
+  // Create the graph { 0 -> 1, 1 -> 2, 2 -> 3, 3 -> 0 }.
+  test::WeightedGraph square;
+  test::GetCycleGraph(4, &square);
+  ASSERT_EQ(4, square.NumNodes());
+  ASSERT_EQ(4, square.NumEdges());
+  const LabeledGraph& input_graph = *square.GetGraph();
+  EdgeIterator edge_it = input_graph.EdgeSetBegin();
+  EdgeId edge12 = *(++edge_it);
+  EdgeId edge23 = *(++edge_it);
+  // Deleting '1 -> 2' and '2 -> 3' should result in the graph { 3 -> 0 -> 1 }.
+  std::unique_ptr<Morphism> morphism1 =
+      DeleteEdgesAndNodes(input_graph, {edge12, edge23});
+  const LabeledGraph& graph1 = morphism1->Output();
+  // Check that the graph has two nodes and one edge.
+  EXPECT_EQ(3, graph1.NumNodes());
+  EXPECT_EQ(2, graph1.NumEdges());
 }
 
 // Label functions for QuotientGraph. All of these functions are required to be

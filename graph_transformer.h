@@ -89,13 +89,24 @@ std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
                                       const set<NodeId>& nodes);
 
 // If G = (V, E) is a graph and F is a subset of edges of E, the result of
-// deleting F from G is the graph with nodes V and edges H = (E - F). The
-// resulting graph has the same set of nodes as the original graph though some
-// of these nodes may have no incoming or outgoing edges.
+// deleting edges but not nodes in F from G is the graph with nodes V and edges
+// H = (E - F). The resulting graph has the same set of nodes as the original
+// graph though some of these nodes may have no incoming or outgoing edges.
 //
 // Returns a labeled graph obtained by deleting 'edges' from the input graph.
-std::unique_ptr<LabeledGraph> DeleteEdges(const LabeledGraph& graph,
-                                          const set<EdgeId>& edges);
+std::unique_ptr<Morphism> DeleteEdgesNotNodes(const LabeledGraph& graph,
+                                              const set<EdgeId>& edges);
+
+// If G = (V, E) is a graph and F is a subset of edges of E, the result of
+// deleting edges and nodes in F from G is the graph with edges H = (E - F) and
+// nodes with some edge in H. A node with no incident edges will not appear in
+// the output graph. Even nodes that had no incident edges in the original graph
+// are removed.
+//
+// Returns a labeled graph obtained by deleting 'edges' from the input graph and
+// nodes with no incident edges in the resulting graph.
+std::unique_ptr<Morphism> DeleteEdgesAndNodes(const LabeledGraph& graph,
+                                              const set<EdgeId>& edges);
 
 // The Quotient graph Q of a graph G is a graph whose nodes are blocks of a
 // partition of the vertices of G and where block B is adjacent to block C if

@@ -34,8 +34,8 @@ using QuotientEdgeMap = std::map<std::pair<NodeId, NodeId>, std::set<EdgeId>>;
 // This map keeps track of all of the predecessors and successors for each node
 // that is being folded. The ordering in the pair is predecessors then
 // successors.
-using NodeFoldMap = std::map<NodeId,
-                               std::pair<std::set<NodeId>, std::set<NodeId>>>;
+using NodeFoldMap =
+    std::map<NodeId, std::pair<std::set<NodeId>, std::set<NodeId>>>;
 
 // A Transformation consists of a reference to an input graph, an output graph
 // and a map between the nodes of the input and the output graph. A
@@ -326,7 +326,7 @@ namespace graph {
 std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
                                       const set<NodeId>& nodes) {
   std::unique_ptr<Morphism> morphism(new Morphism(&graph));
-  morphism->CloneInputType();
+  morphism->CopyInputType();
   if (!morphism->HasOutputGraph()) {
     return morphism;
   }
@@ -338,8 +338,7 @@ std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
     if (nodes.find(src) != nodes.end()) {
       continue;
     }
-    NodeId new_src =
-        morphism->FindOrMapNode(src, graph.GetNodeLabel(src));
+    morphism->FindOrCopyNode(src);
     OutEdgeIterator out_edge_end = graph.OutEdgeEnd(src);
     for (OutEdgeIterator edge_it = graph.OutEdgeBegin(src);
          edge_it != out_edge_end; ++edge_it) {
@@ -348,41 +347,62 @@ std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
       if (nodes.find(tgt) != nodes.end()) {
         continue;
       }
-      NodeId new_tgt = morphism->FindOrMapNode(tgt, graph.GetNodeLabel(tgt));
-      morphism->MutableOutput()->FindOrAddEdge(new_src, new_tgt,
-                                               graph.GetEdgeLabel(*edge_it));
+      morphism->FindOrCopyEdge(*edge_it);
     }
   }
   return morphism;
 }
 
-// The deletion function iterates over edges in the input graph and copies the
+// The deletion function iterates over nodes in the input graph and copies the
 // source and target node of each edge to the new graph. An edge is copied to
 // the new graph if the edge is not in the set of edges to delete.
-std::unique_ptr<LabeledGraph> DeleteEdges(const LabeledGraph& graph,
-                                          const set<EdgeId>& edges) {
-  Transformation transform(graph);
-  transform.output = CloneGraphType(graph);
-  if (transform.output == nullptr) {
-    return std::move(transform.output);
+std::unique_ptr<Morphism> DeleteEdgesNotNodes(const LabeledGraph& graph,
+                                              const set<EdgeId>& edges) {
+  std::unique_ptr<Morphism> morphism(new Morphism(&graph));
+  morphism->CopyInputType();
+  if (!morphism->HasOutputGraph()) {
+    return morphism;
+  }
+  NodeIterator end_it = graph.NodeSetEnd();
+  for (NodeIterator node_it = graph.NodeSetBegin(); node_it != end_it;
+       ++node_it) {
+    NodeId src = *node_it;
+    morphism->FindOrCopyNode(src);
+    OutEdgeIterator out_edge_end = graph.OutEdgeEnd(src);
+    for (OutEdgeIterator edge_it = graph.OutEdgeBegin(src);
+         edge_it != out_edge_end; ++edge_it) {
+      NodeId tgt = graph.Target(*edge_it);
+      morphism->FindOrCopyNode(tgt);
+      // Skip the edge if it is to be deleted.
+      if (edges.find(*edge_it) != edges.end()) {
+        continue;
+      }
+      morphism->FindOrCopyEdge(*edge_it);
+    }
+  }
+  return morphism;
+}
+
+// The deletion function iterates over edges (not nodes) in the input graph and
+// copies edges that are not to be deleted to the output graph. A node that has
+// no incident edges in the original graph or whose incident edges ae all in the
+// deletion set will not be added to the new graph.
+std::unique_ptr<Morphism> DeleteEdgesAndNodes(const LabeledGraph& graph,
+                                              const set<EdgeId>& edges) {
+  std::unique_ptr<Morphism> morphism(new Morphism(&graph));
+  morphism->CopyInputType();
+  if (!morphism->HasOutputGraph()) {
+    return morphism;
   }
   EdgeIterator end_it = graph.EdgeSetEnd();
   for (EdgeIterator edge_it = graph.EdgeSetBegin(); edge_it != end_it;
        ++edge_it) {
-    EdgeId old_edge = *edge_it;
-    NodeId old_src = graph.Source(*edge_it);
-    NodeId old_tgt = graph.Target(*edge_it);
-    NodeId new_src =
-        FindOrRelabelNode(old_src, graph.GetNodeLabel(old_src), &transform);
-    NodeId new_tgt =
-        FindOrRelabelNode(old_tgt, graph.GetNodeLabel(old_tgt), &transform);
-    if (edges.find(old_edge) != edges.end()) {
+    if (edges.find(*edge_it) != edges.end()) {
       continue;
     }
-    transform.output->FindOrAddEdge(new_src, new_tgt,
-                                    graph.GetEdgeLabel(*edge_it));
+    morphism->FindOrCopyEdge(*edge_it);
   }
-  return std::move(transform.output);
+  return morphism;
 }
 
 std::unique_ptr<LabeledGraph> QuotientGraph(
@@ -416,8 +436,8 @@ std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
                                             const QuotientConfig& config) {
   std::map<NodeId, std::set<NodeId>> adj_map = MakeAdjacencyMap(graph, edges);
   std::map<NodeId, int> partition = MakePartitionFromRelation(graph, adj_map);
-  auto graph_with_edges_removed = DeleteEdges(graph, edges);
-  return QuotientGraph(*graph_with_edges_removed, partition, config);
+  std::unique_ptr<Morphism> morphism = DeleteEdgesNotNodes(graph, edges);
+  return QuotientGraph(morphism->Output(), partition, config);
 }
 
 // The FoldNodes function iterates over the nodeset of 'graph' and does one

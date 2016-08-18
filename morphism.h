@@ -68,11 +68,18 @@ class Morphism {
   // Creates a new output graph that has the same node and edge types as the
   // input graph. An output graph that already exists will no longer be
   // accessible.
-  void CloneInputType();
+  void CopyInputType();
 
+  // Returns the id of an output node with the same label as input_node. Adds a
+  // node to the output graph if no such node exists.
+  NodeId FindOrCopyNode(NodeId input_node);
   // Returns the id of the output node that the input node maps to in the
   // morphism. Adds a new node to the output graph if no such node exists.
   NodeId FindOrMapNode(NodeId input_node, TaggedAST label);
+
+  // These functions are similar to the functions for adding nodes above.
+  EdgeId FindOrCopyEdge(EdgeId input_edge);
+  EdgeId FindOrMapEdge(EdgeId input_edge, TaggedAST label);
 
   // Composes this morphism with the input and takes ownership of the output
   // graph in the input morphism. The output graph that existed before

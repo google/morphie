@@ -18,11 +18,11 @@ TEST(MorphismTest, ConstructorDoesNotCreateOutputGraph) {
   EXPECT_FALSE(morphism.HasOutputGraph());
 }
 
-TEST(MorphismTest, CloneGraphCreatesEmptyOutputGraph) {
+TEST(MorphismTest, CopyGraphCreatesEmptyOutputGraph) {
   test::WeightedGraph weighted_graph;
   test::GetPathGraph(2, &weighted_graph);
   Morphism morphism(weighted_graph.GetGraph());
-  morphism.CloneInputType();
+  morphism.CopyInputType();
   EXPECT_TRUE(morphism.HasOutputGraph());
   EXPECT_EQ(0, morphism.Output().NumNodes());
 }
@@ -31,7 +31,7 @@ TEST(MorphismTest, OutputGraphProperties) {
   test::WeightedGraph weighted_graph;
   test::GetPathGraph(2, &weighted_graph);
   Morphism morphism(weighted_graph.GetGraph());
-  morphism.CloneInputType();
+  morphism.CopyInputType();
   // Add a node to the output graph.
   TaggedAST label;
   label.set_tag(kNodeWeightTag);
@@ -44,7 +44,7 @@ TEST(MorphismTest, TakeOutputProperties) {
   test::WeightedGraph weighted_graph;
   test::GetPathGraph(2, &weighted_graph);
   Morphism morphism(weighted_graph.GetGraph());
-  morphism.CloneInputType();
+  morphism.CopyInputType();
   ASSERT_TRUE(morphism.HasOutputGraph());
   auto output_graph = morphism.TakeOutput();
   EXPECT_FALSE(morphism.HasOutputGraph());
