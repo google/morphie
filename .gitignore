@@ -2,3 +2,4 @@ BUILD
 build/*
 google/*
 README.google
+google3/third_party/logle/BUILD
