@@ -43,7 +43,9 @@ const char kInvalidAnalyzerErr[] =
     "Invalid analysis. The analysis must be one of 'curio', 'mail', or "
     "'plaso'.";
 const char kOpenFileErr[] = "Error opening file: ";
-
+const char kInvalidPlasoOption[] =
+    "Unsupported input parameter. Plaso analyzer supports only json_file and "
+    "json_stream_file.";
 
 // Returns a pair consisting of a status object and a CSV parser for 'filename'.
 // The return value is:
@@ -147,24 +149,29 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
                               ? options.plaso_options().show_all_sources()
                               : false;
   PlasoAnalyzer plaso_analyzer(show_all_sources);
+  std::ifstream* input_stream = nullptr;
   switch (options.input_file_case()) {
     case AnalysisOptions::InputFileCase::kJsonFile:{
-      std::ifstream file(options.json_file());
-      CHECK(file.is_open(),
-            util::StrCat(kOpenFileErr, options.json_file()));
-      status = plaso_analyzer.Initialize(new tervuren::FullJson(&file));
+      input_stream = new std::ifstream(options.json_file());
+      if (!input_stream->is_open()){
+        return util::Status(tervuren::Code::EXTERNAL,
+                            util::StrCat(kOpenFileErr, options.json_file()));
+      }
+      status = plaso_analyzer.Initialize(new tervuren::FullJson(input_stream));
       break;
     }
     case AnalysisOptions::InputFileCase::kJsonStreamFile:{
-      std::ifstream file(options.json_stream_file());
-      CHECK(file.is_open(),
-            util::StrCat(kOpenFileErr, options.json_stream_file()));
-      status = plaso_analyzer.Initialize(new tervuren::StreamJson(&file));
+      input_stream = new std::ifstream(options.json_stream_file());
+      if (!input_stream->is_open()){
+        return util::Status(tervuren::Code::EXTERNAL,
+                            util::StrCat(kOpenFileErr,
+                            options.json_stream_file()));
+      }
+      status = plaso_analyzer.Initialize(new tervuren::StreamJson(input_stream));
       break;
     }
     default:{
-      FAIL("Unsupported input parameter. Plaso analyzer supports only "
-           "json_file and json_stream_file.");
+      return util::Status(tervuren::Code::EXTERNAL, kInvalidPlasoOption);
       break;
     }
   }
@@ -172,6 +179,7 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
     return status;
   }
   plaso_analyzer.BuildPlasoGraph();
+  input_stream->close();
   if (options.has_output_dot_file()) {
     *output_graph = plaso_analyzer.PlasoGraphDot();
   } else if (options.has_output_pbtxt_file()) {
