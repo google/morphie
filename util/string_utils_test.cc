@@ -22,6 +22,7 @@
 #include "gtest.h"
 
 namespace tervuren {
+namespace util {
 namespace {
 
 TEST(VectorSplitTest, Correctness) {

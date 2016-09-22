@@ -18,8 +18,6 @@
 #ifndef LOGLE_PLASO_EVENT_H_
 #define LOGLE_PLASO_EVENT_H_
 
-#include <vector>
-
 #include "ast.pb.h"
 #include "base/string.h"
 #include "json/json.h"

@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 BUILD
 build/*
 google/*
 README.google
 google3/third_party/logle/BUILD
+=======
+google/
+BUILD
+logle.cc
+>>>>>>> 105867e... ported includes

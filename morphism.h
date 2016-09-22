@@ -33,13 +33,14 @@
 // they compose, so one can apply a series of transformations to an input graph
 // and only obtain the relationship between the first and large graph generated
 // by these transformations.
-#ifndef THIRD_PARTY_LOGLE_MORPHISM_H_
-#define THIRD_PARTY_LOGLE_MORPHISM_H_
+#ifndef LOGLE_MORPHISM_H_
+#define LOGLE_MORPHISM_H_
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include "labeled_graph.h"
-#include "third_party/logle/ast.pb.h"
+#include "ast.pb.h"
 
 namespace tervuren {
 namespace graph {
@@ -95,4 +96,4 @@ class Morphism {
 
 }  // namespace graph
 }  // namespace tervuren
-#endif  // THIRD_PARTY_LOGLE_MORPHISM_H_
+#endif  // LOGLE_MORPHISM_H_

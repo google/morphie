@@ -33,6 +33,7 @@ const char kNullAccessGraphErr[] = "The access graph is null.";
 }  // namespace
 
 namespace tervuren {
+// This function performs a series of checks, described by the error message
 // generated if the check fails.
 util::Status AccessAnalyzer::Initialize(
     std::unique_ptr<util::CSVParser> parser) {

@@ -15,15 +15,15 @@
 // This file contains utilities for exporting a Logle LabeledGraph to a graph
 // representation that can be used by an internal visualizer. The visualizer is
 // currently experimental but once it is mature, will also be released.
-#ifndef THIRD_PARTY_LOGLE_GRAPH_EXPORTER_H_
-#define THIRD_PARTY_LOGLE_GRAPH_EXPORTER_H_
+#ifndef LOGLE_GRAPH_EXPORTER_H_
+#define LOGLE_GRAPH_EXPORTER_H_
 
 #include <string>
 
 #include "base/string.h"
 #include "labeled_graph.h"
-#include "third_party/logle/ast.pb.h"
-#include "third_party/logle/graph_explorer.pb.h"
+#include "ast.pb.h"
+#include "graph_explorer.pb.h"
 
 namespace tervuren {
 
@@ -89,4 +89,4 @@ class GraphExporter {
 
 }  // namespace viz
 }  // namespace tervuren
-#endif  // THIRD_PARTY_LOGLE_GRAPH_EXPORTER_H_
+#endif  // LOGLE_GRAPH_EXPORTER_H_

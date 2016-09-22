@@ -13,8 +13,8 @@
 // the License.
 
 // This file contains utilities for analyzing graphs.
-#ifndef THIRD_PARTY_LOGLE_GRAPH_ANALYZER_H_
-#define THIRD_PARTY_LOGLE_GRAPH_ANALYZER_H_
+#ifndef LOGLE_GRAPH_ANALYZER_H_
+#define LOGLE_GRAPH_ANALYZER_H_
 
 #include <map>
 #include "labeled_graph.h"
@@ -48,4 +48,4 @@ std::map<NodeId, int> RefinePartition(const LabeledGraph& graph,
 }  // namespace tervuren
 
 
-#endif  // THIRD_PARTY_LOGLE_GRAPH_ANALYZER_H_
+#endif  // LOGLE_GRAPH_ANALYZER_H_

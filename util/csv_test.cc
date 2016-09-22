@@ -18,6 +18,7 @@
 #include "gtest.h"
 
 namespace tervuren {
+namespace util {
 namespace {
 
 // Exercise the API of the Record class.

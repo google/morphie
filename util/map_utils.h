@@ -13,8 +13,8 @@
 // the License.
 
 // Utilities for implementing simple mathematical operations on maps.
-#ifndef THIRD_PARTY_LOGLE_UTIL_MAP_UTILS_H_
-#define THIRD_PARTY_LOGLE_UTIL_MAP_UTILS_H_
+#ifndef LOGLE_UTIL_MAP_UTILS_H_
+#define LOGLE_UTIL_MAP_UTILS_H_
 
 #include <unordered_map>
 #include <unordered_set>
@@ -68,4 +68,4 @@ std::unordered_map<ValType, std::unordered_set<KeyType>> Preimage(
 }  // namespace util
 }  // namespace tervuren
 
-#endif  // THIRD_PARTY_LOGLE_UTIL_MAP_UTILS_H_
+#endif  // LOGLE_UTIL_MAP_UTILS_H_

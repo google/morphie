@@ -177,6 +177,13 @@ target_link_libraries(labeled_graph_build_test
 	labeled_graph
 	type)
 
+add_library(morphism STATIC morphism.h morphism.cc)
+target_link_libraries(morphism
+ 	ast_proto
+ 	labeled_graph
+	util_map_utils
+	util_status)
+
 add_library(dot_printer STATIC dot_printer.h dot_printer.cc)
 target_link_libraries(dot_printer
  	ast
@@ -193,10 +200,27 @@ target_link_libraries(dot_printer_build_test
 	labeled_graph
 	type)
 
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS graph_explorer.proto)
+add_library(graph_explorer_proto STATIC ${PROTO_SRCS} ${PROTO_HDRS})
+target_include_directories(graph_explorer_proto PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+
+add_library(graph_exporter STATIC graph_exporter.h graph_exporter.cc)
+target_link_libraries(graph_exporter
+ 	ast
+ 	ast_proto
+ 	graph_explorer_proto
+	labeled_graph
+	util_string_utils)
+
 add_library(graph_transformer STATIC graph_transformer.h graph_transformer.cc)
 target_link_libraries(graph_transformer
  	labeled_graph
-	util_status)
+ 	morphism
+ 	type
+	util_logging
+	util_status
+	util_string_utils
+	value)
 
 add_executable(graph_transformer_build_test "build_test/graph_transformer_build_test.cc")
 target_link_libraries(graph_transformer_build_test
@@ -314,6 +338,8 @@ target_link_libraries(plaso_event_graph
  	ast
  	ast_proto
 	dot_printer
+ 	graph_explorer_proto
+        graph_exporter
  	labeled_graph
  	plaso_defs
  	plaso_event

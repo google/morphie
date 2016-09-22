@@ -48,7 +48,7 @@ const char kUserTag[] = "User";
 // statements here are the main input validation checks.
 string GetField(const string& field_name,
                 const unordered_map<string, int>& field_index,
-                const vector<string>& fields) {
+                const std::vector<string>& fields) {
   const auto field_it = field_index.find(field_name);
   tervuren::CHECK(
       field_it != field_index.end(),

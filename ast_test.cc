@@ -222,10 +222,6 @@ TEST_F(ASTTest, PrintTuple) {
   EXPECT_EQ("0\nfoo", ToString(ast_, config));
 }
 
-<<<<<<< HEAD
-}  // namespace
-}  // namespace ast
-=======
 TEST_F(ASTTest, PrintSet) {
   ast_.mutable_c_ast()->set_op(Operator::SET);
   ast_.set_is_nullable(true);

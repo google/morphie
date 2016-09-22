@@ -19,6 +19,7 @@
 
 #include "base/string.h"
 #include "gtest.h"
+#include "plaso_defs.h"
 #include "plaso_event.pb.h"
 #include "type.h"
 #include "type_checker.h"
@@ -29,7 +30,7 @@ namespace {
 
 static const char kJSONstring[] =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "File Hosted Date",
   "data_type" : "windows:registry:key_value",
   "message" : "IDX Version: 100 Host IP address: [127.0.0.1]",
@@ -58,16 +59,16 @@ TEST(PlasoEventDeathTest, RequiresNonEmptyJSONInput) {
 TEST(PlasoEventDeathTest, JSONHasRequiredFields) {
   PlasoEvent e;
   reader.parse(kJSONstring, json_doc);
-  DeleteField("datetime", &json_doc);
+  DeleteField(plaso::kTimestampName, &json_doc);
   EXPECT_DEATH({ e = plaso::ParseJSON(json_doc); }, "No field named.*");
   reader.parse(kJSONstring, json_doc);
-  DeleteField("timestamp_desc", &json_doc);
+  DeleteField(plaso::kDescriptionName, &json_doc);
   EXPECT_DEATH({ e = plaso::ParseJSON(json_doc); }, "No field named.*");
   reader.parse(kJSONstring, json_doc);
-  DeleteField("data_type", &json_doc);
+  DeleteField(plaso::kDataTypeName, &json_doc);
   EXPECT_DEATH({ e = plaso::ParseJSON(json_doc); }, "No field named.*");
   reader.parse(kJSONstring, json_doc);
-  DeleteField("display_name", &json_doc);
+  DeleteField(plaso::kSourceFileName, &json_doc);
   EXPECT_DEATH({ e = plaso::ParseJSON(json_doc); }, "No field named.*");
 }
 
@@ -119,25 +120,14 @@ TEST_F(PlasoEventTest, ParsesFilenames) {
 TEST_F(PlasoEventTest, ParseJSONExtractsTimestamp) {
   PlasoEvent e;
   reader.parse(kJSONstring, json_doc);
-  // The timestamp field should not be set for invalid timestamps.
-  json_doc["datetime"] = "invalid timestamp";
   e = plaso::ParseJSON(json_doc);
-  EXPECT_FALSE(e.has_timestamp());
-  // Test RFC3339 representations of positive and negative timestamps.
-  string time_str = "2012-04-03T00:25:21+00:00";
-  json_doc["datetime"] = time_str.c_str();
-  e = plaso::ParseJSON(json_doc);
-  EXPECT_EQ(time_str, util::UnixMicrosToRFC3339(e.timestamp()));
-  time_str = "1969-12-31T23:59:59+00:00";
-  json_doc["datetime"] = time_str.c_str();
-  e = plaso::ParseJSON(json_doc);
-  EXPECT_EQ(time_str, util::UnixMicrosToRFC3339(e.timestamp()));
+  EXPECT_EQ(1333412795000000, e.timestamp());
 }
 
 TEST_F(PlasoEventTest, ChromeFileDownloadProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome History",
   "data_type" : "chrome:history:file_downloaded",
   "message" : "This is an inaccurate message",
@@ -158,7 +148,7 @@ R"({
 TEST_F(PlasoEventTest, ChromePageVisitedProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome History",
   "data_type" : "chrome:history:page_visited",
   "message" : "This is an inaccurate message",
@@ -182,7 +172,7 @@ R"({
 TEST_F(PlasoEventTest, ChromeCacheEntryProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome Cache",
   "data_type" : "chrome:cache:entry",
   "message" : "This is an inaccurate message",
@@ -199,7 +189,7 @@ R"({
 TEST_F(PlasoEventTest, ChromeCookieProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome Cookies",
   "data_type" : "chrome:cookie:entry",
   "message" : "This is an inaccurate message",
@@ -216,7 +206,7 @@ R"({
 TEST_F(PlasoEventTest, ChromeExtensionActivityProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome Extension Activity",
   "data_type" : "chrome:extension_activity:activity_log",
   "message" : "This is an inaccurate message",
@@ -236,7 +226,7 @@ R"({
 TEST_F(PlasoEventTest, ChromeExtensionInstallationProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome Extension Activity",
   "data_type" : "chrome:preferences:extension_installation",
   "message" : "This is an inaccurate message",
@@ -256,7 +246,7 @@ R"({
 TEST_F(PlasoEventTest, FirefoxDownloadProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Chrome History",
   "data_type" : "firefox:downloads:download",
   "message" : "This is an inaccurate message",
@@ -278,7 +268,7 @@ R"({
 TEST_F(PlasoEventTest, FirefoxBookmarkProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Firefox History",
   "data_type" : "firefox:places:bookmark",
   "message" : "This is an inaccurate message",
@@ -298,7 +288,7 @@ R"({
 TEST_F(PlasoEventTest, FirefoxPageVisitedProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Firefox History",
   "data_type" : "firefox:places:page_visited",
   "message" : "This is an inaccurate message",
@@ -315,7 +305,7 @@ R"({
 TEST_F(PlasoEventTest, MacApplicationUsage) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Application Usage",
   "data_type" : "macosx:application_usage",
   "application" : "Chrome Browser",
@@ -332,7 +322,7 @@ R"({
 TEST_F(PlasoEventTest, TaskSchedulerTaskCache) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Application Usage",
   "data_type" : "task_scheduler:task_cache:entry",
   "task_name" : "Chrome Browser",
@@ -348,7 +338,7 @@ R"({
 TEST_F(PlasoEventTest, WindowsEvtRecord) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Executable Information",
   "data_type" : "windows:evtx:record",
   "event_identifier" : "bad_event",
@@ -368,7 +358,7 @@ R"({
 TEST_F(PlasoEventTest, WindowsEvtxRecord) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Executable Information",
   "data_type" : "windows:evtx:record",
   "event_identifier" : "bad_event",
@@ -388,7 +378,7 @@ R"({
 TEST_F(PlasoEventTest, WindowsAppCompatCacheProcessing) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Executable Information",
   "data_type" : "windows:registry:appcompatcache",
   "path" : "/HKLM/SYSTEM/CurrentControlSet/Control/Session/Manager/)"
@@ -405,7 +395,7 @@ R"(AppCompatibility/AppCompatCache" })";
 TEST_F(PlasoEventTest, WindowsPrefetchExecution) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Executable Information",
   "data_type" : "windows:prefetch:execution",
   "executable" : "name/of/executable.exe",
@@ -421,7 +411,7 @@ R"({
 TEST_F(PlasoEventTest, WindowsShellItem) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Executable Information",
   "data_type" : "windows:shell_item:file_entry",
   "name" : "name/of/executable.exe",
@@ -437,7 +427,7 @@ R"({
 TEST_F(PlasoEventTest, WindowsTasksJob) {
   string json_str =
 R"({
-  "datetime" : "2012-04-03T00:25:21+00:00",
+  "timestamp" : 1333412795000000,
   "timestamp_desc" : "Executable Information",
   "data_type" : "windows:tasks:job",
   "application" : "name/of/executable.exe",

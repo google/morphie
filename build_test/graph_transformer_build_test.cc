@@ -19,6 +19,7 @@
 #include "dot_printer.h"
 #include "graph_transformer.h"
 #include "labeled_graph.h"
+#include "morphism.h"
 #include "type.h"
 #include "value.h"
 
@@ -36,6 +37,7 @@ int main(int argc, char **argv) {
   std::cout << "Input graph." << std::endl
             << printer.DotGraph(graph) << std::endl
             << "Output graph." << std::endl
-            << printer.DotGraph(*tervuren::graph::DeleteNodes(graph, {node0}))
+            << printer.DotGraph(
+                   tervuren::graph::DeleteNodes(graph, {node0})->Output())
             << std::endl;
 }

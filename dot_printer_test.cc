@@ -26,7 +26,7 @@
 #include "labeled_graph.h"
 #include "plaso_event.h"
 #include "type.h"
-#include "third_party/logle/ast.pb.h"
+#include "ast.pb.h"
 #include "type_checker.h"
 #include "util/status.h"
 #include "util/string_utils.h"
