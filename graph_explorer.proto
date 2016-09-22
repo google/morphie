@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package logle;
+package graph_explorer;
 
 // GraphExplorer is a tool for interactive visualization of graphs with
 // hierarchical structure, rich node and edge labels, and with metadata
@@ -68,6 +68,8 @@ message Node {
   // but if no label is present, the identifier will be displayed.
   string name = 1;
 
+  // For legacy reasons there must be an attribute present named "op".
+  //
   // * Supported attributes of all nodes:
   // label - a plain text or HTML node label.
   // fillColor - any HTML color, including hex strings.
