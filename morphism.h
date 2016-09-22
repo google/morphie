@@ -61,6 +61,9 @@ class Morphism {
   const LabeledGraph& Input() const { return input_graph_; }
   const LabeledGraph& Output() const { return *output_graph_; }
   LabeledGraph* MutableOutput() { return output_graph_.get(); }
+  // Returns and gives up ownership of the output graph and clears the internal
+  // maps between input and output nodes.
+  std::unique_ptr<LabeledGraph> TakeOutput();
 
   // Creates a new output graph that has the same node and edge types as the
   // input graph. An output graph that already exists will no longer be
@@ -71,9 +74,15 @@ class Morphism {
   // morphism. Adds a new node to the output graph if no such node exists.
   NodeId FindOrMapNode(NodeId input_node, TaggedAST label);
 
+  // Composes this morphism with the input and takes ownership of the output
+  // graph in the input morphism. The output graph that existed before
+  // composition cannot be access after the composition.
+  util::Status ComposeWith(Morphism* morphism);
+
  private:
   const LabeledGraph& input_graph_;
   std::unordered_map<NodeId, NodeId> node_map_;
+  std::unordered_map<NodeId, std::unordered_set<NodeId>> node_preimage_;
   std::unique_ptr<LabeledGraph> output_graph_;
 };  // class Morphism
 

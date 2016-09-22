@@ -1,9 +1,16 @@
 #include "morphism.h"
 
+#include "util/map_utils.h"
 #include "util/status.h"
 
 namespace tervuren {
 namespace graph {
+
+std::unique_ptr<LabeledGraph> Morphism::TakeOutput() {
+  node_map_.clear();
+  node_preimage_.clear();
+  return std::move(output_graph_);
+}
 
 void Morphism::CloneInputType() {
   output_graph_.reset(new LabeledGraph());
@@ -23,7 +30,24 @@ NodeId Morphism::FindOrMapNode(NodeId input_node, TaggedAST label) {
   }
   NodeId output_node = output_graph_->FindOrAddNode(label);
   node_map_.insert({input_node, output_node});
+  auto preimage_it = node_preimage_.find(output_node);
+  if (preimage_it == node_preimage_.end()) {
+    node_preimage_.insert({output_node, {input_node}});
+  } else {
+    preimage_it->second.insert(input_node);
+  }
   return output_node;
+}
+
+util::Status Morphism::ComposeWith(Morphism* morphism) {
+  if (output_graph_.get() != &morphism->input_graph_) {
+    return util::Status(Code::INVALID_ARGUMENT,
+                        "Trying to compose incompatible morphisms.");
+  }
+  node_map_ = util::Compose(node_map_, morphism->node_map_);
+  node_preimage_ = util::Preimage(node_map_);
+  output_graph_ = morphism->TakeOutput();
+  return util::Status::OK;
 }
 
 }  // namespace graph

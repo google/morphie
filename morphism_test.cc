@@ -40,6 +40,16 @@ TEST(MorphismTest, OutputGraphProperties) {
   EXPECT_EQ(1, morphism.Output().NumNodes());
 }
 
+TEST(MorphismTest, TakeOutputProperties) {
+  test::WeightedGraph weighted_graph;
+  test::GetPathGraph(2, &weighted_graph);
+  Morphism morphism(weighted_graph.GetGraph());
+  morphism.CloneInputType();
+  ASSERT_TRUE(morphism.HasOutputGraph());
+  auto output_graph = morphism.TakeOutput();
+  EXPECT_FALSE(morphism.HasOutputGraph());
+}
+
 }  // namespace
 }  // namespace graph
 }  // namespace tervuren
