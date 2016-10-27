@@ -12,8 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// Create an exporter for the empty graph and print its output.
-#include "graph_exporter.h"
+// Instantiate a morphism with an empty graph and print the result.
+#include "morphism.h"
 
 #include <iostream>
 
@@ -25,6 +25,6 @@ int main(int argc, char **argv) {
   tervuren::LabeledGraph graph;
   tervuren::AST ast = tervuren::ast::type::MakeInt("int label", false);
   graph.Initialize({}, {}, {}, {}, ast);
-  tervuren::viz::GraphExporter exporter(graph);
-  std::cout << "Exported graph: " << exporter.GraphAsString() << std::endl;
+  tervuren::graph::Morphism morphism(&graph);
+  std::cout << "Initialized morphism." << std::endl;
 }
