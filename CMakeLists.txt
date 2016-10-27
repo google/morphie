@@ -184,6 +184,13 @@ target_link_libraries(morphism
 	util_map_utils
 	util_status)
 
+add_executable(morphism_build_test "build_test/morphism_build_test.cc")
+target_link_libraries(morphism_build_test
+	ast_proto
+	labeled_graph
+	morphism
+	type)
+
 add_library(dot_printer STATIC dot_printer.h dot_printer.cc)
 target_link_libraries(dot_printer
  	ast
@@ -211,6 +218,13 @@ target_link_libraries(graph_exporter
  	graph_explorer_proto
 	labeled_graph
 	util_string_utils)
+
+add_executable(graph_exporter_build_test "build_test/graph_exporter_build_test.cc")
+target_link_libraries(graph_exporter_build_test
+	ast_proto
+	labeled_graph
+	graph_exporter
+	type)
 
 add_library(graph_transformer STATIC graph_transformer.h graph_transformer.cc)
 target_link_libraries(graph_transformer
