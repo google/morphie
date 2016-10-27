@@ -12,5 +12,5 @@ ExternalProject_Add(gflags
   SOURCE_DIR        "${CMAKE_BINARY_DIR}/gflags-src"
   BINARY_DIR        "${CMAKE_BINARY_DIR}/gflags-build"
   INSTALL_DIR       "${CMAKE_BINARY_DIR}/gflags-build"
-  CMAKE_ARGS        "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBUILD_gflags_nothreads_LIBS"
+  CMAKE_ARGS        "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
 )
