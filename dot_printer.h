@@ -40,7 +40,7 @@
 #include "base/string.h"
 #include "labeled_graph.h"
 
-namespace tervuren {
+namespace morphie {
 
 // An attribute function returns a GraphViz DOT attribute for a node or an edge.
 // The first argument represents a tag and the second is an abstract syntax tree
@@ -119,5 +119,5 @@ class DotPrinter {
   AttributeFn edge_attribute_;
 };  // class DotPrinter
 
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_DOT_PRINTER_H_

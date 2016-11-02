@@ -16,7 +16,7 @@
 #include "gtest.h"
 #include "test_graphs.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 std::map<NodeId, int> SingleBlockPartition(const LabeledGraph& graph) {
@@ -149,4 +149,4 @@ TEST(GraphAnalyzerTest, CycleRefinement) {
 }
 
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

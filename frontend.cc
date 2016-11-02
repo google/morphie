@@ -36,7 +36,7 @@
 
 namespace {
 
-namespace util = tervuren::util;
+namespace util = morphie::util;
 
 // Error messages.
 const char kInvalidAnalyzerErr[] =
@@ -62,7 +62,7 @@ std::pair<util::Status, std::unique_ptr<util::CSVParser>> GetCSVParser(
     const std::string& filename) {
   std::ifstream* csv_stream = new std::ifstream(filename);
   if (csv_stream == nullptr || !*csv_stream) {
-    return {util::Status(tervuren::Code::EXTERNAL,
+    return {util::Status(morphie::Code::EXTERNAL,
                          util::StrCat(kOpenFileErr, filename)), nullptr};
   }
   // The CSV parser takes ownership of the csv_stream and will close the file
@@ -93,18 +93,18 @@ util::Status WriteToFile(const std::string& filename,
   // early returns will not leave the file open. The file is nonetheless
   // explicitly closed only to be able to detect errors.
   if (!out_file) {
-    return util::Status(tervuren::Code::EXTERNAL,
+    return util::Status(morphie::Code::EXTERNAL,
                        util::StrCat("Error opening file: ", filename));
   }
   out_file << contents;
 
   if (!out_file) {
-    return util::Status(tervuren::Code::INTERNAL,
+    return util::Status(morphie::Code::INTERNAL,
                        util::StrCat("Error writing to file: ", filename));
   }
   out_file.close();
   if (!out_file) {
-    return util::Status(tervuren::Code::EXTERNAL,
+    return util::Status(morphie::Code::EXTERNAL,
                        util::StrCat("Error closing file: ", filename));
   }
   return util::Status::OK;
@@ -112,7 +112,7 @@ util::Status WriteToFile(const std::string& filename,
 
 }  // namespace
 
-namespace tervuren {
+namespace morphie {
 namespace frontend {
 
 // Runs the Curio analyzer in curio_analyzer.h on the input. Returns an error
@@ -120,7 +120,7 @@ namespace frontend {
 util::Status RunCurioAnalyzer(const AnalysisOptions& options,
                               string* output_graph) {
   if (!options.has_json_file()) {
-    return util::Status(tervuren::Code::INVALID_ARGUMENT,
+    return util::Status(morphie::Code::INVALID_ARGUMENT,
                         "The Curio analyzer requires a JSON input file.");
   }
   std::unique_ptr<Json::Value> json_doc = GetJsonDoc(options.json_file());
@@ -154,24 +154,24 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
     case AnalysisOptions::InputFileCase::kJsonFile:{
       input_stream = new std::ifstream(options.json_file());
       if (!input_stream->is_open()){
-        return util::Status(tervuren::Code::EXTERNAL,
+        return util::Status(morphie::Code::EXTERNAL,
                             util::StrCat(kOpenFileErr, options.json_file()));
       }
-      status = plaso_analyzer.Initialize(new tervuren::FullJson(input_stream));
+      status = plaso_analyzer.Initialize(new morphie::FullJson(input_stream));
       break;
     }
     case AnalysisOptions::InputFileCase::kJsonStreamFile:{
       input_stream = new std::ifstream(options.json_stream_file());
       if (!input_stream->is_open()){
-        return util::Status(tervuren::Code::EXTERNAL,
+        return util::Status(morphie::Code::EXTERNAL,
                             util::StrCat(kOpenFileErr,
                             options.json_stream_file()));
       }
-      status = plaso_analyzer.Initialize(new tervuren::StreamJson(input_stream));
+      status = plaso_analyzer.Initialize(new morphie::StreamJson(input_stream));
       break;
     }
     default:{
-      return util::Status(tervuren::Code::EXTERNAL, kInvalidPlasoOption);
+      return util::Status(morphie::Code::EXTERNAL, kInvalidPlasoOption);
       break;
     }
   }
@@ -196,7 +196,7 @@ util::Status RunPlasoAnalyzer(const AnalysisOptions& options,
 util::Status RunMailAccessAnalyzer(const AnalysisOptions& options,
                                    string* output_graph) {
   if (!options.has_csv_file()) {
-    return util::Status(tervuren::Code::INVALID_ARGUMENT,
+    return util::Status(morphie::Code::INVALID_ARGUMENT,
                         "The access analyzer requires a CSV input file.");
   }
   AccessAnalyzer access_analyzer;
@@ -250,4 +250,4 @@ util::Status Run(const AnalysisOptions& options) {
 }
 
 }  // namespace frontend
-}  // namespace tervuren
+}  // namespace morphie

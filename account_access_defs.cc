@@ -14,7 +14,7 @@
 
 #include "account_access_defs.h"
 
-namespace tervuren {
+namespace morphie {
 namespace access {
 
 const char kRequiredFields[] = "fromx,tox,attr_count,attr_actor_title";
@@ -25,4 +25,4 @@ const char kNumAccesses[] = "attr_count";
 const char kUser[] = "tox";
 
 }  // namespace access
-}  // namespace tervuren
+}  // namespace morphie

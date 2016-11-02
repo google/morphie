@@ -23,7 +23,7 @@
 #include "base/string.h"
 #include "base/vector.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace type {
 
@@ -71,6 +71,6 @@ AST MakeURL();
 
 }  // namespace type
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_TYPE_H_

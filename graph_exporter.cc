@@ -19,7 +19,7 @@
 #include "ast.h"
 #include "util/string_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace viz {
 
 GraphExporter::GraphExporter(const LabeledGraph& graph)
@@ -114,4 +114,4 @@ ge::Node GraphExporter::Node(NodeId node_id) {
 }
 
 }  // namespace viz
-}  // namespace tervuren
+}  // namespace morphie

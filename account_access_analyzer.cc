@@ -32,7 +32,7 @@ const char kNullAccessGraphErr[] = "The access graph is null.";
 
 }  // namespace
 
-namespace tervuren {
+namespace morphie {
 // This function performs a series of checks, described by the error message
 // generated if the check fails.
 util::Status AccessAnalyzer::Initialize(
@@ -138,4 +138,4 @@ util::Status AccessAnalyzer::InitializeFieldMap() {
   return util::Status::OK;
 }
 
-}  // namespace tervuren
+}  // namespace morphie

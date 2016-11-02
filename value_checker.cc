@@ -27,7 +27,7 @@
 #include "util/logging.h"
 #include "util/string_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace value {
 
@@ -265,4 +265,4 @@ void Canonicalize(AST* val) {
 
 }  // namespace value
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

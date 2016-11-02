@@ -42,7 +42,7 @@
 #include "labeled_graph.h"
 #include "ast.pb.h"
 
-namespace tervuren {
+namespace morphie {
 namespace graph {
 
 // A morphism, with lower-case 'm', is a pair of partial functions from the
@@ -95,5 +95,5 @@ class Morphism {
 };  // class Morphism
 
 }  // namespace graph
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_MORPHISM_H_

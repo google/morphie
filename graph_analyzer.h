@@ -19,7 +19,7 @@
 #include <map>
 #include "labeled_graph.h"
 
-namespace tervuren {
+namespace morphie {
 
 // Contains methods for analyzing graphs and structures on graphs.
 namespace graph_analyzer {
@@ -45,7 +45,7 @@ std::map<NodeId, int> RefinePartition(const LabeledGraph& graph,
                                       const std::map<NodeId, int>& partition);
 }  // namespace graph_analyzer
 
-}  // namespace tervuren
+}  // namespace morphie
 
 
 #endif  // LOGLE_GRAPH_ANALYZER_H_

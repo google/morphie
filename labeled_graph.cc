@@ -28,7 +28,7 @@
 #include "util/logging.h"
 #include "util/string_utils.h"
 
-namespace tervuren {
+namespace morphie {
 
 using ast::type::Types;
 namespace type = ast::type;
@@ -604,4 +604,4 @@ EdgeId LabeledGraph::InsertEdge(NodeId source, NodeId target, TaggedAST label) {
   return edge_id;
 }
 
-}  // namespace tervuren
+}  // namespace morphie

@@ -32,7 +32,7 @@
 #include "labeled_graph.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // The account access graph contains labels with the following names and types.
 // The labels are all unique, meaning there can be at most one node with each
@@ -97,6 +97,6 @@ class AccountAccessGraph : public GraphInterface {
   LabeledGraph graph_;
 };  // class AccountAccessGraph
 
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_ACCOUNT_ACCESS_GRAPH_H_

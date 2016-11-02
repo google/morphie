@@ -18,7 +18,7 @@
 #include "gtest.h"
 #include "type_checker.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace type {
 namespace {
@@ -143,4 +143,4 @@ TEST(TypeDeathTest, NonTypeASTToCompositeArg) {
 }  // namespace
 }  // namespace type
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

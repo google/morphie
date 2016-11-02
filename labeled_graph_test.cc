@@ -26,7 +26,7 @@
 #include "value.h"
 #include "value_checker.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 using ast::type::Types;
@@ -870,4 +870,4 @@ TEST_F(LabeledGraphTest, UniqueEdgeUpdateClash) {
 }
 
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

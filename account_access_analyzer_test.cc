@@ -21,7 +21,7 @@
 #include "util/status.h"
 #include "util/string_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 void TestCSVInitialization(const char* kInput, Code code) {
@@ -103,4 +103,4 @@ TEST(AccessAnalyzerTest, TestGraphConstruction) {
 }
 
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

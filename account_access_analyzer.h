@@ -27,7 +27,7 @@
 #include "util/csv.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // The AccessAnalyzer is initialized with a CSV parser. The fields that must be
 // present in the CSV input are defined in account_access_defs.h.
@@ -72,5 +72,5 @@ class AccessAnalyzer {
   std::unique_ptr<util::CSVParser> csv_parser_;
 };
 
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_ACCOUNT_ACCESS_ANALYZER_H_

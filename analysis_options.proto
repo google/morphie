@@ -15,7 +15,7 @@
 // Command-line options supported by the tool, represented as protocol buffers.
 syntax = "proto2";
 
-package tervuren;
+package morphie;
 
 // Options available for analyzing Plaso input.
 message PlasoOptions {

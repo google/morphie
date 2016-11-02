@@ -21,9 +21,9 @@
 #include "type.h"
 
 int main(int argc, char **argv) {
-  tervuren::LabeledGraph graph;
-  tervuren::AST ast = tervuren::ast::type::MakeInt("int label", false);
+  morphie::LabeledGraph graph;
+  morphie::AST ast = morphie::ast::type::MakeInt("int label", false);
   graph.Initialize({}, {}, {}, {}, ast);
-  tervuren::DotPrinter dot_printer;
+  morphie::DotPrinter dot_printer;
   std::cout << dot_printer.DotGraph(graph) << std::endl;
 }

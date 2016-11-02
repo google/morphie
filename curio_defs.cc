@@ -14,7 +14,7 @@
 
 #include "curio_defs.h"
 
-namespace tervuren {
+namespace morphie {
 namespace curio {
 
 const char kChildrenField[] = "Children";
@@ -25,4 +25,4 @@ const char kStreamNameTag[] = "Stream Name";
 const char kDependentTag[] = "Dependent";
 
 }  // namespace curio
-}  // namespace tervuren
+}  // namespace morphie

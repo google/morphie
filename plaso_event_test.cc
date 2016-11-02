@@ -25,7 +25,7 @@
 #include "type_checker.h"
 #include "util/time_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 static const char kJSONstring[] =
@@ -463,4 +463,4 @@ TEST_F(PlasoEventTest, FileMessageToAST) {
 }
 
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

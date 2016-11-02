@@ -33,7 +33,7 @@
 #include "util/time_utils.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -289,4 +289,4 @@ string PlasoEventGraph::ToPbTxt() const {
   return exporter.GraphAsString();
 }
 
-}  // namespace tervuren
+}  // namespace morphie

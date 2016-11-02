@@ -15,7 +15,7 @@
 
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 namespace {
 
@@ -38,4 +38,4 @@ TEST(StatusTest, MemberFunctions) {
 
 }  // unnamed namespace
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

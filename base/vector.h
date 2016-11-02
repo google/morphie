@@ -17,9 +17,9 @@
 
 #include <vector>
 
-namespace tervuren {
+namespace morphie {
 
 using std::vector;
 
-}  // tervuren 
+}  // morphie 
 #endif  // LOGLE_BASE_VECTOR_H_

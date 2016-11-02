@@ -22,7 +22,7 @@
 #include "util/string_utils.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 
 using ast::type::Types;
 namespace type = ast::type;
@@ -473,4 +473,4 @@ std::unique_ptr<LabeledGraph> FoldNodes(const LabeledGraph& graph,
   return std::move(transform.output);
 }
 }  // namespace graph
-}  // namespace tervuren
+}  // namespace morphie

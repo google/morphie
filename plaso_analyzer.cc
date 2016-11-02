@@ -33,7 +33,7 @@ const int kMaxMalformedLines = 1000000;
 
 }  // namespace
 
-namespace tervuren {
+namespace morphie {
 
 util::Status PlasoAnalyzer::Initialize(
     JsonDocumentIterator* doc_iterator) {
@@ -100,4 +100,4 @@ void PlasoAnalyzer::BuildPlasoGraphFromJSON() {
   plaso_graph_->AddTemporalEdges();
 }
 
-}  // namespace tervuren
+}  // namespace morphie

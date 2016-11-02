@@ -23,7 +23,7 @@
 #include "type_checker.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 const char kNodeLabelTag_[] = "NodeLabel";
@@ -129,4 +129,4 @@ TEST_F(TFGraphExporterTest, ExportsTFNode) {
 }
 
 }  // unnamed namespace
-}  // namespace tervuren
+}  // namespace morphie

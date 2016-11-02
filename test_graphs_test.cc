@@ -16,7 +16,7 @@
 
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace test {
 namespace {
 
@@ -110,4 +110,4 @@ TEST(TestGraphsTest, IsCycleGraph) {
 
 }  // namespace
 }  // namespace test
-}  // namespace tervuren
+}  // namespace morphie

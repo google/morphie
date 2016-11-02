@@ -18,7 +18,7 @@
 #include "stream_dependency_graph.h"
 
 int main(int argc, char **argv) {
-  tervuren::StreamDependencyGraph graph;
+  morphie::StreamDependencyGraph graph;
   graph.Initialize();
   std::cout << "Initialized stream dependency graph." << std::endl
             << graph.ToDot() << std::endl;

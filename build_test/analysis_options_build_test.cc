@@ -18,7 +18,7 @@
 #include "analysis_options.pb.h"
 
 int main(int argc, char **argv) {
-  tervuren::AnalysisOptions options;
+  morphie::AnalysisOptions options;
   options.set_output_dot_file("/tmp/out.dot");
   std::cout << options.DebugString() << std::endl;
   return 0;

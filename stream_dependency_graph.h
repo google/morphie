@@ -29,7 +29,7 @@
 #include "labeled_graph.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // The StreamDependencyGraph class implements a stream dependency graph. The
 // nodes in the graph are labels represented as abstract syntax trees (see
@@ -70,5 +70,5 @@ class StreamDependencyGraph : public GraphInterface {
   LabeledGraph graph_;
 };
 
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_STREAM_DEPENDENCY_GRAPH_H_

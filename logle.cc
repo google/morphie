@@ -28,7 +28,7 @@
 #include "util/status.h"
 
 namespace protobuf = google::protobuf;
-using Analyzer = tervuren::frontend::Analyzer;
+using Analyzer = morphie::frontend::Analyzer;
 using std::string;
 
 // Flags that determine which analyzer to use and the options with which to
@@ -50,7 +50,7 @@ static bool is_config_empty =
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-  tervuren::AnalysisOptions options;
+  morphie::AnalysisOptions options;
   string out;
   if (!protobuf::TextFormat::ParseFromString(FLAGS_analysis_options,
                                              &options)) {
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
                  "AnalysisOptions proto.";
     return -1;
   }
-  tervuren::util::Status status = tervuren::frontend::Run(options);
+  morphie::util::Status status = morphie::frontend::Run(options);
   if (!status.ok()) {
     std::cerr << status.message();
     return -1;

@@ -19,9 +19,9 @@
 #include "account_access_analyzer.h"
 
 int main(int argc, char **argv) {
-  tervuren::AccessAnalyzer analyzer;
-  std::unique_ptr<tervuren::util::CSVParser> parser(
-      new tervuren::util::CSVParser(new std::stringstream("")));
+  morphie::AccessAnalyzer analyzer;
+  std::unique_ptr<morphie::util::CSVParser> parser(
+      new morphie::util::CSVParser(new std::stringstream("")));
   analyzer.Initialize(std::move(parser));
   std::cout << "Initialized account access analyzer." << std::endl;
 }

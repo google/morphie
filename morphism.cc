@@ -3,7 +3,7 @@
 #include "util/map_utils.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 namespace graph {
 
 std::unique_ptr<LabeledGraph> Morphism::TakeOutput() {
@@ -68,4 +68,4 @@ util::Status Morphism::ComposeWith(Morphism* morphism) {
 }
 
 }  // namespace graph
-}  // namespace tervuren
+}  // namespace morphie

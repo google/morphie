@@ -19,7 +19,7 @@
 #include "analysis_options.pb.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 namespace frontend {
 
 enum class Analyzer { kCurio, kMailAccess, kPlaso };
@@ -36,5 +36,5 @@ enum class Analyzer { kCurio, kMailAccess, kPlaso };
 util::Status Run(const AnalysisOptions& options);
 
 }  // namespace frontend
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_FRONTEND_H_

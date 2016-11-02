@@ -19,7 +19,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 // The type unordered_map<A, B> can be viewed as a partial function from values
@@ -66,6 +66,6 @@ std::unordered_map<ValType, std::unordered_set<KeyType>> Preimage(
 }
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_UTIL_MAP_UTILS_H_

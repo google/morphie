@@ -23,9 +23,9 @@
 #include "plaso_defs.h"
 #include "util/string_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
-namespace util = tervuren::util;
+namespace util = morphie::util;
 
 // Tests of JSON input validation and input processing.
 // NOLINTNEXTLINE
@@ -46,11 +46,11 @@ void TestInitialization(
   util::Status status;
 
   if (is_line_json) {
-    tervuren::StreamJson jstream(&stream);
+    morphie::StreamJson jstream(&stream);
     status = analyzer.Initialize(&jstream);
     analyzer.BuildPlasoGraph();
   } else {
-    tervuren::FullJson jstream(&stream);
+    morphie::FullJson jstream(&stream);
     status = analyzer.Initialize(&jstream);
     analyzer.BuildPlasoGraph();
   }
@@ -73,4 +73,4 @@ TEST(PlasoAnalyzerDeathTest, RequiresCorrectJSONDoc) {
     ".*JSON*");
 }
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

@@ -23,7 +23,7 @@
 #include "labeled_graph.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 namespace test {
 
 // A weighted graph is one in which the nodes and edges have int weights. There
@@ -83,5 +83,5 @@ bool IsPath(const LabeledGraph& graph);
 bool IsCycle(const LabeledGraph& graph);
 
 }  // namespace test
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_TEST_GRAPHS_H_

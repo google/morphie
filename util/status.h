@@ -20,7 +20,7 @@
 // details about why the operation failed.
 #include "base/string.h"
 
-namespace tervuren {
+namespace morphie {
 enum class Code {
   // No error. Returned on success.
   OK = 0,
@@ -77,6 +77,6 @@ class Status {
 };
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_UTIL_STATUS_H_

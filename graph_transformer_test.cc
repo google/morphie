@@ -25,7 +25,7 @@
 #include "value.h"
 #include "value_checker.h"
 
-namespace tervuren {
+namespace morphie {
 namespace graph {
 namespace {
 namespace type = ast::type;
@@ -969,4 +969,4 @@ TEST(GraphTransformerTest, DoubleIndicatorLabelNodeFold) {
 
 }  // namespace
 }  // namespace graph
-}  // namespace tervuren
+}  // namespace morphie

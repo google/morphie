@@ -17,7 +17,7 @@
 #include "account_access_defs.h"
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 TEST(AccountAccessGraphDeathTest, UninitializedCall) {
@@ -77,4 +77,4 @@ TEST_F(AccountAccessGraphTest, ProcessSingleAccess) {
 }
 
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

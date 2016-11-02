@@ -27,7 +27,7 @@
 #include "util/string_utils.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -123,4 +123,4 @@ string StreamDependencyGraph::ToDot() const {
   return util::StrCat("digraph stream_dependencies {\n", dot_graph, "}");
 }
 
-}  // namespace tervuren
+}  // namespace morphie

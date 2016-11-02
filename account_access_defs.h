@@ -16,7 +16,7 @@
 #ifndef LOGLE_ACCOUNT_ACCESS_DEFS_H_
 #define LOGLE_ACCOUNT_ACCESS_DEFS_H_
 
-namespace tervuren {
+namespace morphie {
 // The 'access' namespace contains definitions of fields used in access-oriented
 // analysis of access to email accounts.
 namespace access {
@@ -38,5 +38,5 @@ extern const char kNumAccesses[];
 extern const char kUser[];
 
 }  // namespace access
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_ACCOUNT_ACCESS_DEFS_H_

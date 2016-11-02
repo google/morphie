@@ -33,7 +33,7 @@ const char kWeightedGraphTag[] = "Weighted-Graph";
 
 }  // namespace
 
-namespace tervuren {
+namespace morphie {
 namespace test {
 
 namespace type = ast::type;
@@ -193,4 +193,4 @@ bool IsCycle(const LabeledGraph& graph) {
 }
 
 }  // namespace test
-}  // namespace tervuren
+}  // namespace morphie

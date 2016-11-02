@@ -4,7 +4,7 @@
 #include "test_graphs.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 namespace graph {
 namespace {
 
@@ -52,4 +52,4 @@ TEST(MorphismTest, TakeOutputProperties) {
 
 }  // namespace
 }  // namespace graph
-}  // namespace tervuren
+}  // namespace morphie

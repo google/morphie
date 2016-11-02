@@ -16,7 +16,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace {
 
@@ -256,4 +256,4 @@ TEST_F(ASTTest, PrintSet) {
 
 }  // namespace
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

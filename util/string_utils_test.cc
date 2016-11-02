@@ -21,7 +21,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 namespace {
 
@@ -151,6 +151,6 @@ TEST(SetJoinTest, OutputProperties) {
 
 }  // anonymous namespace
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_UTIL_STRING_UTILS_TEST_H_

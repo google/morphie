@@ -412,15 +412,11 @@ target_link_libraries(frontend
 	${JSONCPP_LIBRARY}
 	${PROTOBUF_LIBRARY})
 
-add_executable(tervuren logle.cc)
-target_include_directories(tervuren PRIVATE ${gflags_src_dir})
-target_link_libraries(tervuren
+add_executable(morphie logle.cc)
+target_include_directories(morphie PRIVATE ${gflags_src_dir})
+target_link_libraries(morphie
  	analysis_options_proto
  	frontend
  	util_status
 	${GFLAGS_LIBRARY}
  	${PROTOBUF_LIBRARY})
-
-# add_executable(tervunen test.cc)
-# target_link_libraries(tervunen
-# 	analysis_options_proto)

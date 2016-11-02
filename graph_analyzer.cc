@@ -22,7 +22,7 @@ using std::map;
 using std::set;
 using std::shared_ptr;
 
-namespace tervuren {
+namespace morphie {
 
 namespace graph_analyzer {
 
@@ -401,4 +401,4 @@ map<NodeId, int> RefinePartition(const LabeledGraph& graph,
 
 }  // namespace graph_analyzer
 
-}  // namespace tervuren
+}  // namespace morphie

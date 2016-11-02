@@ -31,7 +31,7 @@
 #include "util/string_utils.h"
 #include "value_checker.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace type {
 
@@ -325,4 +325,4 @@ bool IsTyped(const Types& types, const TaggedAST& val, string* err) {
 
 }  // namespace type
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

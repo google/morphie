@@ -14,7 +14,7 @@
 
 syntax = "proto2";
 
-package tervuren;
+package morphie;
 
 // Plaso (go/plaso) is a forensic analysis tool that extracts timed events from
 // forensic artefacts. This file defines the PlasoEvent proto, which stores

@@ -18,7 +18,7 @@
 #include <cstdlib>   // for abort()
 #include <iostream>  // for std::cerr
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 void Check(bool condition, const string& location, const string& err) {
@@ -35,4 +35,4 @@ void Check(bool condition, const string& location) {
 void Check(bool condition) { Check(condition, "", ""); }
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

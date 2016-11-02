@@ -20,7 +20,7 @@
 #include "gtest.h"
 #include "value_checker.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace value {
 namespace {
@@ -622,4 +622,4 @@ TEST(CanonicalizerTest, TupleCanonicalization) {
 }  // namespace
 }  // namespace value
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

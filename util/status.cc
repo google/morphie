@@ -13,7 +13,7 @@
 // the License.
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 namespace {
@@ -28,4 +28,4 @@ const Status& GetOkStatus() {
 const Status& Status::OK = GetOkStatus();
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

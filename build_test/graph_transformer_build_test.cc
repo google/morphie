@@ -24,20 +24,20 @@
 #include "value.h"
 
 int main(int argc, char **argv) {
-  tervuren::LabeledGraph graph;
-  tervuren::AST ast = tervuren::ast::type::MakeInt("int label", false);
-  tervuren::TaggedAST tast;
+  morphie::LabeledGraph graph;
+  morphie::AST ast = morphie::ast::type::MakeInt("int label", false);
+  morphie::TaggedAST tast;
   tast.set_tag("num");
-  *tast.mutable_ast() = tervuren::ast::value::MakeInt(0);
+  *tast.mutable_ast() = morphie::ast::value::MakeInt(0);
   graph.Initialize({{"num", ast}}, {}, {}, {}, ast);
-  tervuren::NodeId node0 = graph.FindOrAddNode(tast);
-  *tast.mutable_ast() = tervuren::ast::value::MakeInt(1);
+  morphie::NodeId node0 = graph.FindOrAddNode(tast);
+  *tast.mutable_ast() = morphie::ast::value::MakeInt(1);
   graph.FindOrAddNode(tast);
-  tervuren::DotPrinter printer;
+  morphie::DotPrinter printer;
   std::cout << "Input graph." << std::endl
             << printer.DotGraph(graph) << std::endl
             << "Output graph." << std::endl
             << printer.DotGraph(
-                   tervuren::graph::DeleteNodes(graph, {node0})->Output())
+                   morphie::graph::DeleteNodes(graph, {node0})->Output())
             << std::endl;
 }

@@ -18,7 +18,7 @@
 #include "base/string.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // The GraphInterface class is an abstract class that specifies the common API
 // for instantiations of the labeled graph.
@@ -43,6 +43,6 @@ class GraphInterface {
   virtual string ToDot() const = 0;
 };  // class GraphInterface
 
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_GRAPH_INTERFACE_H_
 

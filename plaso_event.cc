@@ -25,7 +25,7 @@
 #include "util/time_utils.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 namespace plaso {
 
 using std::map;
@@ -287,4 +287,4 @@ string ToString(const File& file) {
 }
 
 }  // namespace plaso
-}  // namespace tervuren
+}  // namespace morphie

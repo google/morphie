@@ -22,7 +22,7 @@
 // void boost::throw_exception(std::exception const& e) {}
 
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 CSVParser::Iterator& CSVParser::Iterator::operator++() {
@@ -91,4 +91,4 @@ void CSVParser::Advance() {
 }
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

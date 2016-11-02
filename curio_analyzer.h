@@ -25,7 +25,7 @@
 #include "stream_dependency_graph.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // The CurioAnalyzer ingests stream definitions provided in JSON and calls the
 // appropriate APIs for graph construction and visualization. Initialize() must
@@ -80,6 +80,6 @@ class CurioAnalyzer {
   std::unique_ptr<StreamDependencyGraph> dependency_graph_;
 };
 
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_CURIO_ANALYZER_H_

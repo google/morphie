@@ -25,7 +25,7 @@
 #include "util/string_utils.h"
 #include "util/time_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 
 namespace {
@@ -240,4 +240,4 @@ string ToStringRoot(const AST& ast, PrintOption opt) {
 }
 
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

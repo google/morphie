@@ -22,9 +22,9 @@
 #include "plaso_analyzer.h"
 
 int main(int argc, char **argv) {
-  tervuren::PlasoAnalyzer analyzer(false /* Do not show event sources.*/);
+  morphie::PlasoAnalyzer analyzer(false /* Do not show event sources.*/);
   std::istringstream stream("");
-  tervuren::StreamJson json_stream(&stream);
+  morphie::StreamJson json_stream(&stream);
   analyzer.Initialize(&json_stream);
   std::cout << "Initialized Plaso analyzer." << std::endl;
 }

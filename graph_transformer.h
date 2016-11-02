@@ -23,7 +23,7 @@
 #include "labeled_graph.h"
 #include "morphism.h"
 
-namespace tervuren {
+namespace morphie {
 // The 'graph' namespace contains functions for manipulating graphs.
 namespace graph {
 
@@ -146,6 +146,6 @@ std::unique_ptr<LabeledGraph> FoldNodes(const LabeledGraph& graph,
                                         const set<NodeId>& nodes);
 }  // namespace graph
 
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_GRAPH_TRANSFORMER_H_

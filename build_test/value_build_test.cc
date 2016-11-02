@@ -21,10 +21,10 @@
 #include "value_checker.h"
 
 int main(int argc, char **argv) {
-  tervuren::AST ast = tervuren::ast::value::MakeBool(false);
+  morphie::AST ast = morphie::ast::value::MakeBool(false);
   std::string err;
   std::cout << ast.DebugString();
-  if (tervuren::ast::value::IsValue(ast, &err)) {
+  if (morphie::ast::value::IsValue(ast, &err)) {
     std::cout << " is a value." << std::endl;
   } else {
     std::cout << " is not a value." << std::endl;

@@ -19,10 +19,10 @@
 #include "ast.pb.h"
 
 int main(int argc, char **argv) {
-  tervuren::AST ast;
-  tervuren::PrimitiveValue pval;
+  morphie::AST ast;
+  morphie::PrimitiveValue pval;
   pval.set_int_val(5);
-  ast.mutable_p_ast()->set_type(tervuren::INT);
+  ast.mutable_p_ast()->set_type(morphie::INT);
   *(ast.mutable_p_ast()->mutable_val()) = pval;
   std::cout << ast.DebugString() << std::endl;
   return 0;

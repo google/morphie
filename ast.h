@@ -38,7 +38,7 @@
 #include "ast.pb.h"
 #include "base/string.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 
 // Constants used by AST utilities.
@@ -154,6 +154,6 @@ string ToString(const Operator& op);
 string ToStringRoot(const AST& ast, PrintOption opt);
 
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_AST_H_

@@ -25,7 +25,7 @@
 #include "ast.pb.h"
 #include "graph_explorer.pb.h"
 
-namespace tervuren {
+namespace morphie {
 
 // A namespace containing visualization-related utilities.
 namespace viz {
@@ -88,5 +88,5 @@ class GraphExporter {
 };  // class GraphExporter
 
 }  // namespace viz
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_GRAPH_EXPORTER_H_

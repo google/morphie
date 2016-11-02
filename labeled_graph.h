@@ -62,7 +62,7 @@
 #include "util/status.h"
 
 
-namespace tervuren {
+namespace morphie {
 
 using std::set;
 using std::unordered_map;
@@ -332,6 +332,6 @@ class LabeledGraph {
   UniqueEdges named_edges_;
 };
 
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_LABELED_GRAPH_H_

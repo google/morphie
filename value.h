@@ -36,7 +36,7 @@
 #include "ast.pb.h"
 #include "base/string.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace value {
 
@@ -145,6 +145,6 @@ void SetField(const AST& type, int field_num, const AST& arg, AST* tuple);
 
 }  // namespace value
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_VALUE_H_

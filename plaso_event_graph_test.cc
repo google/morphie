@@ -23,7 +23,7 @@
 #include "util/time_utils.h"
 #include "value.h"
 
-namespace tervuren {
+namespace morphie {
 namespace {
 
 namespace value = ast::value;
@@ -135,4 +135,4 @@ TEST_F(PlasoEventGraphTest, ProcessEventsWithURLs) {
 }
 
 }  // namespace
-}  // namespace tervuren
+}  // namespace morphie

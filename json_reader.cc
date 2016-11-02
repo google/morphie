@@ -6,7 +6,7 @@
 #include "json_reader.h"
 #include "util/logging.h"
 
-namespace tervuren {
+namespace morphie {
 
 std::unique_ptr<Json::Value> GetJsonDoc(std::istream* json_stream) {
   Json::Reader json_reader;
@@ -64,4 +64,4 @@ const Json::Value* StreamJson::Next() {
 StreamJson::~StreamJson() {
 }
 
-}  // namespace tervuren
+}  // namespace morphie

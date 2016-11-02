@@ -13,7 +13,7 @@
 // the License.
 #include "util/string_utils.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 std::set<string> SplitToSet(const string& str, char delim) {
@@ -99,4 +99,4 @@ void StrAppend(string* out, const string& str1, const string& str2,
 }
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

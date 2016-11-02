@@ -30,7 +30,7 @@
 #include "plaso_event_graph.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // The PlasoAnalyzer uses graphs to extract information from log data. The
 // analyzer must be initialized with a JSON document (a Json::Value object from
@@ -93,6 +93,6 @@ class PlasoAnalyzer {
   JsonDocumentIterator* doc_iterator_;
 };
 
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_PLASO_ANALYZER_H_

@@ -2,7 +2,7 @@
 
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 namespace {
@@ -64,4 +64,4 @@ TEST(MapPreimageTest, PreimageProperties) {
 
 }  // namespace
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

@@ -50,20 +50,20 @@ string GetField(const string& field_name,
                 const unordered_map<string, int>& field_index,
                 const std::vector<string>& fields) {
   const auto field_it = field_index.find(field_name);
-  tervuren::CHECK(
+  morphie::CHECK(
       field_it != field_index.end(),
-      (tervuren::util::StrCat("No field named ", field_name, " in input.")));
-  tervuren::CHECK(0 <= field_it->second,
-               (tervuren::util::StrCat("Index of ", field_name, " is negative.")));
-  tervuren::CHECK(
+      (morphie::util::StrCat("No field named ", field_name, " in input.")));
+  morphie::CHECK(0 <= field_it->second,
+               (morphie::util::StrCat("Index of ", field_name, " is negative.")));
+  morphie::CHECK(
       static_cast<int>(fields.size()) > field_it->second,
-      (tervuren::util::StrCat("Index of ", field_name, " exceeds bounds.")));
+      (morphie::util::StrCat("Index of ", field_name, " exceeds bounds.")));
   return fields[field_it->second];
 }
 
 }  // namespace
 
-namespace tervuren {
+namespace morphie {
 
 namespace type = ast::type;
 namespace value = ast::value;
@@ -178,4 +178,4 @@ TaggedAST AccountAccessGraph::MakeEdgeLabel(
   return count;
 }
 
-}  // namespace tervuren
+}  // namespace morphie

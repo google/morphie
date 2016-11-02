@@ -20,8 +20,8 @@
 #include "type.h"
 
 int main(int argc, char **argv) {
-  tervuren::LabeledGraph graph;
-  tervuren::AST ast = tervuren::ast::type::MakeInt("int label", false);
+  morphie::LabeledGraph graph;
+  morphie::AST ast = morphie::ast::type::MakeInt("int label", false);
   graph.Initialize({}, {}, {}, {}, ast);
   std::cout << "Initialized graph." << std::endl;
 }

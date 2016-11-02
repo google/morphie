@@ -19,7 +19,7 @@
 #include "base/string.h"
 #include "gtest.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 namespace {
 
@@ -61,4 +61,4 @@ TEST(TimeUtilsTest, MicrosToRFC3339) {
 
 }  // anonymous namespace
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie

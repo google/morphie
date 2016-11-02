@@ -26,7 +26,7 @@
 #include "ast.pb.h"
 #include "base/string.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace value {
 
@@ -131,6 +131,6 @@ void Canonicalize(AST* val);
 
 }  // namespace value
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_VALUE_CHECKER_H_

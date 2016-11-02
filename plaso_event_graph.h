@@ -39,7 +39,7 @@
 #include "plaso_event.pb.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 
 // An event graph (lower case refers to the concept, not its implementation) is
 // a graph with labelled nodes and edges. The types of node and edge labels are
@@ -140,6 +140,6 @@ class PlasoEventGraph : public GraphInterface {
   std::map<int64_t, std::set<NodeId>> time_index_;
 };
 
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_PLASO_EVENT_GRAPH_H_

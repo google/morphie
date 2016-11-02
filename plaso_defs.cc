@@ -14,7 +14,7 @@
 
 #include "plaso_defs.h"
 
-namespace tervuren {
+namespace morphie {
 namespace plaso {
 
 const char kRequiredFields[] =
@@ -27,4 +27,4 @@ const char kSourceFileName[] = "display_name";
 const char kTimestampName[] = "timestamp";
 
 }  // namespace plaso
-}  // namespace tervuren
+}  // namespace morphie

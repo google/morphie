@@ -17,9 +17,9 @@
 
 #include <string>
 
-namespace tervuren {
+namespace morphie {
 
 using std::string;
 
-}  // namespace tervuren
+}  // namespace morphie
 #endif  // LOGLE_BASE_STRING_H_

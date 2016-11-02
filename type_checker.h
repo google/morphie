@@ -78,7 +78,7 @@
 #include "ast.pb.h"
 #include "base/string.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace type {
 
@@ -120,6 +120,6 @@ bool IsTyped(const Types& types, const TaggedAST& val, string* err);
 
 }  // namespace type
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_TYPE_CHECKER_H_

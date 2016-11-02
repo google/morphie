@@ -20,7 +20,7 @@
 #include "type_checker.h"
 #include "util/logging.h"
 
-namespace tervuren {
+namespace morphie {
 namespace ast {
 namespace type {
 
@@ -136,4 +136,4 @@ AST MakeURL() {
 
 }  // namespace type
 }  // namespace ast
-}  // namespace tervuren
+}  // namespace morphie

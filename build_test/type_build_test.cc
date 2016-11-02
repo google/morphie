@@ -20,10 +20,10 @@
 #include "type_checker.h"
 
 int main(int argc, char **argv) {
-  tervuren::AST ast = tervuren::ast::type::MakeBool("ast", false);
+  morphie::AST ast = morphie::ast::type::MakeBool("ast", false);
   std::cout << ast.DebugString();
   std::string err;
-  if (tervuren::ast::type::IsType(ast, &err)) {
+  if (morphie::ast::type::IsType(ast, &err)) {
     std::cout << " is a type." << std::endl;
   } else {
     std::cout << " is not a type." << std::endl;

@@ -27,7 +27,7 @@
 #include "value.h"
 #include "value_checker.h"
 
-namespace tervuren {
+namespace morphie {
 
 namespace {
 
@@ -216,4 +216,4 @@ string DotPrinter::DotGraph(const LabeledGraph& graph) {
   return util::StrCat("digraph logle_graph {\n", dot_graph, "}");
 }
 
-}  // namespace tervuren
+}  // namespace morphie

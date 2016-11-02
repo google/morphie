@@ -60,7 +60,7 @@
 #include "base/string.h"
 #include "util/status.h"
 
-namespace tervuren {
+namespace morphie {
 namespace util {
 
 using std::vector;
@@ -168,6 +168,6 @@ class CSVParser {
 };
 
 }  // namespace util
-}  // namespace tervuren
+}  // namespace morphie
 
 #endif  // LOGLE_UTIL_CSV_H_
