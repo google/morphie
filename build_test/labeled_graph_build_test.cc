@@ -15,7 +15,7 @@
 // Construct and print an empty labeled graph.
 #include <iostream>
 
-#include "ast.pb.h"
+#include "third_party/logle/graph/ast.pb.h"
 #include "labeled_graph.h"
 #include "type.h"
 

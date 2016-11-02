@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "ast.pb.h"
+#include "third_party/logle/graph/ast.pb.h"
 #include "value_checker.h"
 
 

@@ -23,13 +23,13 @@
 #include <type_traits>
 #include <utility>
 
-#include "json/json.h"
-#include "account_access_analyzer.h"
+#include "third_party/jsoncpp/json.h"
+#include "analyzers/examples/account_access_analyzer.h"
+#include "analyzers/examples/curio_analyzer.h"
+#include "analyzers/plaso/plaso_analyzer.h"
 #include "base/string.h"
-#include "curio_analyzer.h"
-#include "json_reader.h"
-#include "plaso_analyzer.h"
 #include "util/csv.h"
+#include "util/json_reader.h"
 #include "util/logging.h"
 #include "util/status.h"
 #include "util/string_utils.h"

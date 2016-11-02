@@ -14,7 +14,7 @@
 
 // Prints a empty JSON object using the JSONCpp library.
 #include <iostream>
-#include "json/json.h"
+#include "third_party/jsoncpp/json.h"
 
 int main(int argc, char **argv) {
   Json::Value json_doc;

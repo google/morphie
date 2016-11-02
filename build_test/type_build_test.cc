@@ -15,7 +15,7 @@
 // The code below runs the type checker on an AST representing a type.
 #include <iostream>
 
-#include "ast.pb.h"
+#include "third_party/logle/graph/ast.pb.h"
 #include "type.h"
 #include "type_checker.h"
 

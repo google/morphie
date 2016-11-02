@@ -15,7 +15,7 @@
 // Tests that the AnalysisOptions proto can be built and linked to.
 #include <iostream>
 
-#include "analysis_options.pb.h"
+#include "third_party/logle/analysis_options.pb.h"
 
 int main(int argc, char **argv) {
   morphie::AnalysisOptions options;

@@ -16,7 +16,7 @@
 #include <iostream>
 
 #include "curio_analyzer.h"
-#include "json/json.h"
+#include "third_party/jsoncpp/json.h"
 
 int main(int argc, char **argv) {
   std::unique_ptr<::Json::Value> doc(new ::Json::Value);

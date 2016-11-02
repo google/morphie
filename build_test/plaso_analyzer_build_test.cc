@@ -17,7 +17,7 @@
 #include <memory>
 #include <sstream>
 
-#include "json/json.h"
+#include "third_party/jsoncpp/json.h"
 #include "json_reader.h"
 #include "plaso_analyzer.h"
 

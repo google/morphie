@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "ast.pb.h"
+#include "third_party/logle/graph/ast.pb.h"
 #include "type_checker.h"
 
 int main(int argc, char **argv) {

@@ -16,7 +16,7 @@
 #ifndef LOGLE_FRONTEND_H_
 #define LOGLE_FRONTEND_H_
 
-#include "analysis_options.pb.h"
+#include "third_party/logle/analysis_options.pb.h"
 #include "util/status.h"
 
 namespace morphie {

@@ -14,12 +14,12 @@
 #include "util/csv.h"
 
 #include <boost/tokenizer.hpp>  // NOLINT
-#include <boost/exception/exception.hpp>  // NOLINT
+
 #include <sstream>
 
 // The Clang compiler does not support exceptions. Boost is compiled with Clang,
 // the client is required to define this function.
-// void boost::throw_exception(std::exception const& e) {}
+void boost::throw_exception(std::exception const& e) {}
 
 
 namespace morphie {
