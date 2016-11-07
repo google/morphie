@@ -20,7 +20,7 @@
 
 // The Clang compiler does not support exceptions. Boost is compiled with Clang,
 // the client is required to define this function.
-
+// void boost::throw_exception(std::exception const& e) {}
 
 namespace morphie {
 namespace util {
