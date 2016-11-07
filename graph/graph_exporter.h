@@ -22,8 +22,8 @@
 
 #include "base/string.h"
 #include "graph/labeled_graph.h"
-#include "third_party/logle/graph/ast.pb.h"
-#include "third_party/logle/graph/graph_explorer.pb.h"
+#include "ast.pb.h"
+#include "graph_explorer.pb.h"
 
 namespace morphie {
 

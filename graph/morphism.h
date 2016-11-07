@@ -40,7 +40,7 @@
 #include <unordered_set>
 
 #include "labeled_graph.h"
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 
 namespace morphie {
 namespace graph {

@@ -31,12 +31,12 @@
 #include <set>
 #include <vector>
 
-#include "third_party/jsoncpp/json.h"
-#include "third_party/logle/graph/ast.pb.h"
+#include "json/json.h"
+#include "ast.pb.h"
 #include "base/string.h"
 #include "graph/graph_interface.h"
 #include "graph/labeled_graph.h"
-#include "third_party/logle/analyzers/plaso/plaso_event.pb.h"
+#include "plaso_event.pb.h"
 #include "util/status.h"
 
 namespace morphie {

@@ -17,7 +17,7 @@
 #include <set>
 #include <utility>
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 #include "gtest.h"
 #include "graph/type.h"

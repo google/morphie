@@ -23,7 +23,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "third_party/jsoncpp/json.h"
+#include "json/json.h"
 #include "analyzers/examples/account_access_analyzer.h"
 #include "analyzers/examples/curio_analyzer.h"
 #include "analyzers/plaso/plaso_analyzer.h"

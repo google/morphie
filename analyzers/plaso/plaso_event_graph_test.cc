@@ -18,7 +18,7 @@
 
 #include "gtest.h"
 #include "analyzers/plaso/plaso_event.h"
-#include "third_party/logle/analyzers/plaso/plaso_event.pb.h"
+#include "plaso_event.pb.h"
 #include "util/status.h"
 #include "util/time_utils.h"
 #include "graph/value.h"

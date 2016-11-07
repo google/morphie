@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "labeled_graph.h"
 #include "type.h"
 

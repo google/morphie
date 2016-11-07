@@ -56,7 +56,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 #include "graph/type_checker.h"
 #include "util/status.h"

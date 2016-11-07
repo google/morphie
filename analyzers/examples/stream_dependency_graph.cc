@@ -17,7 +17,7 @@
 #include <set>
 #include <utility>
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "analyzers/examples/curio_defs.h"
 #include "base/vector.h"
 #include "graph/dot_printer.h"

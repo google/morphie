@@ -23,7 +23,7 @@
 #ifndef LOGLE_VALUE_CHECKER_H_
 #define LOGLE_VALUE_CHECKER_H_
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 
 namespace morphie {

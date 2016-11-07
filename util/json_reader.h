@@ -4,7 +4,7 @@
 #include <fstream>
 #include <memory>
 
-#include "third_party/jsoncpp/json.h"
+#include "json/json.h"
 
 namespace morphie {
 

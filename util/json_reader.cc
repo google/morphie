@@ -2,7 +2,6 @@
 #include <fstream>
 
 #include "base/string.h"
-#include "third_party/jsoncpp/json.h"
 #include "json_reader.h"
 #include "util/logging.h"
 

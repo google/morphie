@@ -22,7 +22,7 @@
 #include "graph/type.h"
 #include "graph/type_checker.h"
 #include "gtest.h"
-#include "third_party/logle/analyzers/plaso/plaso_event.pb.h"
+#include "plaso_event.pb.h"
 #include "util/time_utils.h"
 
 namespace morphie {

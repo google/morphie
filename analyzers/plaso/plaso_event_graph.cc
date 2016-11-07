@@ -22,7 +22,7 @@
 #include <utility>
 
 #include "analyzers/plaso/plaso_event.h"
-#include "third_party/logle/analyzers/plaso/plaso_event.pb.h"
+#include "plaso_event.pb.h"
 #include "graph/ast.h"
 #include "graph/dot_printer.h"
 #include "graph/graph_exporter.h"

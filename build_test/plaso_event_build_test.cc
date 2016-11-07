@@ -17,7 +17,7 @@
 #include <iostream>
 
 #include "plaso_event.h"
-#include "third_party/logle/plaso_event.pb.h"
+#include "plaso_event.pb.h"
 
 int main(int argc, char **argv) {
   morphie::File file = morphie::plaso::ParseFilename("/tmp/build/test/file.txt");

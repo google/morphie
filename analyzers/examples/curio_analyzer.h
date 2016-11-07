@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "third_party/jsoncpp/json.h"
+#include "json/json.h"
 #include "base/string.h"
 #include "analyzers/examples/stream_dependency_graph.h"
 #include "util/status.h"

@@ -18,10 +18,10 @@
 #ifndef LOGLE_PLASO_EVENT_H_
 #define LOGLE_PLASO_EVENT_H_
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
-#include "third_party/jsoncpp/json.h"
-#include "third_party/logle/analyzers/plaso/plaso_event.pb.h"
+#include "json/json.h"
+#include "plaso_event.pb.h"
 
 namespace morphie {
 // The 'plaso' namespace contains utilities for dealing with Plaso output.

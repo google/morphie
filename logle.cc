@@ -22,10 +22,8 @@
 
 #include <google/protobuf/text_format.h>
 
-#include "third_party/logle/analysis_options.pb.h"
-#include "base/commandlineflags.h"
-#include "base/init_google.h"
-#include "base/integral_types.h"
+#include "analysis_options.pb.h"
+#include "gflags/gflags.h"
 #include "frontend.h"
 #include "util/status.h"
 
@@ -48,7 +46,7 @@ static bool CheckFlagValueNotEmpty(const char* flagname, const string& value) {
 }
 
 static bool is_config_empty =
-    RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
+    google::RegisterFlagValidator(&FLAGS_analysis_options, &CheckFlagValueNotEmpty);
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);

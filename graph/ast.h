@@ -35,7 +35,7 @@
 #ifndef LOGLE_AST_H_
 #define LOGLE_AST_H_
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 
 namespace morphie {

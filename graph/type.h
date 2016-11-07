@@ -19,7 +19,7 @@
 #define LOGLE_TYPE_H_
 
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 #include "base/vector.h"
 

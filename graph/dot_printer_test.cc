@@ -19,7 +19,7 @@
 #include <set>
 
 #include "analyzers/plaso/plaso_event.h"
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 #include "base/vector.h"
 #include "gtest.h"

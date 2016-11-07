@@ -33,7 +33,7 @@
 
 #include <cstdint>
 
-#include "third_party/logle/graph/ast.pb.h"
+#include "ast.pb.h"
 #include "base/string.h"
 
 namespace morphie {
