@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-#include "analyzers/examples//stream_dependency_graph.h"
+#include "analyzers/examples/stream_dependency_graph.h"
 
 #include "base/vector.h"
 
@@ -31,7 +31,7 @@ TEST(PlasoEventGraphDeathTest, UninitializedCalls) {
   EXPECT_DEATH({ graph.ToDot(); }, kInitializationRegEx);
 }
 
-static const vector<std::pair<string, string>> streams = {
+static const std::vector<std::pair<string, string>> streams = {
     {"[/path/to/stream:stream1]", "stream1"},
     {"[/path/to/stream:stream2]", "stream2"},
     {"[/path/to/stream:stream3]", "stream3"},

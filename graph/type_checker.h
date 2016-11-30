@@ -75,8 +75,8 @@
 
 #include <map>
 
-#include "ast.pb.h"
 #include "base/string.h"
+#include "ast.pb.h"
 
 namespace morphie {
 namespace ast {

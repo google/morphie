@@ -101,12 +101,12 @@ void AccessAnalyzer::IncrementSkipCounter() {
 }
 
 util::Status AccessAnalyzer::InitializeFieldMap() {
-  const vector<string>& field_names = csv_parser_->begin()->fields();
+  const std::vector<string>& field_names = csv_parser_->begin()->fields();
   if (field_names.empty()) {
     return util::Status(Code::INVALID_ARGUMENT, "First line has no columns.");
   }
   int index = 0;
-  set<string> provided_fields;
+  std::set<string> provided_fields;
   for (const string& field_name : field_names) {
     if (field_name.empty()) {
       return util::Status(
@@ -123,9 +123,9 @@ util::Status AccessAnalyzer::InitializeFieldMap() {
     provided_fields.insert(field_name);
     ++index;
   }
-  const set<string> required_fields =
+  const std::set<string> required_fields =
       util::SplitToSet(access::kRequiredFields, ',');
-  set<string> missing_fields;
+  std::set<string> missing_fields;
   std::set_difference(required_fields.begin(), required_fields.end(),
                       provided_fields.begin(), provided_fields.end(),
                       std::inserter(missing_fields, missing_fields.begin()));

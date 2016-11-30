@@ -321,7 +321,7 @@ TEST_F(ValueTest, ConstructsSets) {
 }
 
 static AST GetTupleType() {
-  vector<AST> field_asts;
+  std::vector<AST> field_asts;
   field_asts.emplace_back(type::MakeBool("First", true));
   field_asts.emplace_back(type::MakeString("Second", true));
   return type::MakeTuple("Tuple", true, field_asts);

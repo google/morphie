@@ -17,15 +17,15 @@
 #include <set>
 #include <utility>
 
-#include "ast.pb.h"
 #include "analyzers/examples/curio_defs.h"
 #include "base/vector.h"
 #include "graph/dot_printer.h"
 #include "graph/type.h"
 #include "graph/type_checker.h"
+#include "graph/value.h"
+#include "ast.pb.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
-#include "graph/value.h"
 
 namespace morphie {
 
@@ -58,7 +58,7 @@ TaggedAST MakeNodeLabel(const AST& type, const string& node_id,
 
 util::Status StreamDependencyGraph::Initialize() {
   // Create a unique node label of type tuple(string, string) for each stream.
-  vector<AST> args;
+  std::vector<AST> args;
   args.emplace_back(
       type::MakeString(curio::kStreamIdTag, false /*May not be null*/));
   args.emplace_back(
@@ -67,11 +67,11 @@ util::Status StreamDependencyGraph::Initialize() {
   node_types.emplace(
       curio::kStreamTag,
       type::MakeTuple(curio::kStreamTag, false /*May not be null*/, args));
-  set<string> unique_nodes = {curio::kStreamTag};
+  std::set<string> unique_nodes = {curio::kStreamTag};
   type::Types edge_types;
   edge_types.emplace(curio::kDependentTag,
                      type::MakeNull(curio::kDependentTag));
-  set<string> unique_edges = {curio::kDependentTag};
+  std::set<string> unique_edges = {curio::kDependentTag};
   // There is no graph-level label.
   AST graph_type = type::MakeNull(curio::kStreamTag);
 

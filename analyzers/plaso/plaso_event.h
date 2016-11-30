@@ -12,16 +12,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// A PlasoEvent proto (defined in third_party/logle/plaso_event.proto)
-// represents data extracted from the output of Plaso (go/plaso). This file
-// defines utilities for parsing input and populating PlasoEvent protos.
+// A PlasoEvent proto (defined in analyzers/plaso/plaso_event.proto) represents
+// data extracted from the output of Plaso (go/plaso). This file defines
+// utilities for parsing input and populating PlasoEvent protos.
 #ifndef LOGLE_PLASO_EVENT_H_
 #define LOGLE_PLASO_EVENT_H_
 
-#include "ast.pb.h"
 #include "base/string.h"
 #include "json/json.h"
 #include "plaso_event.pb.h"
+#include "ast.pb.h"
 
 namespace morphie {
 // The 'plaso' namespace contains utilities for dealing with Plaso output.

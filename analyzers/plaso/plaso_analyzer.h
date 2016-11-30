@@ -25,8 +25,8 @@
 #include <unordered_map>
 
 #include "analyzers/plaso/plaso_event_graph.h"
-#include "json/json.h"
 #include "base/string.h"
+#include "json/json.h"
 #include "util/json_reader.h"
 #include "util/status.h"
 

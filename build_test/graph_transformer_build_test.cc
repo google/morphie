@@ -15,7 +15,7 @@
 // Uses the graph transformer to delete nodes in a graph and prints the result.
 #include <iostream>
 
-#include "ast.pb.h"
+#include "third_party/logle/ast.pb.h"
 #include "dot_printer.h"
 #include "graph_transformer.h"
 #include "labeled_graph.h"

@@ -84,7 +84,7 @@ struct QuotientConfig {
 // space complexity linear in the number of nodes and edges of the ouput graph.
 // - Requires that 'nodes' contains valid node identifiers of the input graph.
 std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
-                                      const set<NodeId>& nodes);
+                                      const std::set<NodeId>& nodes);
 
 // If G = (V, E) is a graph and F is a subset of edges of E, the result of
 // deleting edges but not nodes in F from G is the graph with nodes V and edges
@@ -93,7 +93,7 @@ std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
 //
 // Returns a labeled graph obtained by deleting 'edges' from the input graph.
 std::unique_ptr<Morphism> DeleteEdgesNotNodes(const LabeledGraph& graph,
-                                              const set<EdgeId>& edges);
+                                              const std::set<EdgeId>& edges);
 
 // If G = (V, E) is a graph and F is a subset of edges of E, the result of
 // deleting edges and nodes in F from G is the graph with edges H = (E - F) and
@@ -104,7 +104,7 @@ std::unique_ptr<Morphism> DeleteEdgesNotNodes(const LabeledGraph& graph,
 // Returns a labeled graph obtained by deleting 'edges' from the input graph and
 // nodes with no incident edges in the resulting graph.
 std::unique_ptr<Morphism> DeleteEdgesAndNodes(const LabeledGraph& graph,
-                                              const set<EdgeId>& edges);
+                                              const std::set<EdgeId>& edges);
 
 // The Quotient graph Q of a graph G is a graph whose nodes are blocks of a
 // partition of the vertices of G and where block B is adjacent to block C if
@@ -134,7 +134,7 @@ std::unique_ptr<LabeledGraph> QuotientGraph(
 // edge (x, u) or (x, v) in the input graph there is an edge (x, w) in the
 // output graph. This applies likewise for edges (u, x) and (u, v).
 std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
-                                            const set<EdgeId>& edges,
+                                            const std::set<EdgeId>& edges,
                                             const QuotientConfig& config);
 
 // Folding node v removes v from the graph, and replacing it with a complete
@@ -143,7 +143,7 @@ std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
 // output graph.
 std::unique_ptr<LabeledGraph> FoldNodes(const LabeledGraph& graph,
                                         const FoldLabelFn& fold_label_fn,
-                                        const set<NodeId>& nodes);
+                                        const std::set<NodeId>& nodes);
 }  // namespace graph
 
 }  // namespace morphie

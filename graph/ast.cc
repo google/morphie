@@ -153,7 +153,7 @@ string ToString(const AST& ast, const PrintConfig& config) {
   if (Includes(config.opt(), PrintOption::kName) || !ast.has_c_ast()) {
     return root;
   }
-  vector<string> arg_str;
+  std::vector<string> arg_str;
   if (ast.c_ast().arg_size() == 0) {
     arg_str.emplace_back(kNullStr);
   } else {

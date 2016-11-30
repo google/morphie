@@ -69,24 +69,25 @@ TEST(CurioAnalyzerTest, InitializationDoesNotProcess) {
   EXPECT_EQ(0, curio_analyzer.NumStreamsProcessed());
 }
 
-static const vector<std::pair<string, std::pair<int, int>>> malformed_data = {
-    // One stream missing all information.
-    {R"({"[/path/to/stream:stream1]" : {}})", {0, 1}},
-    // Two streams missing all information.
-    {R"({"[/path/to/stream:stream2]" : {},
+static const std::vector<std::pair<string, std::pair<int, int>>>
+    malformed_data = {
+        // One stream missing all information.
+        {R"({"[/path/to/stream:stream1]" : {}})", {0, 1}},
+        // Two streams missing all information.
+        {R"({"[/path/to/stream:stream2]" : {},
              "[/path/to/stream:stream3]" : {}})",
-     {0, 2}},
-    // A stream missing ID and children definitions.
-    {R"({"[/path/to/stream:stream4]" : {"Node":{}}})", {0, 1}},
-    // A stream with empty ID and no children definition.
-    {R"({"[/path/to/stream:stream5]" : {"Node":{"ID":{}}}})", {0, 1}},
-    // A stream with no children definition.
-    {R"({"[/path/to/stream:stream6]" :
+         {0, 2}},
+        // A stream missing ID and children definitions.
+        {R"({"[/path/to/stream:stream4]" : {"Node":{}}})", {0, 1}},
+        // A stream with empty ID and no children definition.
+        {R"({"[/path/to/stream:stream5]" : {"Node":{"ID":{}}}})", {0, 1}},
+        // A stream with no children definition.
+        {R"({"[/path/to/stream:stream6]" :
       {"Node":{"ID":{"Package":"/path/to/stream", "Name":"stream6"}}}})",
-     {0, 1}},
+         {0, 1}},
 };
 
-static const vector<std::pair<string, std::pair<int, int>>> streams = {
+static const std::vector<std::pair<string, std::pair<int, int>>> streams = {
     // A stream with an empty set of children is valid input.
     {R"({"[/path/to/stream:stream1]" :
       {"Node":{"ID":{"Package":"/path/to/stream", "Name":"stream1"}},

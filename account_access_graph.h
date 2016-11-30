@@ -28,8 +28,8 @@
 
 #include "base/string.h"
 #include "base/vector.h"
-#include "graph/graph_interface.h"
-#include "graph/labeled_graph.h"
+#include "graph_interface.h"
+#include "labeled_graph.h"
 #include "util/status.h"
 
 namespace morphie {
@@ -79,7 +79,7 @@ class AccountAccessGraph : public GraphInterface {
   // to represent an unknown user, there will be a user node in the graph
   // labelled with the empty string.
   void ProcessAccessData(const unordered_map<string, int>& field_index,
-                         const std::vector<string>& fields);
+                         const vector<string>& fields);
 
   // Return a representation of the graph in Graphviz DOT format.
   string ToDot() const;
@@ -87,11 +87,11 @@ class AccountAccessGraph : public GraphInterface {
  private:
   // The functions below create each of the three types of labels in the graph.
   TaggedAST MakeActorLabel(const unordered_map<string, int>& field_index,
-                           const std::vector<string>& fields);
+                           const vector<string>& fields);
   TaggedAST MakeUserLabel(const unordered_map<string, int>& field_index,
-                          const std::vector<string>& fields);
+                          const vector<string>& fields);
   TaggedAST MakeEdgeLabel(const unordered_map<string, int>& field_index,
-                          const std::vector<string>& fields);
+                          const vector<string>& fields);
 
   bool is_initialized_;
   LabeledGraph graph_;

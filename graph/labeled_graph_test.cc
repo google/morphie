@@ -17,14 +17,14 @@
 #include <set>
 #include <utility>
 
-#include "ast.pb.h"
 #include "base/string.h"
-#include "gtest.h"
 #include "graph/type.h"
 #include "graph/type_checker.h"
-#include "util/status.h"
 #include "graph/value.h"
 #include "graph/value_checker.h"
+#include "gtest.h"
+#include "ast.pb.h"
+#include "util/status.h"
 
 namespace morphie {
 namespace {
@@ -53,7 +53,7 @@ TEST(LabeledGraphDeathTest, UninitializedGetNodeTypes) {
 // Uninitialized call to GetUniqueNodeTags().
 TEST(LabeledGraphDeathTest, UninitializedGetUniqueNodeTags) {
   LabeledGraph graph;
-  set<string> tags;
+  std::set<string> tags;
   EXPECT_DEATH({ tags = graph.GetUniqueNodeTags(); }, ".*");
 }
 
@@ -74,7 +74,7 @@ TEST(LabeledGraphDeathTest, UninitializedGetEdgeTypes) {
 // Uninitialized call to GetUniqueEdgeTags().
 TEST(LabeledGraphDeathTest, UninitializedGetUniqueEdgeTags) {
   LabeledGraph graph;
-  set<string> tags;
+  std::set<string> tags;
   EXPECT_DEATH({ tags = graph.GetUniqueEdgeTags(); }, ".*");
 }
 
@@ -125,14 +125,14 @@ TEST(LabeledGraphDeathTest, UninitializedGetGraphLabel) {
 // Uninitialized call to GetNodes.
 TEST(LabeledGraphDeathTest, UninitializedGetNodes) {
   LabeledGraph graph;
-  set<NodeId> nodes;
+  std::set<NodeId> nodes;
   EXPECT_DEATH({ nodes = graph.GetNodes(TempLabel()); }, ".*");
 }
 
 // Uninitialized call to GetEdges.
 TEST(LabeledGraphDeathTest, UninitializedGetEdges) {
   LabeledGraph graph;
-  set<EdgeId> edges;
+  std::set<EdgeId> edges;
   EXPECT_DEATH({ edges = graph.GetEdges(TempLabel()); }, ".*");
 }
 
@@ -194,16 +194,20 @@ class LabeledGraphTest : public ::testing::Test {
 // Do not initialize if all arguments are empty.
 TEST_F(LabeledGraphTest, RejectsAllEmptyTypes) {
   AST graph_type;
-  EXPECT_FALSE(graph_.Initialize(Types(), set<string>(), Types(), set<string>(),
-                                 graph_type).ok());
+  EXPECT_FALSE(graph_
+                   .Initialize(Types(), std::set<string>(), Types(),
+                               std::set<string>(), graph_type)
+                   .ok());
 }
 
 // Do not initialize if the graph type is malformed.
 TEST_F(LabeledGraphTest, RejectMalformedGraphType) {
   AST graph_type = type::MakeString("name", false);
   graph_type.clear_is_nullable();
-  EXPECT_FALSE(graph_.Initialize(Types(), set<string>(), Types(), set<string>(),
-                                 graph_type).ok());
+  EXPECT_FALSE(graph_
+                   .Initialize(Types(), std::set<string>(), Types(),
+                               std::set<string>(), graph_type)
+                   .ok());
 }
 
 // Do not initialize if the set of node types contains a malformed type.
@@ -213,8 +217,10 @@ TEST_F(LabeledGraphTest, RejectsMalformedNodeType) {
   // Add an AST that is not a type to node_types.
   node_types.insert({"Event", node_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_FALSE(graph_.Initialize(node_types, set<string>(), Types(),
-                                 set<string>(), graph_type).ok());
+  EXPECT_FALSE(graph_
+                   .Initialize(node_types, std::set<string>(), Types(),
+                               std::set<string>(), graph_type)
+                   .ok());
 }
 
 // Do not initialize if the set of edge types contains a malformed type.
@@ -223,8 +229,10 @@ TEST_F(LabeledGraphTest, RejectsMalformedEdgeType) {
   Types edge_types;
   edge_types.insert({"Download", edge_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_FALSE(graph_.Initialize(Types(), set<string>(), edge_types,
-                                 set<string>(), graph_type).ok());
+  EXPECT_FALSE(graph_
+                   .Initialize(Types(), std::set<string>(), edge_types,
+                               std::set<string>(), graph_type)
+                   .ok());
 }
 
 // In cases where initialization succeeds, tested next, the graph obtained
@@ -232,8 +240,10 @@ TEST_F(LabeledGraphTest, RejectsMalformedEdgeType) {
 // If initialization succeeds, the graph is empty.
 TEST_F(LabeledGraphTest, AcceptsOnlyNonEmptyGraphType) {
   AST graph_type = type::MakeString("name", false);
-  EXPECT_TRUE(graph_.Initialize(Types(), set<string>(), Types(), set<string>(),
-                                graph_type).ok());
+  EXPECT_TRUE(graph_
+                  .Initialize(Types(), std::set<string>(), Types(),
+                              std::set<string>(), graph_type)
+                  .ok());
   EXPECT_EQ(0, graph_.NumNodeTypes());
   EXPECT_EQ(0, graph_.NumUniqueNodeTypes());
   EXPECT_EQ(0, graph_.NumEdgeTypes());
@@ -248,8 +258,10 @@ TEST_F(LabeledGraphTest, AcceptsNonEmptyNodeAndGraphTypes) {
   Types node_types;
   node_types.insert({"Event", node_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_TRUE(graph_.Initialize(node_types, set<string>(), Types(),
-                                set<string>(), graph_type).ok());
+  EXPECT_TRUE(graph_
+                  .Initialize(node_types, std::set<string>(), Types(),
+                              std::set<string>(), graph_type)
+                  .ok());
   EXPECT_EQ(1, graph_.NumNodeTypes());
   EXPECT_EQ(0, graph_.NumUniqueNodeTypes());
   EXPECT_EQ(0, graph_.NumEdgeTypes());
@@ -264,8 +276,10 @@ TEST_F(LabeledGraphTest, AcceptsNonEmptyEdgeAndGraphTypes) {
   Types edge_types;
   edge_types.insert({"Download", edge_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_TRUE(graph_.Initialize(Types(), set<string>(), edge_types,
-                                set<string>(), graph_type).ok());
+  EXPECT_TRUE(graph_
+                  .Initialize(Types(), std::set<string>(), edge_types,
+                              std::set<string>(), graph_type)
+                  .ok());
   EXPECT_EQ(0, graph_.NumNodeTypes());
   EXPECT_EQ(0, graph_.NumUniqueNodeTypes());
   EXPECT_EQ(1, graph_.NumEdgeTypes());
@@ -283,8 +297,10 @@ TEST_F(LabeledGraphTest, AcceptsAllNonEmptyTypesAndEmptyUniqueTag) {
   Types edge_types;
   edge_types.insert({"Download", edge_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_TRUE(graph_.Initialize(node_types, set<string>(), edge_types,
-                                set<string>(), graph_type).ok());
+  EXPECT_TRUE(graph_
+                  .Initialize(node_types, std::set<string>(), edge_types,
+                              std::set<string>(), graph_type)
+                  .ok());
   EXPECT_EQ(1, graph_.NumNodeTypes());
   EXPECT_EQ(0, graph_.NumUniqueNodeTypes());
   EXPECT_EQ(1, graph_.NumEdgeTypes());
@@ -298,14 +314,16 @@ TEST_F(LabeledGraphTest, AcceptsAllNonEmptyTypesAndUniqueNodeTags) {
   AST node_type = type::MakeInt("EventID", false);
   Types node_types;
   node_types.insert({"Event", node_type});
-  set<string> tags;
+  std::set<string> tags;
   tags.insert("Event");
   AST edge_type = type::MakeBool("isDownload", false);
   Types edge_types;
   edge_types.insert({"Download", edge_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_TRUE(graph_.Initialize(node_types, tags, edge_types, set<string>(),
-                                graph_type).ok());
+  EXPECT_TRUE(graph_
+                  .Initialize(node_types, tags, edge_types, std::set<string>(),
+                              graph_type)
+                  .ok());
   EXPECT_EQ(1, graph_.NumNodeTypes());
   EXPECT_EQ(1, graph_.NumUniqueNodeTypes());
   EXPECT_EQ(1, graph_.NumEdgeTypes());
@@ -319,14 +337,16 @@ TEST_F(LabeledGraphTest, AcceptsAllNonEmptyTypesAndUniqueEdgeTags) {
   AST node_type = type::MakeInt("EventID", false);
   Types node_types;
   node_types.insert({"Event", node_type});
-  set<string> tags;
+  std::set<string> tags;
   tags.insert("Event");
   AST edge_type = type::MakeBool("isDownload", false);
   Types edge_types;
   edge_types.insert({"Download", edge_type});
   AST graph_type = type::MakeString("name", false);
-  EXPECT_TRUE(graph_.Initialize(node_types, set<string>(), edge_types, tags,
-                                graph_type).ok());
+  EXPECT_TRUE(graph_
+                  .Initialize(node_types, std::set<string>(), edge_types, tags,
+                              graph_type)
+                  .ok());
   EXPECT_EQ(1, graph_.NumNodeTypes());
   EXPECT_EQ(0, graph_.NumUniqueNodeTypes());
   EXPECT_EQ(1, graph_.NumEdgeTypes());
@@ -340,7 +360,7 @@ TEST_F(LabeledGraphTest, AcceptsAllNonEmptyTypesAndUniqueTags) {
   AST node_type = type::MakeInt("EventID", false);
   Types node_types;
   node_types.insert({"Event", node_type});
-  set<string> tags;
+  std::set<string> tags;
   tags.insert("Event");
   AST edge_type = type::MakeBool("isDownload", false);
   Types edge_types;
@@ -366,14 +386,14 @@ util::Status Initialize(LabeledGraph* graph) {
   node_types.insert({"Event", node_type});
   node_type = type::MakeString("Filename", false);
   node_types.insert({"File", node_type});
-  set<string> node_tags;
+  std::set<string> node_tags;
   node_tags.insert("File");
   AST edge_type = type::MakeString("Info", false);
   Types edge_types;
   edge_types.insert({"Relation", edge_type});
   edge_type = type::MakeInt("Number", false);
   edge_types.insert({"Frequency", edge_type});
-  set<string> edge_tags;
+  std::set<string> edge_tags;
   edge_tags.insert("Frequency");
   AST graph_type = type::MakeString("System", false);
   return graph->Initialize(node_types, node_tags, edge_types, edge_tags,
@@ -391,7 +411,7 @@ TEST_F(LabeledGraphTest, TestGetNodeTypes) {
   EXPECT_TRUE(value::Isomorphic(type_it->second, result.second));
   result = graph_.GetNodeType("Info");
   EXPECT_FALSE(result.first);
-  set<string> tags = graph_.GetUniqueNodeTags();
+  std::set<string> tags = graph_.GetUniqueNodeTags();
   EXPECT_EQ(1, tags.size());
   EXPECT_EQ("File", *tags.begin());
 }
@@ -407,7 +427,7 @@ TEST_F(LabeledGraphTest, TestGetEdgeTypes) {
   EXPECT_TRUE(value::Isomorphic(type_it->second, result.second));
   result = graph_.GetEdgeType("Info");
   EXPECT_FALSE(result.first);
-  set<string> tags = graph_.GetUniqueEdgeTags();
+  std::set<string> tags = graph_.GetUniqueEdgeTags();
   EXPECT_EQ(1, tags.size());
   EXPECT_EQ("Frequency", *tags.begin());
 }
@@ -483,7 +503,7 @@ TEST_F(LabeledGraphTest, CreateSingleNodeGraph) {
   // Graph should have one node with the given label.
   EXPECT_EQ(1, graph_.NumNodes());
   EXPECT_EQ(1, graph_.NumLabeledNodes(label));
-  set<NodeId> nodes = graph_.GetNodes(label);
+  std::set<NodeId> nodes = graph_.GetNodes(label);
   EXPECT_EQ(1, nodes.size());
   EXPECT_EQ(node_id, *nodes.begin());
   TaggedAST node_label = graph_.GetNodeLabel(node_id);
@@ -523,7 +543,7 @@ TEST_F(LabeledGraphTest, CreateSingleUniqueNodeGraph) {
   EXPECT_EQ(node1, node2);
   EXPECT_EQ(1, graph_.NumNodes());
   EXPECT_EQ(1, graph_.NumLabeledNodes(label));
-  set<NodeId> nodes = graph_.GetNodes(label);
+  std::set<NodeId> nodes = graph_.GetNodes(label);
   EXPECT_EQ(1, nodes.size());
   EXPECT_EQ(*nodes.begin(), node1);
   TaggedAST node_label = graph_.GetNodeLabel(node1);
@@ -544,7 +564,7 @@ TEST_F(LabeledGraphTest, TwoNodeNoEdgeGraph) {
   // Graph should have two nodes with the given labels.
   EXPECT_EQ(2, graph_.NumNodes());
   EXPECT_EQ(1, graph_.NumLabeledNodes(event_label));
-  set<NodeId> nodes = graph_.GetNodes(event_label);
+  std::set<NodeId> nodes = graph_.GetNodes(event_label);
   EXPECT_EQ(1, nodes.size());
   EXPECT_EQ(1, graph_.NumLabeledNodes(file_label));
   EXPECT_EQ(*nodes.begin(), event_id);
@@ -701,9 +721,10 @@ TEST_F(LabeledGraphTest, TwoNodesTwoEdgesSameOrientation) {
 TEST_F(LabeledGraphTest, GetNeighbors) {
   // Create this graph:  0 -> 1, 0 -> 2, 1 -> 2
   ASSERT_TRUE(Initialize(&graph_).ok());
-  vector<TaggedAST> label = {GetIntLabel("Event", 0), GetIntLabel("Event", 1),
-                             GetIntLabel("Event", 2)};
-  vector<NodeId> node_id;
+  std::vector<TaggedAST> label = {GetIntLabel("Event", 0),
+                                  GetIntLabel("Event", 1),
+                                  GetIntLabel("Event", 2)};
+  std::vector<NodeId> node_id;
   node_id.resize(3);
   node_id[0] = graph_.FindOrAddNode(label[0]);
   node_id[1] = graph_.FindOrAddNode(label[1]);
@@ -719,7 +740,7 @@ TEST_F(LabeledGraphTest, GetNeighbors) {
   ASSERT_TRUE(Initialize(&empty_graph).ok());
   EXPECT_FALSE(empty_graph.HasNode(node_id[0]));
   // Check the predecessors of nodes in 'graph_'.
-  set<NodeId> node_set;
+  std::set<NodeId> node_set;
   InEdgeIterator in_edge_it;
   // Check that predecessors(0) == {}, the empty set.
   EXPECT_TRUE(graph_.HasNode(node_id[0]));

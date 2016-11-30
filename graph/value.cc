@@ -12,16 +12,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// See third_party/logle/value_checker.h for details on values.
+// See third_party/logle/graph/value_checker.h for details on values.
 #include "graph/value.h"
 
 #include <algorithm>
 
 #include "graph/ast.h"
 #include "graph/type_checker.h"
+#include "graph/value_checker.h"
 #include "util/logging.h"
 #include "util/time_utils.h"
-#include "graph/value_checker.h"
 
 namespace morphie {
 namespace ast {

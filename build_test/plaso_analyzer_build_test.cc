@@ -17,9 +17,9 @@
 #include <memory>
 #include <sstream>
 
-#include "json/json.h"
-#include "json_reader.h"
 #include "analyzers/plaso/plaso_analyzer.h"
+#include "json_reader.h"
+#include "json/json.h"
 
 int main(int argc, char **argv) {
   morphie::PlasoAnalyzer analyzer(false /* Do not show event sources.*/);

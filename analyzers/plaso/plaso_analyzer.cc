@@ -73,7 +73,7 @@ void PlasoAnalyzer::IncrementSkipCounter() {
 }
 
 void PlasoAnalyzer::BuildPlasoGraphFromJSON() {
-  const set<string> required_fields =
+  const std::set<string> required_fields =
       util::SplitToSet(plaso::kRequiredFields, ',');
   CHECK(!required_fields.empty(), "No required fields in input.");
   // List of all event names.

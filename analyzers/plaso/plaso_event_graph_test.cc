@@ -16,12 +16,12 @@
 
 #include <memory>  // for __alloc_traits<>::value_type
 
-#include "gtest.h"
 #include "analyzers/plaso/plaso_event.h"
+#include "graph/value.h"
+#include "gtest.h"
 #include "plaso_event.pb.h"
 #include "util/status.h"
 #include "util/time_utils.h"
-#include "graph/value.h"
 
 namespace morphie {
 namespace {

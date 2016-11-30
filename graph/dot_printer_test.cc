@@ -19,15 +19,15 @@
 #include <set>
 
 #include "analyzers/plaso/plaso_event.h"
-#include "ast.pb.h"
 #include "base/string.h"
 #include "base/vector.h"
-#include "gtest.h"
 #include "graph/ast.h"
 #include "graph/labeled_graph.h"
 #include "graph/type.h"
 #include "graph/type_checker.h"
 #include "graph/value.h"
+#include "gtest.h"
+#include "ast.pb.h"
 #include "util/status.h"
 #include "util/string_utils.h"
 
@@ -89,8 +89,8 @@ bool HasGraphDeclaration(const string& s) {
 }
 
 // Returns the set of tags in 's'.
-vector<string> GetTags(const string& s) {
-  vector<string> tags;
+std::vector<string> GetTags(const string& s) {
+  std::vector<string> tags;
   boost::regex label_regex(kTaggedLabelRegEx);
   // There are two subgroups in the regular expression kTaggedLabelRegEx. The
   // first group matches the name and the second matches the contents of a label
@@ -138,7 +138,7 @@ class LabeledGraphVisualizerTest : public ::testing::Test {
   DotPrinter dot_printer_;
   TaggedAST tast_;
   LabeledGraph graph_;
-  vector<string> label_strs_;
+  std::vector<string> label_strs_;
 };
 
 // These tests check the formatting of attributes and declarations and also
@@ -321,12 +321,12 @@ util::Status Initialize(LabeledGraph* graph) {
   node_types.emplace(ast::kIPAddressTag, ast::type::MakeIPAddress());
   node_types.emplace(ast::kURLTag, ast::type::MakeURL());
   node_types.emplace(kRandomTag_, ast::type::MakeString(kRandomTag_, false));
-  set<string> node_tags = {ast::kFileTag, ast::kIPAddressTag,
+  std::set<string> node_tags = {ast::kFileTag, ast::kIPAddressTag,
                            ast::kURLTag};
   Types edge_types;
   edge_types.emplace(ast::kPrecedesTag, ast::type::MakeBool("", true));
   edge_types.emplace(kEdgeTag_, ast::type::MakeString(kEdgeTag_, false));
-  set<string> edge_tags = {ast::kPrecedesTag};
+  std::set<string> edge_tags = {ast::kPrecedesTag};
   AST graph_type = ast::type::MakeString("System", false);
   return graph->Initialize(node_types, node_tags, edge_types, edge_tags,
                            graph_type);

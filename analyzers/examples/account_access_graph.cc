@@ -21,9 +21,9 @@
 #include "graph/dot_printer.h"
 #include "graph/type.h"
 #include "graph/type_checker.h"
+#include "graph/value.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
-#include "graph/value.h"
 
 namespace {
 // These declarations are required because the using declaration in
@@ -71,7 +71,7 @@ namespace value = ast::value;
 util::Status AccountAccessGraph::Initialize() {
   // Create a unique node label of type tuple(string, string, string) for actor
   // information.
-  vector<AST> args;
+  std::vector<AST> args;
   args.emplace_back(type::MakeString(kActorTag, false));
   args.emplace_back(type::MakeString(kTitle, true));
   args.emplace_back(type::MakeString(kManager, true));
@@ -79,11 +79,11 @@ util::Status AccountAccessGraph::Initialize() {
   node_types.emplace(kActorTag, type::MakeTuple(kActorTag, false, args));
   // Create a unique node label of type string for user names.
   node_types.emplace(kUserTag, type::MakeString(kUserTag, false));
-  set<string> unique_nodes = {kActorTag, kUserTag};
+  std::set<string> unique_nodes = {kActorTag, kUserTag};
   // Define an access edge whose label is the number of accesses.
   type::Types edge_types;
   edge_types.emplace(kAccessEdgeTag, type::MakeInt(kCount, false));
-  set<string> unique_edges = {kAccessEdgeTag};
+  std::set<string> unique_edges = {kAccessEdgeTag};
   // There is no graph-level label.
   AST graph_type = type::MakeNull(kAccessGraphTag);
 
@@ -118,7 +118,7 @@ int AccountAccessGraph::NumLabeledEdges(const TaggedAST& label) const {
 
 void AccountAccessGraph::ProcessAccessData(
     const unordered_map<string, int>& field_index,
-    const vector<string>& fields) {
+    const std::vector<string>& fields) {
   CHECK(is_initialized_, kInitializationErr);
   CHECK(!field_index.empty(), "The map 'field_index' is empty");
   CHECK(!fields.empty(), "The vector 'fields' is empty");
@@ -137,7 +137,7 @@ string AccountAccessGraph::ToDot() const {
 
 TaggedAST AccountAccessGraph::MakeActorLabel(
     const unordered_map<string, int>& field_index,
-    const vector<string>& fields) {
+    const std::vector<string>& fields) {
   // Create a tuple consisting of the actor, title and manager.
   AST actor_ast = value::MakeNullTuple(3);
   std::pair<bool, AST> result = graph_.GetNodeType(kActorTag);
@@ -157,7 +157,7 @@ TaggedAST AccountAccessGraph::MakeActorLabel(
 
 TaggedAST AccountAccessGraph::MakeUserLabel(
     const unordered_map<string, int>& field_index,
-    const vector<string>& fields) {
+    const std::vector<string>& fields) {
   string user_str = GetField(access::kUser, field_index, fields);
   AST user_ast = value::MakeString(user_str);
   TaggedAST user;
@@ -168,7 +168,7 @@ TaggedAST AccountAccessGraph::MakeUserLabel(
 
 TaggedAST AccountAccessGraph::MakeEdgeLabel(
     const unordered_map<string, int>& field_index,
-    const vector<string>& fields) {
+    const std::vector<string>& fields) {
   string count_str = GetField(access::kNumAccesses, field_index, fields);
   // Convert a string to a 64 bit signed integer.
   int64_t count_val = std::stoll(count_str);

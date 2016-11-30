@@ -23,8 +23,8 @@
 #ifndef LOGLE_VALUE_CHECKER_H_
 #define LOGLE_VALUE_CHECKER_H_
 
-#include "ast.pb.h"
 #include "base/string.h"
+#include "ast.pb.h"
 
 namespace morphie {
 namespace ast {

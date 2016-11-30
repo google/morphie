@@ -21,9 +21,9 @@
 
 #include <algorithm>
 
-#include "graph/ast.h"
 #include "base/vector.h"
 #include "google/protobuf/message_lite.h"
+#include "graph/ast.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
 
@@ -164,7 +164,7 @@ void CanonicalizeContainer(CompositeAST* val) {
 // Sort the argument list of a set and remove duplicates.
 void CanonicalizeSet(CompositeAST* val) {
   CHECK(val->op() == Operator::SET, "");
-  vector<string> elements;
+  std::vector<string> elements;
   elements.reserve(val->arg_size());
   string serialized_val;
   for (AST& arg : *(val->mutable_arg())) {

@@ -89,7 +89,7 @@ string ToDotIndent(const AST& ast, int indent) {
     AddEscapes(&label);
     return util::StrCat(string(indent, ' '), label);
   }
-  vector<string> arg_str;
+  std::vector<string> arg_str;
   for (const AST& arg : ast.c_ast().arg()) {
     arg_str.emplace_back(ToDotIndent(arg, indent + 2));
   }

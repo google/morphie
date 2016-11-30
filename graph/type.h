@@ -13,15 +13,14 @@
 // the License.
 
 // This file contains functions for constructing ASTs that represent types.  See
-// third_party/logle/ast.proto and third_party/logle/type_checker.h for
-// details on types.
+// third_party/logle/graph/ast.proto and third_party/logle/graph/type_checker.h
+// for details on types.
 #ifndef LOGLE_TYPE_H_
 #define LOGLE_TYPE_H_
 
-
-#include "ast.pb.h"
 #include "base/string.h"
 #include "base/vector.h"
+#include "ast.pb.h"
 
 namespace morphie {
 namespace ast {
@@ -54,9 +53,10 @@ AST MakeList(const string& name, bool is_nullable, const AST& arg);
 AST MakeSet(const string& name, bool is_nullable, const AST& arg);
 AST MakeContainer(const string& name, bool is_nullable, Operator op,
                   const AST& arg);
-AST MakeTuple(const string& name, bool is_nullable, const vector<AST>& args);
+AST MakeTuple(const string& name, bool is_nullable,
+              const std::vector<AST>& args);
 AST MakeComposite(const string& name, bool is_nullable, Operator op,
-                  const vector<AST>& args);
+                  const std::vector<AST>& args);
 
 // The Make[Data] functions below generate predefined ASTs for commonly
 // occurring types of data.

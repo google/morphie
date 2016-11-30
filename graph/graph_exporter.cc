@@ -100,7 +100,7 @@ ge::Node GraphExporter::Node(NodeId node_id) {
   // The value of this field can be used to automatically color a metanode by
   // the frequency of types of nodes within the metanode.
   node_attr["op"] = "op";
-  set<NodeId> in_nodes = graph_.GetPredecessors(node_id);
+  std::set<NodeId> in_nodes = graph_.GetPredecessors(node_id);
   string in_node_name;
   for (auto in_node : in_nodes) {
     in_node_name = FindOrAddName(in_node);

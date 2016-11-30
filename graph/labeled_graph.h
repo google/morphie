@@ -29,7 +29,7 @@
 // The LabeledGraph class provides an API for constructing and manipulating
 // graphs with typed labels. The type of a label and the values of these labels
 // are both represented as Abstract Syntax Tree (AST) protos defined in
-// third_party/logle/ast.proto.
+// third_party/logle/graph/ast.proto.
 //
 // Node labels can be declared unique, which means that exactly one node in the
 // graph can have that label. For example, in graphs constructed for forensic
@@ -56,11 +56,10 @@
 #include <unordered_map>
 #include <utility>
 
-#include "ast.pb.h"
 #include "base/string.h"
 #include "graph/type_checker.h"
+#include "ast.pb.h"
 #include "util/status.h"
-
 
 namespace morphie {
 
@@ -175,9 +174,10 @@ class LabeledGraph {
   // - OK - otherwise.
   // The containers 'node_types', 'edge_types', 'unique_nodes' and
   // 'unique_edges' may be empty. If types are constructed using functions in
-  // third_party/logle/type.h, the constraints on types will be satisfied. The
+  // third_party/logle/graph/type.h, the constraints on types will be satisfied.
+  // The
   // definition of types and functions for type checking are in
-  // third_party/logle/type_checker.h
+  // third_party/logle/graph/type_checker.h
   util::Status Initialize(ast::type::Types node_types,
                           const set<string>& unique_nodes,
                           ast::type::Types edge_types,

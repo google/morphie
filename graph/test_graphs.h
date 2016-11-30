@@ -49,7 +49,7 @@ class WeightedGraph {
   EdgeId AddEdge(NodeId src, NodeId tgt, int edge_weight);
 
   // Returns the set of identifiers of the nodes with a given weight.
-  set<NodeId> GetNodes(int node_weight) const;
+  std::set<NodeId> GetNodes(int node_weight) const;
 
   const LabeledGraph* GetGraph() const;
 

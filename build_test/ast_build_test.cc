@@ -16,7 +16,7 @@
 // prints a simple AST.
 #include <iostream>
 
-#include "ast.pb.h"
+#include "third_party/logle/ast.pb.h"
 
 int main(int argc, char **argv) {
   morphie::AST ast;

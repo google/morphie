@@ -244,8 +244,7 @@ std::map<NodeId, int> MakePartitionFromRelation(
 
 // For each node that will be folded, the initial predecessors and successors
 // are just their predecessors and successors in the graph.
-AdjMap CreateAdjMap(const LabeledGraph& graph,
-                              const set<NodeId>& nodes) {
+AdjMap CreateAdjMap(const LabeledGraph& graph, const std::set<NodeId>& nodes) {
   AdjMap adj_map;
   for (NodeId node : nodes) {
     std::set<NodeId> predecessors(graph.GetPredecessors(node));
@@ -319,7 +318,7 @@ namespace graph {
 // source node of an edge in a sequence of calls is the same and would perform
 // redudnant lookups in the node map.
 std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
-                                      const set<NodeId>& nodes) {
+                                      const std::set<NodeId>& nodes) {
   std::unique_ptr<Morphism> morphism(new Morphism(&graph));
   morphism->CopyInputType();
   if (!morphism->HasOutputGraph()) {
@@ -352,7 +351,7 @@ std::unique_ptr<Morphism> DeleteNodes(const LabeledGraph& graph,
 // source and target node of each edge to the new graph. An edge is copied to
 // the new graph if the edge is not in the set of edges to delete.
 std::unique_ptr<Morphism> DeleteEdgesNotNodes(const LabeledGraph& graph,
-                                              const set<EdgeId>& edges) {
+                                              const std::set<EdgeId>& edges) {
   std::unique_ptr<Morphism> morphism(new Morphism(&graph));
   morphism->CopyInputType();
   if (!morphism->HasOutputGraph()) {
@@ -383,7 +382,7 @@ std::unique_ptr<Morphism> DeleteEdgesNotNodes(const LabeledGraph& graph,
 // no incident edges in the original graph or whose incident edges ae all in the
 // deletion set will not be added to the new graph.
 std::unique_ptr<Morphism> DeleteEdgesAndNodes(const LabeledGraph& graph,
-                                              const set<EdgeId>& edges) {
+                                              const std::set<EdgeId>& edges) {
   std::unique_ptr<Morphism> morphism(new Morphism(&graph));
   morphism->CopyInputType();
   if (!morphism->HasOutputGraph()) {
@@ -423,7 +422,7 @@ std::unique_ptr<LabeledGraph> QuotientGraph(
 }
 
 std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
-                                            const set<EdgeId>& edges,
+                                            const std::set<EdgeId>& edges,
                                             const QuotientConfig& config) {
   std::map<NodeId, std::set<NodeId>> adj_map = MakeAdjacencyMap(graph, edges);
   std::map<NodeId, int> partition = MakePartitionFromRelation(graph, adj_map);
@@ -438,7 +437,7 @@ std::unique_ptr<LabeledGraph> ContractEdges(const LabeledGraph& graph,
 // neighbors.
 std::unique_ptr<LabeledGraph> FoldNodes(const LabeledGraph& graph,
                                         const FoldLabelFn& fold_label_fn,
-                                        const set<NodeId>& nodes) {
+                                        const std::set<NodeId>& nodes) {
   Transformation transform(graph);
   transform.output = CloneGraphType(graph);
   if (transform.output == nullptr) {

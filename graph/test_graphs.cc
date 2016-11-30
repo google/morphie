@@ -16,8 +16,8 @@
 
 #include "graph/dot_printer.h"
 #include "graph/type.h"
-#include "util/logging.h"
 #include "graph/value.h"
+#include "util/logging.h"
 
 namespace {
 
@@ -107,7 +107,7 @@ EdgeId WeightedGraph::AddEdge(NodeId src, NodeId tgt, int edge_weight) {
   return graph_.FindOrAddEdge(src, tgt, label);
 }
 
-set<NodeId> WeightedGraph::GetNodes(int node_weight) const {
+std::set<NodeId> WeightedGraph::GetNodes(int node_weight) const {
   TaggedAST label;
   label.set_tag(kNodeWeightTag);
   *label.mutable_ast() = value::MakeInt(node_weight);
@@ -152,8 +152,8 @@ void GetCycleGraph(int num_nodes, WeightedGraph* graph) {
   // The call to GetPathGraph will crash if 'graph' is null, so subsequent
   // dereferences are well defined.
   GetPathGraph(num_nodes, graph);
-  set<NodeId> first_nodes = graph->GetNodes(0);
-  set<NodeId> last_nodes = graph->GetNodes(num_nodes - 1);
+  std::set<NodeId> first_nodes = graph->GetNodes(0);
+  std::set<NodeId> last_nodes = graph->GetNodes(num_nodes - 1);
   graph->AddEdge(*last_nodes.begin(), *first_nodes.begin(), num_nodes - 1);
 }
 

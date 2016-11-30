@@ -69,13 +69,13 @@ std::pair<bool, AST> GetTaggedType(const string& tag, const Types& types) {
 // or an edge id and the index must have the corresponding type.
 template <typename ObjectId>
 util::Status IndexObject(const TaggedAST& label, ObjectId id,
-                         Indexes<set<ObjectId>>* indexes) {
+                         Indexes<std::set<ObjectId>>* indexes) {
   auto index_it = indexes->find(label.tag());
   if (index_it == indexes->end()) {
     return util::Status(Code::INVALID_ARGUMENT,
                         util::StrCat(kInvalidIndexTagErr, label.tag(), "."));
   }
-  Index<set<ObjectId>>& index = index_it->second;
+  Index<std::set<ObjectId>>& index = index_it->second;
   index[GetSerializationOrNull(label)].insert(id);
   return util::Status::OK;
 }
@@ -84,9 +84,9 @@ util::Status IndexObject(const TaggedAST& label, ObjectId id,
 // an edge and 'label' must be of non-unique type.
 template <typename ObjectId>
 void DeIndexObject(const TaggedAST& label, ObjectId id,
-                   Indexes<set<ObjectId>>* indexes) {
+                   Indexes<std::set<ObjectId>>* indexes) {
   auto index_it = indexes->find(label.tag());
-  Index<set<ObjectId>>& index = index_it->second;
+  Index<std::set<ObjectId>>& index = index_it->second;
   index[GetSerializationOrNull(label)].erase(id);
 }
 
@@ -153,8 +153,8 @@ void DeIndexUniqueEdge(const string& tag, const Edge& edge,
 // set either if no index exists for label.tag(), or if an index exists but does
 // not contain the serialization of label.ast() as a key.
 template <typename ObjectId>
-set<ObjectId> GetLabeledObjects(const TaggedAST& label,
-                                const Indexes<set<ObjectId>>& indexes) {
+std::set<ObjectId> GetLabeledObjects(
+    const TaggedAST& label, const Indexes<std::set<ObjectId>>& indexes) {
   const auto index_it = indexes.find(label.tag());
   if (index_it == indexes.end()) {
     return {};
@@ -175,9 +175,9 @@ set<ObjectId> GetLabeledObjects(const TaggedAST& label,
 // node or edge ids, and for unique label types, the index maps a string to a
 // single node or edge id.
 util::Status LabeledGraph::Initialize(Types node_types,
-                                      const set<string>& unique_nodes,
+                                      const std::set<string>& unique_nodes,
                                       Types edge_types,
-                                      const set<string>& unique_edges,
+                                      const std::set<string>& unique_edges,
                                       AST graph_type) {
   string tmp_err;
   if (!type::AreTypes(node_types, &tmp_err)) {
@@ -199,13 +199,13 @@ util::Status LabeledGraph::Initialize(Types node_types,
     named_nodes_.insert({tag, Index<NodeId>()});
   }
   for (const auto& type : node_types_) {
-    node_indexes_.insert({type.first, Index<set<NodeId>>()});
+    node_indexes_.insert({type.first, Index<std::set<NodeId>>()});
   }
   for (const string& tag : unique_edges) {
     named_edges_.insert({tag, EdgeIndex()});
   }
   for (const auto& type : edge_types_) {
-    edge_indexes_.insert({type.first, Index<set<EdgeId>>()});
+    edge_indexes_.insert({type.first, Index<std::set<EdgeId>>()});
   }
   is_initialized_ = true;
   return util::Status::OK;
@@ -216,9 +216,9 @@ Types LabeledGraph::GetNodeTypes() const {
   return node_types_;
 }
 
-set<string> LabeledGraph::GetUniqueNodeTags() const {
+std::set<string> LabeledGraph::GetUniqueNodeTags() const {
   CHECK(is_initialized_, kInitializationErr);
-  set<string> tags;
+  std::set<string> tags;
   // A 'tagged_index' is a pair consisting of a tag and an index.
   for (const auto& tagged_index : named_nodes_) {
     tags.insert(tagged_index.first);
@@ -236,9 +236,9 @@ Types LabeledGraph::GetEdgeTypes() const {
   return edge_types_;
 }
 
-set<string> LabeledGraph::GetUniqueEdgeTags() const {
+std::set<string> LabeledGraph::GetUniqueEdgeTags() const {
   CHECK(is_initialized_, kInitializationErr);
-  set<string> tags;
+  std::set<string> tags;
   // A 'tagged_index' is a pair consisting of a tag and an index.
   for (const auto& tagged_index : named_edges_) {
     tags.insert(tagged_index.first);
@@ -424,7 +424,7 @@ bool LabeledGraph::IsUniqueEdgeType(const TaggedAST& label_type) const {
   return (named_edges_.find(label_type.tag()) != named_edges_.end());
 }
 
-set<NodeId> LabeledGraph::GetNodes(const TaggedAST& label) const {
+std::set<NodeId> LabeledGraph::GetNodes(const TaggedAST& label) const {
   CHECK(is_initialized_, kInitializationErr);
   const auto index_it = named_nodes_.find(label.tag());
   if (index_it == named_nodes_.end()) {
@@ -438,7 +438,7 @@ set<NodeId> LabeledGraph::GetNodes(const TaggedAST& label) const {
   return {name_it->second};
 }
 
-set<EdgeId> LabeledGraph::GetEdges(const TaggedAST& label) const {
+std::set<EdgeId> LabeledGraph::GetEdges(const TaggedAST& label) const {
   CHECK(is_initialized_, kInitializationErr);
   const auto index_it = named_edges_.find(label.tag());
   if (index_it == named_edges_.end()) {
@@ -446,7 +446,7 @@ set<EdgeId> LabeledGraph::GetEdges(const TaggedAST& label) const {
   }
   const EdgeIndex& edge_index = index_it->second;
   const string& name = GetSerializationOrNull(label);
-  set<EdgeId> edges;
+  std::set<EdgeId> edges;
   for (const auto& key_edge : edge_index) {
     if (key_edge.first.label == name) {
       edges.insert(key_edge.second);
@@ -457,10 +457,10 @@ set<EdgeId> LabeledGraph::GetEdges(const TaggedAST& label) const {
 
 // In a Boost graph which uses an adjacency list representation, the type NodeId
 // is an unsigned int and valid node_ids are in the range [0, NumNodes() - 1].
-set<NodeId> LabeledGraph::GetPredecessors(NodeId node_id) const {
+std::set<NodeId> LabeledGraph::GetPredecessors(NodeId node_id) const {
   CHECK(is_initialized_, kInitializationErr);
   CHECK(HasNode(node_id), kInvalidNodeErr);
-  set<NodeId> predecessors;
+  std::set<NodeId> predecessors;
   for (InEdgeIterator edge_it = InEdgeBegin(node_id);
        edge_it != InEdgeEnd(node_id); ++edge_it) {
     predecessors.insert(Source(*edge_it));
@@ -468,10 +468,10 @@ set<NodeId> LabeledGraph::GetPredecessors(NodeId node_id) const {
   return predecessors;
 }
 
-set<NodeId> LabeledGraph::GetSuccessors(NodeId node_id) const {
+std::set<NodeId> LabeledGraph::GetSuccessors(NodeId node_id) const {
   CHECK(is_initialized_, kInitializationErr);
   CHECK(HasNode(node_id), kInvalidNodeErr);
-  set<NodeId> successors;
+  std::set<NodeId> successors;
   for (OutEdgeIterator edge_it = OutEdgeBegin(node_id);
        edge_it != OutEdgeEnd(node_id); ++edge_it) {
     successors.insert(Target(*edge_it));
@@ -503,11 +503,12 @@ OutEdgeIterator LabeledGraph::OutEdgeEnd(NodeId node_id) const {
   return ::boost::out_edges(node_id, graph_).second;
 }
 
-set<NodeId> LabeledGraph::GetLabelPredecessors(const TaggedAST& label) const {
+std::set<NodeId> LabeledGraph::GetLabelPredecessors(
+    const TaggedAST& label) const {
   CHECK(is_initialized_, kInitializationErr);
-  set<NodeId> target_nodes = GetNodes(label);
-  set<NodeId> predecessors;
-  set<NodeId> sources;
+  std::set<NodeId> target_nodes = GetNodes(label);
+  std::set<NodeId> predecessors;
+  std::set<NodeId> sources;
   for (NodeId target_id : target_nodes) {
     sources = GetPredecessors(target_id);
     predecessors.insert(sources.begin(), sources.end());
@@ -515,11 +516,12 @@ set<NodeId> LabeledGraph::GetLabelPredecessors(const TaggedAST& label) const {
   return predecessors;
 }
 
-set<NodeId> LabeledGraph::GetLabelSuccessors(const TaggedAST& label) const {
+std::set<NodeId> LabeledGraph::GetLabelSuccessors(
+    const TaggedAST& label) const {
   CHECK(is_initialized_, kInitializationErr);
-  set<NodeId> source_nodes = GetNodes(label);
-  set<NodeId> successors;
-  set<NodeId> targets;
+  std::set<NodeId> source_nodes = GetNodes(label);
+  std::set<NodeId> successors;
+  std::set<NodeId> targets;
   for (NodeId source_id : source_nodes) {
     targets = GetSuccessors(source_id);
     successors.insert(targets.begin(), targets.end());

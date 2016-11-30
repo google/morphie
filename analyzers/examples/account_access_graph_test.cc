@@ -36,11 +36,11 @@ class AccountAccessGraphTest : public ::testing::Test {
   AccountAccessGraph graph_;
 };
 
-static vector<string> fields1{"bad-person@logle", "manager-person@logle",
-                              "Bad Actor", "32", "user@fake-mail"};
+static std::vector<string> fields1{"bad-person@logle", "manager-person@logle",
+                                   "Bad Actor", "32", "user@fake-mail"};
 
-static vector<string> fields2{"good-person@logle", "manager-person@logle",
-                              "Good Actor", "32", "user@logle-mail"};
+static std::vector<string> fields2{"good-person@logle", "manager-person@logle",
+                                   "Good Actor", "32", "user@logle-mail"};
 
 unordered_map<string, int> GetIndex() {
   unordered_map<string, int> index;

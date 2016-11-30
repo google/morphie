@@ -36,9 +36,9 @@
 
 #include <functional>
 
-#include "ast.pb.h"
 #include "base/string.h"
 #include "graph/labeled_graph.h"
+#include "ast.pb.h"
 
 namespace morphie {
 

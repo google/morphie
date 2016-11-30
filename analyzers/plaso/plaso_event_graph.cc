@@ -22,13 +22,13 @@
 #include <utility>
 
 #include "analyzers/plaso/plaso_event.h"
-#include "plaso_event.pb.h"
 #include "graph/ast.h"
 #include "graph/dot_printer.h"
 #include "graph/graph_exporter.h"
 #include "graph/type.h"
 #include "graph/type_checker.h"
 #include "graph/value.h"
+#include "plaso_event.pb.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
 #include "util/time_utils.h"
@@ -56,7 +56,7 @@ const char kSystemTag[] = "System";
 // same horizontal level as their timestamp in the timeline.
 string GetTimeline(const std::map<int64_t, std::set<NodeId>>& time_index) {
   string timeline = "// Sub-graph showing timeline\n{\n";
-  vector<string> timestamps;
+  std::vector<string> timestamps;
   string node_name;
   string time_aligned_nodes;
   for (const auto& timed_events : time_index) {
@@ -79,7 +79,7 @@ string GetTimeline(const std::map<int64_t, std::set<NodeId>>& time_index) {
 
 util::Status PlasoEventGraph::Initialize() {
   // Create a non-unique node label of type tuple(timestamp, string) for events.
-  vector<AST> args;
+  std::vector<AST> args;
   args.emplace_back(type::MakeTimestamp(ast::kTimeTag, true));
   args.emplace_back(type::MakeString(kDescTag, true));
   type::Types node_types;

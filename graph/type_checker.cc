@@ -14,12 +14,12 @@
 
 // The methods in this file check if an AST represents a type and if an AST
 // representing a value respects a given type. Types and values have an
-// inductive structure given by the grammar in third_party/logle/ast.proto. The
-// methods that check if an AST is a type walk the tree and check that each
-// operator node has the right number of arguments. The methods to check if a
-// value respects a type simultaneously walk the type and value ASTs and check
-// if the node in the value AST has the appropriate operator and number of
-// arguments as specified by the type AST.
+// inductive structure given by the grammar in graph/ast.proto. The methods that
+// check if an AST is a type walk the tree and check that each operator node has
+// the right number of arguments. The methods to check if a value respects a
+// type simultaneously walk the type and value ASTs and check if the node in the
+// value AST has the appropriate operator and number of arguments as specified
+// by the type AST.
 #include "type_checker.h"
 
 #include <algorithm>
@@ -27,9 +27,9 @@
 #include <utility>
 
 #include "graph/ast.h"
+#include "graph/value_checker.h"
 #include "util/logging.h"
 #include "util/string_utils.h"
-#include "graph/value_checker.h"
 
 namespace morphie {
 namespace ast {

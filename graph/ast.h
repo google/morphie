@@ -13,7 +13,7 @@
 // the License.
 
 // The 'ast' namespace contains utilities that operate on Abstract Syntax Tree
-// (AST) protos. See third_party/logle/ast.proto for a definition of AST
+// (AST) protos. See third_party/logle/graph/ast.proto for a definition of AST
 // protos. An AST proto that represents a type or a value must satisfy
 // additional constraints. The functions in the 'ast' namespace impose no
 // constraints on the protos.
@@ -35,8 +35,8 @@
 #ifndef LOGLE_AST_H_
 #define LOGLE_AST_H_
 
-#include "ast.pb.h"
 #include "base/string.h"
+#include "ast.pb.h"
 
 namespace morphie {
 namespace ast {

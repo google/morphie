@@ -12,9 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 #include "util/csv.h"
-
-#include <boost/tokenizer.hpp>  // NOLINT
 #include <boost/exception/exception.hpp>  // NOLINT
+#include <boost/tokenizer.hpp>  // NOLINT
 
 #include <sstream>
 

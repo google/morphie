@@ -15,8 +15,8 @@
 #include "graph/type.h"
 
 #include "base/vector.h"
-#include "gtest.h"
 #include "graph/type_checker.h"
+#include "gtest.h"
 
 namespace morphie {
 namespace ast {
@@ -79,7 +79,7 @@ TEST_F(TypeTest, CreatesASet) {
 
 // Create a type for a tuple of a timestamp and a string.
 TEST_F(TypeTest, CreatesATuple) {
-  vector<AST> args;
+  std::vector<AST> args;
   arg_ast_ = MakeTimestamp("foo", false);
   args.emplace_back(arg_ast_);
   arg_ast_ = MakeString("bar", false);
@@ -121,7 +121,7 @@ TEST(TypeDeathTest, NonTypeASTToSetArg) {
 
 TEST(TypeDeathTest, NonTypeASTToTupleArg) {
   AST arg, type;
-  vector<AST> args;
+  std::vector<AST> args;
   arg = MakeBool("foo", false);
   args.emplace_back(arg);
   arg.clear_is_nullable();
@@ -131,7 +131,7 @@ TEST(TypeDeathTest, NonTypeASTToTupleArg) {
 
 TEST(TypeDeathTest, NonTypeASTToCompositeArg) {
   AST arg, type;
-  vector<AST> args;
+  std::vector<AST> args;
   arg = MakeBool("foo", false);
   args.emplace_back(arg);
   arg.clear_is_nullable();

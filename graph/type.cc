@@ -73,7 +73,7 @@ AST MakePrimitive(const string& name, bool is_nullable, PrimitiveType ptype) {
 
 AST MakeInterval(const string& name, PrimitiveType ptype) {
   AST arg = MakePrimitive(kIntervalArg, true, ptype);
-  vector<AST> args;
+  std::vector<AST> args;
   args.emplace_back(arg);
   return MakeComposite(name, true, Operator::INTERVAL, args);
 }
@@ -88,19 +88,20 @@ AST MakeSet(const string& name, bool is_nullable, const AST& arg) {
 
 AST MakeContainer(const string& name, bool is_nullable, Operator op,
                   const AST& arg) {
-  vector<AST> args;
+  std::vector<AST> args;
   args.emplace_back(arg);
   AST ast = MakeComposite(name, is_nullable, op, args);
   ast.mutable_c_ast()->mutable_arg(0)->set_name(kContainerArg);
   return ast;
 }
 
-AST MakeTuple(const string& name, bool is_nullable, const vector<AST>& args) {
+AST MakeTuple(const string& name, bool is_nullable,
+              const std::vector<AST>& args) {
   return MakeComposite(name, is_nullable, Operator::TUPLE, args);
 }
 
 AST MakeComposite(const string& name, bool is_nullable, Operator op,
-                  const vector<AST>& args) {
+                  const std::vector<AST>& args) {
   AST ast;
   SetFields(name, is_nullable, &ast);
   ast.mutable_c_ast()->set_op(op);
@@ -120,7 +121,7 @@ AST MakeDirectory() {
 }
 
 AST MakeFile() {
-  vector<AST> args;
+  std::vector<AST> args;
   args.push_back(MakeDirectory());
   args.push_back(MakeString(kFilename, true));
   return MakeTuple(kFileTag, true, args);

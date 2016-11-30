@@ -14,11 +14,11 @@
 
 #include <map>
 
-#include "graph/ast.h"
 #include "base/string.h"
 #include "base/vector.h"
-#include "gtest.h"
+#include "graph/ast.h"
 #include "graph/value_checker.h"
+#include "gtest.h"
 
 namespace morphie {
 namespace ast {
@@ -39,7 +39,7 @@ static void Initialize(Operator op, const AST& arg, AST* ast) {
   *a = arg;
 }
 
-static const map<string, bool> bool_vals = {
+static const std::map<string, bool> bool_vals = {
     {"", false}, {"true", true}, {"false", true}, {"0", false}, {"1", false} };
 
 // The set of tests below check if ASTs represent values.
@@ -81,7 +81,7 @@ TEST(ValueCheckerTest, IsABool) {
 }
 
 // Test representation of int values.
-static const map<string, bool> int_vals = {
+static const std::map<string, bool> int_vals = {
   {"", false}, {"0", true}, {"00", true}, {"-0", true}, {"-00", true},
   {"1", true}, {"01", true}, {"-1", true}, {"-01", true}, {"a", false},
   {"1a", false}, {"-1a", false} };
@@ -526,7 +526,7 @@ TEST(CanonicalizerTest, IntIntervalCanonicalization) {
   CanonicalizeIntIntervals(0, -1, 3, 1, false, true);
 }
 
-void MakeIntContainer(Operator op, const vector<int>& args, AST* val) {
+void MakeIntContainer(Operator op, const std::vector<int>& args, AST* val) {
   val->clear_name();
   val->clear_is_nullable();
   val->mutable_c_ast()->set_op(op);
@@ -541,7 +541,8 @@ void MakeIntContainer(Operator op, const vector<int>& args, AST* val) {
   }
 }
 
-void MakeCompositeContainer(Operator op, const vector<AST>& args, AST* val) {
+void MakeCompositeContainer(Operator op, const std::vector<AST>& args,
+                            AST* val) {
   val->clear_name();
   val->clear_is_nullable();
   val->mutable_c_ast()->set_op(op);
@@ -556,7 +557,7 @@ void MakeCompositeContainer(Operator op, const vector<AST>& args, AST* val) {
 TEST(CanonicalizerTest, IntervalListCanonicalization) {
   AST itv1;
   MakeBoolInterval(true, false, &itv1);
-  vector<AST> args;
+  std::vector<AST> args;
 
   // A list containing the empty interval and one containing the interval
   // [true,false] are only isomorphic after canonicalization.
@@ -573,7 +574,7 @@ TEST(CanonicalizerTest, IntervalListCanonicalization) {
 }
 
 TEST(CanonicalizerTest, SetCanonicalization) {
-  vector<int> args;
+  std::vector<int> args;
   AST set1, set2;
   // The set { 0 } has non-isomorphic representations, with 0 occurring multiple
   // times.
@@ -602,7 +603,7 @@ TEST(CanonicalizerTest, TupleCanonicalization) {
   Initialize(PrimitiveType::INT, &one);
   one.mutable_p_ast()->mutable_val()->set_int_val(1);
 
-  vector<AST> args;
+  std::vector<AST> args;
 
   // A tuple containing the empty interval and one containing the interval
   // [true,false] are only isomorphic after canonicalization.

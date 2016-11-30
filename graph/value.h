@@ -13,8 +13,8 @@
 // the License.
 
 // A value in the context of this file is an Abstract Syntax Tree (AST) for a
-// value of a type defined in third_party/logle/ast.proto. This file provides
-// utilities for constructing and manipulating value ASTs.
+// value of a type defined in graph/ast.proto. This file provides utilities for
+// constructing and manipulating value ASTs.
 //
 // Example. This code constructs a value AST representing the empty integer
 // intervals [] and the closed unit interval [0,1]. The checks illustrate the
@@ -33,8 +33,8 @@
 
 #include <cstdint>
 
-#include "ast.pb.h"
 #include "base/string.h"
+#include "ast.pb.h"
 
 namespace morphie {
 namespace ast {
@@ -42,8 +42,8 @@ namespace value {
 
 // The Value class contains functions named Make[Type](...), which return a
 // value AST of the specified type. These ASTs satisfy the well-formedness
-// constraints on ASTs defined in third_party/logle/value_checker.h and the
-// typing constraints defined in third_party/logle/type_checker.h.
+// constraints on ASTs defined in graph/value_checker.h and the typing
+// constraints defined in graph/type_checker.h.
 
 // Generate the null value. Unlike the AST for the null type, the AST for a
 // null value has no 'name' or 'is_nullable' fields.
