@@ -15,7 +15,7 @@
 // Creates and empty graph and uses the DOT printer to serialize it.
 #include <iostream>
 
-#include "third_party/logle/ast.pb.h"
+#include "ast.pb.h"
 #include "dot_printer.h"
 #include "labeled_graph.h"
 #include "type.h"

@@ -16,7 +16,7 @@
 #include <iostream>
 #include <string>
 
-#include "third_party/logle/ast.pb.h"
+#include "ast.pb.h"
 #include "value.h"
 #include "value_checker.h"
 
